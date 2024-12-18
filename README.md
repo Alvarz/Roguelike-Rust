@@ -17,4 +17,4 @@
 
 
 
-current chapter http://bfnightly.bracketproductions.com/rustbook/chapter_13.html
+current chapter http://bfnightly.bracketproductions.com/rustbook/chapter_15.html
