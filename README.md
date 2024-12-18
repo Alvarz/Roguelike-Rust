@@ -14,3 +14,7 @@
 
 * If you'd like to work with the mdbook format - used for this book! - cargo can help with that, too. Just once, you need to run cargo install mdbook to add the tools to your system. After that, mdbook build will build a book project, mdbook init will make a new one, and mdbook serve will give you a local webserver to view your work! You can learn all about mdbook on their documentation page.
 * Cargo can also integrate with a "linter" - called Clippy. Clippy is a little pedantic (just like his Microsoft Office namesake!). Just the once, run rustup component add clippy. You can now type cargo clippy at any time to see suggestions for what may be wrong with your code!
+
+
+
+current chapter http://bfnightly.bracketproductions.com/rustbook/chapter_9.html
