@@ -19,7 +19,7 @@ pub struct Renderable {
     pub render_order : i32
 }
 
-#[derive(Component, Serialize, Deserialize, Clone)]
+#[derive(Component, Debug, Serialize, Deserialize, Clone)]
 pub struct Player {}
 
 #[derive(Component, ConvertSaveload, Clone)]
@@ -122,7 +122,7 @@ pub struct WantsToDropItem {
     pub item : Entity
 }
 
-// Serialization helper code. We need to implement ConvertSaveload for each type that contains an
+// Serialization helper code. We need to implement ConvertSaveLoad for each type that contains an
 // Entity.
 
 pub struct SerializeMe;
@@ -132,3 +132,4 @@ pub struct SerializeMe;
 pub struct SerializationHelper {
     pub map : super::map::Map
 }
+
