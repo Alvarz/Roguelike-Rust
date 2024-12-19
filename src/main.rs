@@ -30,6 +30,7 @@ pub mod saveload_system;
 pub mod random_table;
 pub mod particle_system;
 pub mod hunger_system;
+pub mod rex_assets;
 
 
 
@@ -446,6 +447,7 @@ fn main() -> rltk::BError {
     gs.ecs.insert(RunState::MainMenu{ menu_selection: gui::MainMenuSelection::NewGame });
     gs.ecs.insert(gamelog::GameLog{ entries : vec!["Welcome to Rusty Roguelike".to_string()] });
     gs.ecs.insert(particle_system::ParticleBuilder::new());
+    gs.ecs.insert(rex_assets::RexAssets::new());
 
     rltk::main_loop(context, gs)
 }
