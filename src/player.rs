@@ -2,7 +2,8 @@ use rltk::{VirtualKeyCode, Rltk, Point};
 use specs::prelude::*;
 use std::cmp::{max, min};
 use super::{Position, Player, Viewshed, State, Map, RunState, CombatStats, WantsToMelee, Item,
-    gamelog::GameLog, WantsToPickupItem, TileType, Monster, HungerClock, HungerState, EntityMoved};
+    gamelog::GameLog, WantsToPickupItem, TileType, Monster, HungerClock, HungerState,
+    EntityMoved, Door, BlocksTile, BlocksVisibility, Renderable};
 
 pub fn try_move_player(delta_x: i32, delta_y: i32, ecs: &mut World) {
     let mut positions = ecs.write_storage::<Position>();
@@ -13,6 +14,10 @@ pub fn try_move_player(delta_x: i32, delta_y: i32, ecs: &mut World) {
     let map = ecs.fetch::<Map>();
     let mut wants_to_melee = ecs.write_storage::<WantsToMelee>();
     let mut entity_moved = ecs.write_storage::<EntityMoved>();
+    let mut doors = ecs.write_storage::<Door>();
+    let mut blocks_visibility = ecs.write_storage::<BlocksVisibility>();
+    let mut blocks_movement = ecs.write_storage::<BlocksTile>();
+    let mut renderables = ecs.write_storage::<Renderable>();
 
     for (entity, _player, pos, viewshed) in (&entities, &players, &mut positions, &mut viewsheds).join() {
         if pos.x + delta_x < 1 || pos.x + delta_x > map.width-1 || pos.y + delta_y < 1 || pos.y + delta_y > map.height-1 { return; }
@@ -24,11 +29,20 @@ pub fn try_move_player(delta_x: i32, delta_y: i32, ecs: &mut World) {
                 wants_to_melee.insert(entity, WantsToMelee{ target: *potential_target }).expect("Add target failed");
                 return;
             }
+            let door = doors.get_mut(*potential_target);
+            if let Some(door) = door {
+                door.open = true;
+                blocks_visibility.remove(*potential_target);
+                blocks_movement.remove(*potential_target);
+                let glyph = renderables.get_mut(*potential_target).unwrap();
+                glyph.glyph = rltk::to_cp437('/');
+                viewshed.dirty = true;
+            }
         }
 
         if !map.blocked[destination_idx] {
-            pos.x = min(79 , max(0, pos.x + delta_x));
-            pos.y = min(49, max(0, pos.y + delta_y));
+            pos.x = min(map.width-1 , max(0, pos.x + delta_x));
+            pos.y = min(map.height-1, max(0, pos.y + delta_y));
             entity_moved.insert(entity, EntityMoved{}).expect("Unable to insert marker");
 
             viewshed.dirty = true;
