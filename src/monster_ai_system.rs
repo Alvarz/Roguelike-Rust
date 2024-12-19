@@ -18,7 +18,8 @@ impl<'a> System<'a> for MonsterAI {
                         WriteStorage<'a, Confusion>);
 
     fn run(&mut self, data : Self::SystemData) {
-        let (mut map, player_pos, player_entity, runstate, entities, mut viewshed, monster, mut position, mut wants_to_melee, mut confused) = data;
+        let (mut map, player_pos, player_entity, runstate, entities, mut viewshed,
+            monster, mut position, mut wants_to_melee, mut confused) = data;
 
         if *runstate != RunState::MonsterTurn { return; }
 
