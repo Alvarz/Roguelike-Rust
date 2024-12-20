@@ -40,10 +40,6 @@ pub fn draw_ui(ecs: &World, ctx : &mut Rltk) {
     let mouse_pos = ctx.mouse_pos();
     ctx.set_bg(mouse_pos.0, mouse_pos.1, RGB::named(rltk::MAGENTA));
     draw_tooltips(ecs, ctx);
-
-    // Show player position
-    let ppos = ecs.fetch::<rltk::Point>();
-    ctx.print(0, 0, &format!("{},{}", ppos.x, ppos.y));
 }
 
 fn draw_tooltips(ecs: &World, ctx : &mut Rltk) {

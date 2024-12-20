@@ -275,9 +275,10 @@ dependencies = [
 ]
 
 [[package]]
-name = "chapter-11-loadsave"
+name = "chapter-46-raws2"
 version = "0.1.0"
 dependencies = [
+ "lazy_static",
  "rltk",
  "serde",
  "serde_json",
