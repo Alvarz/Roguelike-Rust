@@ -32,6 +32,12 @@ pub struct Viewshed {
 #[derive(Component, Debug, Serialize, Deserialize, Clone)]
 pub struct Monster {}
 
+#[derive(Component, Debug, Serialize, Deserialize, Clone)]
+pub struct Bystander {}
+
+#[derive(Component, Debug, Serialize, Deserialize, Clone)]
+pub struct Vendor {}
+
 #[derive(Component, Debug, ConvertSaveload, Clone)]
 pub struct Name {
     pub name : String
@@ -190,6 +196,11 @@ pub struct EntityMoved {}
 
 #[derive(Component, Debug, Serialize, Deserialize, Clone)]
 pub struct SingleActivation {}
+
+#[derive(Component, Debug, Serialize, Deserialize, Clone)]
+pub struct Quips {
+    pub available : Vec<String>
+}
 
 // Serialization helper code. We need to implement ConvertSaveLoad for each type that contains an
 // Entity.

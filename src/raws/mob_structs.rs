@@ -7,7 +7,9 @@ pub struct Mob {
     pub renderable : Option<Renderable>,
     pub blocks_tile : bool,
     pub stats : MobStats,
-    pub vision_range : i32
+    pub vision_range : i32,
+    pub ai : String,
+    pub quips : Option<Vec<String>>
 }
 
 #[derive(Deserialize, Debug)]
