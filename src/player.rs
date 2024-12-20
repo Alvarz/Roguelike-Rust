@@ -289,6 +289,9 @@ pub fn player_input(gs: &mut State, ctx: &mut Rltk) -> RunState {
             // Save and Quit
             VirtualKeyCode::Escape => return RunState::SaveGame,
 
+            // Cheating!
+            VirtualKeyCode::Backslash => return RunState::ShowCheatMenu,
+
             _ => { return RunState::AwaitingInput }
         },
     }

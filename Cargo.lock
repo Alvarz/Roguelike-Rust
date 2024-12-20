@@ -275,7 +275,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "chapter-55-backtrack"
+name = "chapter-56-caverns"
 version = "0.1.0"
 dependencies = [
  "lazy_static",

@@ -429,8 +429,8 @@ pub fn ranged_target(gs : &mut State, ctx : &mut Rltk, range : i32) -> (ItemMenu
         for idx in visible.visible_tiles.iter() {
             let distance = rltk::DistanceAlg::Pythagoras.distance2d(*player_pos, *idx);
             if distance <= range as f32 {
-                let screen_x = idx.x - min_x - 1;
-                let screen_y = idx.y - min_y - 1;
+                let screen_x = idx.x - min_x;
+                let screen_y = idx.y - min_y;
                 if screen_x > 1 && screen_x < (max_x - min_x)-1 && screen_y > 1 && screen_y < (max_y - min_y)-1 {
                     ctx.set_bg(screen_x, screen_y, RGB::named(rltk::BLUE));
                     available_cells.push(idx);
@@ -444,8 +444,8 @@ pub fn ranged_target(gs : &mut State, ctx : &mut Rltk, range : i32) -> (ItemMenu
     // Draw mouse cursor
     let mouse_pos = ctx.mouse_pos();
     let mut mouse_map_pos = mouse_pos;
-    mouse_map_pos.0 += min_x;
-    mouse_map_pos.1 += min_y;
+    mouse_map_pos.0 += min_x - 1;
+    mouse_map_pos.1 += min_y - 1;
     let mut valid_target = false;
     for idx in available_cells.iter() { if idx.x == mouse_map_pos.0 && idx.y == mouse_map_pos.1 { valid_target = true; } }
     if valid_target {
@@ -557,5 +557,33 @@ pub fn game_over(ctx : &mut Rltk) -> GameOverResult {
     match ctx.key {
         None => GameOverResult::NoSelection,
         Some(_) => GameOverResult::QuitToMenu
+    }
+}
+
+#[derive(PartialEq, Copy, Clone)]
+pub enum CheatMenuResult { NoResponse, Cancel, TeleportToExit }
+
+pub fn show_cheat_mode(_gs : &mut State, ctx : &mut Rltk) -> CheatMenuResult {
+    let count = 2;
+    let y = (25 - (count / 2)) as i32;
+    ctx.draw_box(15, y-2, 31, (count+3) as i32, RGB::named(rltk::WHITE), RGB::named(rltk::BLACK));
+    ctx.print_color(18, y-2, RGB::named(rltk::YELLOW), RGB::named(rltk::BLACK), "Cheating!");
+    ctx.print_color(18, y+count as i32+1, RGB::named(rltk::YELLOW), RGB::named(rltk::BLACK), "ESCAPE to cancel");
+
+    ctx.set(17, y, RGB::named(rltk::WHITE), RGB::named(rltk::BLACK), rltk::to_cp437('('));
+    ctx.set(18, y, RGB::named(rltk::YELLOW), RGB::named(rltk::BLACK), rltk::to_cp437('T'));
+    ctx.set(19, y, RGB::named(rltk::WHITE), RGB::named(rltk::BLACK), rltk::to_cp437(')'));
+
+    ctx.print(21, y, "Teleport to next level");
+
+    match ctx.key {
+        None => CheatMenuResult::NoResponse,
+        Some(key) => {
+            match key {
+                VirtualKeyCode::T => CheatMenuResult::TeleportToExit,
+                VirtualKeyCode::Escape => CheatMenuResult::Cancel,
+                _ => CheatMenuResult::NoResponse
+            }
+        }
     }
 }
