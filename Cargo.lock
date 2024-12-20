@@ -275,7 +275,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "chapter-53-woods"
+name = "chapter-54-xp"
 version = "0.1.0"
 dependencies = [
  "lazy_static",
