@@ -1,6 +1,6 @@
 use specs::prelude::*;
 use specs_derive::*;
-use rltk::{RGB};
+use rltk::{RGB, Point};
 use serde::{Serialize, Deserialize};
 use specs::saveload::{Marker, ConvertSaveload};
 use specs::error::NoError;
@@ -8,6 +8,12 @@ use std::collections::HashMap;
 
 #[derive(Component, ConvertSaveload, Clone)]
 pub struct Position {
+    pub x: i32,
+    pub y: i32,
+}
+
+#[derive(Component, ConvertSaveload, Clone)]
+pub struct TileSize {
     pub x: i32,
     pub y: i32,
 }
@@ -30,6 +36,46 @@ pub struct Renderable {
 #[derive(Component, Debug, Serialize, Deserialize, Clone)]
 pub struct Player {}
 
+#[derive(Component, Debug, Serialize, Deserialize, Clone)]
+pub struct Target {}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct KnownSpell {
+    pub display_name : String,
+    pub mana_cost : i32
+}
+
+#[derive(Component, Debug, Serialize, Deserialize, Clone)]
+pub struct KnownSpells {
+    pub spells : Vec<KnownSpell>
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct SpecialAbility {
+    pub spell : String,
+    pub chance : f32,
+    pub range : f32,
+    pub min_range : f32
+}
+
+#[derive(Component, Debug, Serialize, Deserialize, Clone)]
+pub struct SpecialAbilities {
+    pub abilities : Vec<SpecialAbility>
+}
+
+#[derive(Component, Debug, Serialize, Deserialize, Clone)]
+pub struct OnDeath {
+    pub abilities : Vec<SpecialAbility>
+}
+
+#[derive(Component, Debug, Serialize, Deserialize, Clone)]
+pub struct AlwaysTargetsSelf {}
+
+#[derive(Component, Debug, Serialize, Deserialize, Clone)]
+pub struct SpellTemplate {
+    pub mana_cost : i32
+}
+
 #[derive(Component, ConvertSaveload, Clone)]
 pub struct Viewshed {
     pub visible_tiles : Vec<rltk::Point>,
@@ -44,16 +90,69 @@ pub struct LightSource {
 }
 
 #[derive(Component, Debug, Serialize, Deserialize, Clone)]
-pub struct Monster {}
+pub struct Initiative {
+    pub current : i32
+}
 
 #[derive(Component, Debug, Serialize, Deserialize, Clone)]
-pub struct Bystander {}
+pub struct Vendor {
+    pub categories : Vec<String>
+}
 
 #[derive(Component, Debug, Serialize, Deserialize, Clone)]
-pub struct Vendor {}
+pub struct MyTurn {}
+
+#[derive(Component, Debug, Serialize, Deserialize, Clone)]
+pub struct Faction {
+    pub name : String
+}
+
+#[derive(Component, Debug, Serialize, Deserialize, Clone)]
+pub struct ApplyMove {
+    pub dest_idx : usize
+}
+
+#[derive(Component, Debug, Serialize, Deserialize, Clone)]
+pub struct ApplyTeleport {
+    pub dest_x : i32,
+    pub dest_y : i32,
+    pub dest_depth : i32
+}
+
+#[derive(Component, Debug, Serialize, Deserialize, Clone)]
+pub struct WantsToApproach {
+    pub idx : i32
+}
+
+#[derive(Component, Debug, Serialize, Deserialize, Clone)]
+pub struct WantsToFlee {
+    pub indices : Vec<usize>
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone, Eq, PartialEq, Hash)]
+pub enum Movement {
+    Static,
+    Random,
+    RandomWaypoint{ path : Option<Vec<usize>> }
+}
+
+#[derive(Component, Debug, Serialize, Deserialize, Clone)]
+pub struct MoveMode {
+    pub mode : Movement
+}
 
 #[derive(Component, Debug, ConvertSaveload, Clone)]
 pub struct Name {
+    pub name : String
+}
+
+#[derive(Component, Debug, Serialize, Deserialize, Clone)]
+pub struct ObfuscatedName {
+    pub name : String
+}
+
+#[derive(Component, Debug, Serialize, Deserialize, Clone)]
+pub struct IdentifiedItem {
     pub name : String
 }
 
@@ -71,7 +170,11 @@ pub struct Pools {
     pub hit_points : Pool,
     pub mana : Pool,
     pub xp : i32,
-    pub level : i32
+    pub level : i32,
+    pub total_weight : f32,
+    pub total_initiative_penalty : f32,
+    pub gold : f32,
+    pub god_mode : bool
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -102,20 +205,14 @@ pub struct WantsToMelee {
     pub target : Entity
 }
 
-#[derive(Component, Debug, Serialize, Deserialize, Clone)]
-pub struct SufferDamage {
-    pub amount : Vec<(i32, bool)>,
+#[derive(Component, Debug, ConvertSaveload, Clone)]
+pub struct WantsToShoot {
+    pub target : Entity
 }
 
-impl SufferDamage {
-    pub fn new_damage(store: &mut WriteStorage<SufferDamage>, victim: Entity, amount: i32, from_player: bool) {
-        if let Some(suffering) = store.get_mut(victim) {
-            suffering.amount.push((amount, from_player));
-        } else {
-            let dmg = SufferDamage { amount : vec![(amount, from_player)] };
-            store.insert(victim, dmg).expect("Unable to insert damage");
-        }
-    }
+#[derive(Component, Debug, ConvertSaveload, Clone)]
+pub struct Chasing {
+    pub target : Entity
 }
 
 #[derive(Component, Debug, Serialize, Deserialize, Clone)]
@@ -124,16 +221,45 @@ pub struct LootTable {
 }
 
 #[derive(Component, Debug, Serialize, Deserialize, Clone)]
-pub struct Carnivore {}
+pub struct EquipmentChanged {}
 
 #[derive(Component, Debug, Serialize, Deserialize, Clone)]
-pub struct Herbivore {}
+pub struct Item {
+    pub initiative_penalty : f32,
+    pub weight_lbs : f32,
+    pub base_value : f32
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone, Eq, PartialEq, Hash)]
+pub enum MagicItemClass { Common, Rare, Legendary }
 
 #[derive(Component, Debug, Serialize, Deserialize, Clone)]
-pub struct Item {}
+pub struct MagicItem {
+    pub class : MagicItemClass
+}
 
 #[derive(Component, Debug, Serialize, Deserialize, Clone)]
-pub struct Consumable {}
+pub struct AttributeBonus {
+    pub might : Option<i32>,
+    pub fitness : Option<i32>,
+    pub quickness : Option<i32>,
+    pub intelligence : Option<i32>
+}
+
+#[derive(Component, Debug, Serialize, Deserialize, Clone)]
+pub struct CursedItem {}
+
+#[derive(Component, Debug, Serialize, Deserialize, Clone)]
+pub struct Consumable {
+    pub max_charges : i32,
+    pub charges : i32
+}
+
+#[derive(Component, Debug, Serialize, Deserialize, Clone)]
+pub struct ProvidesRemoveCurse {}
+
+#[derive(Component, Debug, Serialize, Deserialize, Clone)]
+pub struct ProvidesIdentification {}
 
 #[derive(Component, Debug, ConvertSaveload, Clone)]
 pub struct Ranged {
@@ -150,14 +276,42 @@ pub struct AreaOfEffect {
     pub radius : i32
 }
 
-#[derive(Component, Debug, ConvertSaveload, Clone)]
-pub struct Confusion {
+#[derive(Component, Debug, Serialize, Deserialize, Clone)]
+pub struct Confusion {}
+
+#[derive(Component, Debug, Serialize, Deserialize, Clone)]
+pub struct Slow {
+    pub initiative_penalty : f32
+}
+
+#[derive(Component, Debug, Serialize, Deserialize, Clone)]
+pub struct DamageOverTime {
+    pub damage : i32
+}
+
+#[derive(Component, Debug, Serialize, Deserialize, Clone)]
+pub struct Duration {
     pub turns : i32
+}
+
+#[derive(Component, Debug, ConvertSaveload, Clone)]
+pub struct StatusEffect {
+    pub target : Entity
 }
 
 #[derive(Component, Debug, ConvertSaveload, Clone)]
 pub struct ProvidesHealing {
     pub heal_amount : i32
+}
+
+#[derive(Component, Debug, Serialize, Deserialize, Clone)]
+pub struct ProvidesMana {
+    pub mana_amount : i32
+}
+
+#[derive(Component, Debug, Serialize, Deserialize, Clone)]
+pub struct TeachesSpell {
+    pub spell : String
 }
 
 #[derive(Component, Debug, Serialize, Deserialize, Clone)]
@@ -182,6 +336,12 @@ pub struct WantsToPickupItem {
 #[derive(Component, Debug, ConvertSaveload, Clone)]
 pub struct WantsToUseItem {
     pub item : Entity,
+    pub target : Option<rltk::Point>
+}
+
+#[derive(Component, Debug, ConvertSaveload, Clone)]
+pub struct WantsToCastSpell {
+    pub spell : Entity,
     pub target : Option<rltk::Point>
 }
 
@@ -213,12 +373,15 @@ pub struct Equipped {
 pub enum WeaponAttribute { Might, Quickness }
 
 #[derive(Component, Serialize, Deserialize, Clone)]
-pub struct MeleeWeapon {
+pub struct Weapon {
+    pub range : Option<i32>,
     pub attribute : WeaponAttribute,
     pub damage_n_dice : i32,
     pub damage_die_type : i32,
     pub damage_bonus : i32,
-    pub hit_bonus : i32
+    pub hit_bonus : i32,
+    pub proc_chance : Option<f32>,
+    pub proc_target : Option<String>,
 }
 
 #[derive(Component, Serialize, Deserialize, Clone)]
@@ -242,8 +405,31 @@ pub struct NaturalAttackDefense {
     pub attacks : Vec<NaturalAttack>
 }
 
+#[derive(Serialize, Deserialize, Clone)]
+pub struct ParticleAnimation {
+    pub step_time : f32,
+    pub path : Vec<Point>,
+    pub current_step : usize,
+    pub timer : f32
+}
+
 #[derive(Component, Serialize, Deserialize, Clone)]
 pub struct ParticleLifetime {
+    pub lifetime_ms : f32,
+    pub animation : Option<ParticleAnimation>
+}
+
+#[derive(Component, Serialize, Deserialize, Clone)]
+pub struct SpawnParticleLine {
+    pub glyph : rltk::FontCharType,
+    pub color : RGB,
+    pub lifetime_ms : f32
+}
+
+#[derive(Component, Serialize, Deserialize, Clone)]
+pub struct SpawnParticleBurst {
+    pub glyph : rltk::FontCharType,
+    pub color : RGB,
     pub lifetime_ms : f32
 }
 
@@ -261,6 +447,17 @@ pub struct ProvidesFood {}
 
 #[derive(Component, Debug, Serialize, Deserialize, Clone)]
 pub struct MagicMapper {}
+
+#[derive(Component, Debug, Serialize, Deserialize, Clone)]
+pub struct TownPortal {}
+
+#[derive(Component, Debug, Serialize, Deserialize, Clone)]
+pub struct TeleportTo {
+    pub x: i32,
+    pub y: i32,
+    pub depth: i32,
+    pub player_only : bool
+}
 
 #[derive(Component, Debug, Serialize, Deserialize, Clone)]
 pub struct Hidden {}
@@ -287,9 +484,11 @@ pub struct SerializeMe;
 // Special component that exists to help serialize the game data
 #[derive(Component, Serialize, Deserialize, Clone)]
 pub struct SerializationHelper {
-    pub map : super::map::Map
+    pub map : super::map::Map,
 }
 #[derive(Component, Serialize, Deserialize, Clone)]
 pub struct DMSerializationHelper {
-    pub map : super::map::MasterDungeonMap
+    pub map : super::map::MasterDungeonMap,
+    pub log : Vec<Vec<crate::gamelog::LogFragment>>,
+    pub events : HashMap<String, i32>
 }

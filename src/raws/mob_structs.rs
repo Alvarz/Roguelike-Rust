@@ -8,7 +8,7 @@ pub struct Mob {
     pub renderable : Option<Renderable>,
     pub blocks_tile : bool,
     pub vision_range : i32,
-    pub ai : String,
+    pub movement : String,
     pub quips : Option<Vec<String>>,
     pub attributes : MobAttributes,
     pub skills : Option<HashMap<String, i32>>,
@@ -18,7 +18,12 @@ pub struct Mob {
     pub equipped : Option<Vec<String>>,
     pub natural : Option<MobNatural>,
     pub loot_table : Option<String>,
-    pub light : Option<MobLight>
+    pub light : Option<MobLight>,
+    pub faction : Option<String>,
+    pub gold : Option<String>,
+    pub vendor : Option<Vec<String>>,
+    pub abilities : Option<Vec<MobAbility>>,
+    pub on_death : Option<Vec<MobAbility>>
 }
 
 #[derive(Deserialize, Debug)]
@@ -47,4 +52,12 @@ pub struct NaturalAttack {
 pub struct MobLight {
     pub range : i32,
     pub color : String
+}
+
+#[derive(Deserialize, Debug)]
+pub struct MobAbility {
+    pub spell : String,
+    pub chance : f32,
+    pub range : f32,
+    pub min_range : f32
 }

@@ -8,6 +8,12 @@ mod spawn_table_structs;
 use spawn_table_structs::*;
 mod loot_structs;
 use loot_structs::*;
+mod faction_structs;
+pub use faction_structs::*;
+mod spell_structs;
+pub use spell_structs::Spell;
+mod weapon_traits;
+pub use weapon_traits::*;
 
 mod rawmaster;
 pub use rawmaster::*;
@@ -26,7 +32,10 @@ pub struct Raws {
     pub mobs : Vec<Mob>,
     pub props : Vec<Prop>,
     pub spawn_table : Vec<SpawnTableEntry>,
-    pub loot_tables : Vec<LootTable>
+    pub loot_tables : Vec<LootTable>,
+    pub faction_table : Vec<FactionInfo>,
+    pub spells : Vec<Spell>,
+    pub weapon_traits : Vec<WeaponTrait>
 }
 
 pub fn load_raws() {
