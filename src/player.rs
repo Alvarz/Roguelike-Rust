@@ -203,9 +203,9 @@ pub fn player_input(gs: &mut State, ctx: &mut Rltk) -> RunState {
                 VirtualKeyCode::Key9 => Some(9),
                 _ => None
             };
-        if let Some(key) = key {
-            return use_consumable_hotkey(gs, key-1);
-        }
+            if let Some(key) = key {
+                return use_consumable_hotkey(gs, key-1);
+            }
     }
 
     // Player movement

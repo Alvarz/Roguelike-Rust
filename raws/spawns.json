@@ -1,20 +1,33 @@
 {
 "spawn_table" : [
-    { "name" : "Goblin", "weight" : 10, "min_depth" : 0, "max_depth" : 100 },
-    { "name" : "Orc", "weight" : 1, "min_depth" : 0, "max_depth" : 100, "add_map_depth_to_weight" : true },
+    { "name" : "Goblin", "weight" : 10, "min_depth" : 3, "max_depth" : 100 },
+    { "name" : "Orc", "weight" : 1, "min_depth" : 3, "max_depth" : 100, "add_map_depth_to_weight" : true },
     { "name" : "Health Potion", "weight" : 7, "min_depth" : 0, "max_depth" : 100 },
     { "name" : "Fireball Scroll", "weight" : 2, "min_depth" : 0, "max_depth" : 100, "add_map_depth_to_weight" : true },
     { "name" : "Confusion Scroll", "weight" : 2, "min_depth" : 0, "max_depth" : 100, "add_map_depth_to_weight" : true },
     { "name" : "Magic Missile Scroll", "weight" : 4, "min_depth" : 0, "max_depth" : 100 },
     { "name" : "Dagger", "weight" : 3, "min_depth" : 0, "max_depth" : 100 },
     { "name" : "Shield", "weight" : 3, "min_depth" : 0, "max_depth" : 100 },
-    { "name" : "Longsword", "weight" : 1, "min_depth" : 1, "max_depth" : 100 },
-    { "name" : "Tower Shield", "weight" : 1, "min_depth" : 1, "max_depth" : 100 },
+    { "name" : "Longsword", "weight" : 1, "min_depth" : 3, "max_depth" : 100 },
+    { "name" : "Tower Shield", "weight" : 1, "min_depth" : 3, "max_depth" : 100 },
     { "name" : "Rations", "weight" : 10, "min_depth" : 0, "max_depth" : 100 },
     { "name" : "Magic Mapping Scroll", "weight" : 2, "min_depth" : 0, "max_depth" : 100 },
     { "name" : "Bear Trap", "weight" : 5, "min_depth" : 0, "max_depth" : 100 },
     { "name" : "Battleaxe", "weight" : 1, "min_depth" : 2, "max_depth" : 100 },
-    { "name" : "Kobold", "weight" : 15, "min_depth" : 0, "max_depth" : 3 }
+    { "name" : "Kobold", "weight" : 15, "min_depth" : 3, "max_depth" : 5 },
+    { "name" : "Rat", "weight" : 15, "min_depth" : 2, "max_depth" : 3 },
+    { "name" : "Mangy Wolf", "weight" : 13, "min_depth" : 2, "max_depth" : 3 },
+    { "name" : "Deer", "weight" : 14, "min_depth" : 2, "max_depth" : 3 },
+    { "name" : "Bandit", "weight" : 9, "min_depth" : 2, "max_depth" : 3 }
+],
+
+"loot_tables" : [
+    { "name" : "Animal",
+      "drops" : [
+          { "name" : "Hide", "weight" : 10 },
+          { "name" : "Meat", "weight" : 10 }
+      ]
+    }
 ],
 
 "items" : [
@@ -112,6 +125,31 @@
     },
 
     {
+        "name" : "Meat",
+        "renderable": {
+            "glyph" : "%",
+            "fg" : "#00FF00",
+            "bg" : "#000000",
+            "order" : 2
+        },
+        "consumable" : {
+            "effects" : { 
+                "food" : ""
+            }
+        }
+    },
+
+    {
+        "name" : "Hide",
+        "renderable": {
+            "glyph" : "ß",
+            "fg" : "#A52A2A",
+            "bg" : "#000000",
+            "order" : 2
+        }
+    },
+
+    {
         "name" : "Dried Sausage",
         "renderable": {
             "glyph" : "%",
@@ -167,6 +205,22 @@
             "range" : "melee",
             "attribute" : "Quickness",
             "base_damage" : "1d4",
+            "hit_bonus" : 0
+        }
+    },
+
+    {
+        "name" : "Shortsword",
+        "renderable": {
+            "glyph" : "/",
+            "fg" : "#FFAAFF",
+            "bg" : "#000000",
+            "order" : 2
+        },
+        "weapon" : {
+            "range" : "melee",
+            "attribute" : "Might",
+            "base_damage" : "1d6",
             "hit_bonus" : 0
         }
     },
@@ -326,8 +380,36 @@
             "order" : 2
         },
         "wearable" : {
-            "slot" : "Legs",
+            "slot" : "Feet",
             "armor_class" : 0.1
+        }
+    },
+
+    {
+        "name" : "Leather Armor",
+        "renderable": {
+            "glyph" : "[",
+            "fg" : "#00FF00",
+            "bg" : "#000000",
+            "order" : 2
+        },
+        "wearable" : {
+            "slot" : "Torso",
+            "armor_class" : 1.0
+        }
+    },
+
+    {
+        "name" : "Leather Boots",
+        "renderable": {
+            "glyph" : "[",
+            "fg" : "#00FF00",
+            "bg" : "#000000",
+            "order" : 2
+        },
+        "wearable" : {
+            "slot" : "Feet",
+            "armor_class" : 0.2
         }
     }
 ],
@@ -336,7 +418,7 @@
     {
         "name" : "Barkeep",
         "renderable": {
-            "glyph" : "☺",
+            "glyph" : "☻",
             "fg" : "#EE82EE",
             "bg" : "#000000",
             "order" : 1
@@ -371,7 +453,7 @@
     {
         "name" : "Patron",
         "renderable": {
-            "glyph" : "☺",
+            "glyph" : "☻",
             "fg" : "#AAAAAA",
             "bg" : "#000000",
             "order" : 1
@@ -387,7 +469,7 @@
     {
         "name" : "Priest",
         "renderable": {
-            "glyph" : "☺",
+            "glyph" : "☻",
             "fg" : "#EE82EE",
             "bg" : "#000000",
             "order" : 1
@@ -402,7 +484,7 @@
     {
         "name" : "Parishioner",
         "renderable": {
-            "glyph" : "☺",
+            "glyph" : "☻",
             "fg" : "#AAAAAA",
             "bg" : "#000000",
             "order" : 1
@@ -418,7 +500,7 @@
     {
         "name" : "Blacksmith",
         "renderable": {
-            "glyph" : "☺",
+            "glyph" : "☻",
             "fg" : "#EE82EE",
             "bg" : "#000000",
             "order" : 1
@@ -433,7 +515,7 @@
     {
         "name" : "Clothier",
         "renderable": {
-            "glyph" : "☺",
+            "glyph" : "☻",
             "fg" : "#EE82EE",
             "bg" : "#000000",
             "order" : 1
@@ -448,7 +530,7 @@
     {
         "name" : "Alchemist",
         "renderable": {
-            "glyph" : "☺",
+            "glyph" : "☻",
             "fg" : "#EE82EE",
             "bg" : "#000000",
             "order" : 1
@@ -463,7 +545,7 @@
     {
         "name" : "Mom",
         "renderable": {
-            "glyph" : "☺",
+            "glyph" : "☻",
             "fg" : "#FFAAAA",
             "bg" : "#000000",
             "order" : 1
@@ -479,7 +561,7 @@
     {
         "name" : "Peasant",
         "renderable": {
-            "glyph" : "☺",
+            "glyph" : "☻",
             "fg" : "#999999",
             "bg" : "#000000",
             "order" : 1
@@ -495,7 +577,7 @@
     {
         "name" : "Dock Worker",
         "renderable": {
-            "glyph" : "☺",
+            "glyph" : "☻",
             "fg" : "#999999",
             "bg" : "#000000",
             "order" : 1
@@ -511,7 +593,7 @@
     {
         "name" : "Fisher",
         "renderable": {
-            "glyph" : "☺",
+            "glyph" : "☻",
             "fg" : "#999999",
             "bg" : "#000000",
             "order" : 1
@@ -527,7 +609,7 @@
     {
         "name" : "Wannabe Pirate",
         "renderable": {
-            "glyph" : "☺",
+            "glyph" : "☻",
             "fg" : "#aa9999",
             "bg" : "#000000",
             "order" : 1
@@ -543,7 +625,7 @@
     {
         "name" : "Drunk",
         "renderable": {
-            "glyph" : "☺",
+            "glyph" : "☻",
             "fg" : "#aa9999",
             "bg" : "#000000",
             "order" : 1
@@ -581,6 +663,106 @@
                 { "name" : "bite", "hit_bonus" : 0, "damage" : "1d4" }
             ]   
         }
+    },
+
+    {
+        "name" : "Mangy Wolf",
+        "renderable": {
+            "glyph" : "w",
+            "fg" : "#FF0000",
+            "bg" : "#000000",
+            "order" : 1
+        },
+        "blocks_tile" : true,
+        "vision_range" : 8,
+        "ai" : "carnivore",
+        "attributes" : {
+            "Might" : 3,
+            "Fitness" : 3
+        },
+        "skills" : {
+            "Melee" : -1,
+            "Defense" : -1
+        },
+        "natural" : {
+            "armor_class" : 12,
+            "attacks" : [
+                { "name" : "bite", "hit_bonus" : 0, "damage" : "1d6" }
+            ]   
+        },
+        "loot_table" : "Animal"
+    },
+
+    {
+        "name" : "Fox",
+        "renderable": {
+            "glyph" : "f",
+            "fg" : "#FF0000",
+            "bg" : "#000000",
+            "order" : 1
+        },
+        "blocks_tile" : true,
+        "vision_range" : 8,
+        "ai" : "carnivore",
+        "attributes" : {
+            "Might" : 3,
+            "Fitness" : 3
+        },
+        "skills" : {
+            "Melee" : -1,
+            "Defense" : -1
+        },
+        "natural" : {
+            "armor_class" : 11,
+            "attacks" : [
+                { "name" : "bite", "hit_bonus" : 0, "damage" : "1d4" }
+            ]   
+        },
+        "loot_table" : "Animal"
+    },
+
+    {
+        "name" : "Deer",
+        "renderable": {
+            "glyph" : "d",
+            "fg" : "#FFFF00",
+            "bg" : "#000000",
+            "order" : 1
+        },
+        "blocks_tile" : true,
+        "vision_range" : 8,
+        "ai" : "herbivore",
+        "attributes" : {
+            "Might" : 3,
+            "Fitness" : 3
+        },
+        "skills" : {
+            "Melee" : -1,
+            "Defense" : -1
+        },
+        "natural" : {
+            "armor_class" : 11,
+            "attacks" : [
+                { "name" : "bite", "hit_bonus" : 0, "damage" : "1d4" }
+            ]   
+        },
+        "loot_table" : "Animal"
+    },
+
+    {
+        "name" : "Bandit",
+        "renderable": {
+            "glyph" : "☻",
+            "fg" : "#FF0000",
+            "bg" : "#000000",
+            "order" : 1
+        },
+        "blocks_tile" : true,
+        "vision_range" : 4,
+        "ai" : "melee",
+        "quips" : [ "Stand and deliver!", "Alright, hand it over" ],
+        "attributes" : {},
+        "equipped" : [ "Dagger", "Shield", "Leather Armor", "Leather Boots" ]
     },
 
     {

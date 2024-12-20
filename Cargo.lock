@@ -275,7 +275,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "chapter-52-ui"
+name = "chapter-53-woods"
 version = "0.1.0"
 dependencies = [
  "lazy_static",
