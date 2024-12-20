@@ -112,6 +112,50 @@
     },
 
     {
+        "name" : "Dried Sausage",
+        "renderable": {
+            "glyph" : "%",
+            "fg" : "#00FF00",
+            "bg" : "#000000",
+            "order" : 2
+        },
+        "consumable" : {
+            "effects" : { 
+                "food" : ""
+            }
+        }
+    },
+
+    {
+        "name" : "Beer",
+        "renderable": {
+            "glyph" : "!",
+            "fg" : "#FF00FF",
+            "bg" : "#000000",
+            "order" : 2
+        },
+        "consumable" : {
+            "effects" : { "provides_healing" : "4" }
+        }
+    },
+
+    {
+        "name" : "Rusty Longsword",
+        "renderable": {
+            "glyph" : "/",
+            "fg" : "#BB77BB",
+            "bg" : "#000000",
+            "order" : 2
+        },
+        "weapon" : {
+            "range" : "melee",
+            "attribute" : "Might",
+            "base_damage" : "1d8-1",
+            "hit_bonus" : -1
+        }
+    },
+
+    {
         "name" : "Dagger",
         "renderable": {
             "glyph" : "/",
@@ -121,7 +165,9 @@
         },
         "weapon" : {
             "range" : "melee",
-            "power_bonus" : 2
+            "attribute" : "Quickness",
+            "base_damage" : "1d4",
+            "hit_bonus" : 0
         }
     },
 
@@ -135,7 +181,9 @@
         },
         "weapon" : {
             "range" : "melee",
-            "power_bonus" : 4
+            "attribute" : "Might",
+            "base_damage" : "1d8",
+            "hit_bonus" : 0
         }
     },
 
@@ -149,7 +197,9 @@
         },
         "weapon" : {
             "range" : "melee",
-            "power_bonus" : 5
+            "attribute" : "Might",
+            "base_damage" : "1d8+1",
+            "hit_bonus" : 0
         }
     },
 
@@ -161,8 +211,9 @@
             "bg" : "#000000",
             "order" : 2
         },
-        "shield" : {
-            "defense_bonus" : 1
+        "wearable" : {
+            "slot" : "Shield",
+            "armor_class" : 1.0
         }
     },
 
@@ -174,8 +225,109 @@
             "bg" : "#000000",
             "order" : 2
         },
-        "shield" : {
-            "defense_bonus" : 3
+        "wearable" : {
+            "slot" : "Shield",
+            "armor_class" : 2.0
+        }
+    },
+
+    {
+        "name" : "Stained Tunic",
+        "renderable": {
+            "glyph" : "[",
+            "fg" : "#00FF00",
+            "bg" : "#000000",
+            "order" : 2
+        },
+        "wearable" : {
+            "slot" : "Torso",
+            "armor_class" : 0.1
+        }
+    },
+
+    {
+        "name" : "Torn Trousers",
+        "renderable": {
+            "glyph" : "[",
+            "fg" : "#00FFFF",
+            "bg" : "#000000",
+            "order" : 2
+        },
+        "wearable" : {
+            "slot" : "Legs",
+            "armor_class" : 0.1
+        }
+    },
+
+    {
+        "name" : "Old Boots",
+        "renderable": {
+            "glyph" : "[",
+            "fg" : "#FF9999",
+            "bg" : "#000000",
+            "order" : 2
+        },
+        "wearable" : {
+            "slot" : "Legs",
+            "armor_class" : 0.1
+        }
+    },
+
+    {
+        "name" : "Cudgel",
+        "renderable": {
+            "glyph" : "/",
+            "fg" : "#A52A2A",
+            "bg" : "#000000",
+            "order" : 2
+        },
+        "weapon" : {
+            "range" : "melee",
+            "attribute" : "Quickness",
+            "base_damage" : "1d4",
+            "hit_bonus" : 0
+        }
+    },
+
+    {
+        "name" : "Cloth Tunic",
+        "renderable": {
+            "glyph" : "[",
+            "fg" : "#00FF00",
+            "bg" : "#000000",
+            "order" : 2
+        },
+        "wearable" : {
+            "slot" : "Torso",
+            "armor_class" : 0.1
+        }
+    },
+
+    {
+        "name" : "Cloth Pants",
+        "renderable": {
+            "glyph" : "[",
+            "fg" : "#00FFFF",
+            "bg" : "#000000",
+            "order" : 2
+        },
+        "wearable" : {
+            "slot" : "Legs",
+            "armor_class" : 0.1
+        }
+    },
+
+    {
+        "name" : "Slippers",
+        "renderable": {
+            "glyph" : "[",
+            "fg" : "#FF9999",
+            "bg" : "#000000",
+            "order" : 2
+        },
+        "wearable" : {
+            "slot" : "Legs",
+            "armor_class" : 0.1
         }
     }
 ],
@@ -190,14 +342,15 @@
             "order" : 1
         },
         "blocks_tile" : true,
-        "stats" : {
-            "max_hp" : 16,
-            "hp" : 16,
-            "defense" : 1,
-            "power" : 4
-        },
         "vision_range" : 4,
-        "ai" : "vendor"
+        "ai" : "vendor",
+        "attributes" : {
+            "intelligence" : 13
+        },
+        "skills" : {
+            "Melee" : 2
+        },
+        "equipped" : [ "Cudgel", "Cloth Tunic", "Cloth Pants", "Slippers" ]
     },
 
     {
@@ -209,14 +362,10 @@
             "order" : 1
         },
         "blocks_tile" : true,
-        "stats" : {
-            "max_hp" : 16,
-            "hp" : 16,
-            "defense" : 1,
-            "power" : 4
-        },
         "vision_range" : 4,
-        "ai" : "vendor"
+        "ai" : "vendor",
+        "attributes" : {},
+        "equipped" : [ "Cudgel", "Cloth Tunic", "Cloth Pants", "Slippers" ]
     },
 
     {
@@ -228,15 +377,11 @@
             "order" : 1
         },
         "blocks_tile" : true,
-        "stats" : {
-            "max_hp" : 16,
-            "hp" : 16,
-            "defense" : 1,
-            "power" : 4
-        },
         "vision_range" : 4,
         "ai" : "bystander",
-        "quips" : [ "Quiet down, it's too early!", "Oh my, I drank too much.", "Still saving the world, eh?" ]
+        "quips" : [ "Quiet down, it's too early!", "Oh my, I drank too much.", "Still saving the world, eh?" ],
+        "attributes" : {},
+        "equipped" : [ "Cudgel", "Cloth Tunic", "Cloth Pants", "Slippers" ]
     },
 
     {
@@ -248,14 +393,10 @@
             "order" : 1
         },
         "blocks_tile" : true,
-        "stats" : {
-            "max_hp" : 16,
-            "hp" : 16,
-            "defense" : 1,
-            "power" : 4
-        },
         "vision_range" : 4,
-        "ai" : "bystander"
+        "ai" : "bystander",
+        "attributes" : {},
+        "equipped" : [ "Cudgel", "Cloth Tunic", "Cloth Pants", "Slippers" ]
     },
 
     {
@@ -267,15 +408,11 @@
             "order" : 1
         },
         "blocks_tile" : true,
-        "stats" : {
-            "max_hp" : 16,
-            "hp" : 16,
-            "defense" : 1,
-            "power" : 4
-        },
         "vision_range" : 4,
         "ai" : "bystander",
-        "quips" : [ "Great to see a new face here!", "I hear there's going to be a good sermon on tea", "Want some cake?" ]
+        "quips" : [ "Great to see a new face here!", "I hear there's going to be a good sermon on tea", "Want some cake?" ],
+        "attributes" : {},
+        "equipped" : [ "Cudgel", "Cloth Tunic", "Cloth Pants", "Slippers" ]
     },
 
     {
@@ -287,14 +424,10 @@
             "order" : 1
         },
         "blocks_tile" : true,
-        "stats" : {
-            "max_hp" : 16,
-            "hp" : 16,
-            "defense" : 1,
-            "power" : 4
-        },
         "vision_range" : 4,
-        "ai" : "vendor"
+        "ai" : "vendor",
+        "attributes" : {},
+        "equipped" : [ "Cudgel", "Cloth Tunic", "Cloth Pants", "Slippers" ]
     },
 
     {
@@ -306,14 +439,10 @@
             "order" : 1
         },
         "blocks_tile" : true,
-        "stats" : {
-            "max_hp" : 16,
-            "hp" : 16,
-            "defense" : 1,
-            "power" : 4
-        },
         "vision_range" : 4,
-        "ai" : "vendor"
+        "ai" : "vendor",
+        "attributes" : {},
+        "equipped" : [ "Cudgel", "Cloth Tunic", "Cloth Pants", "Slippers" ]
     },
 
     {
@@ -325,14 +454,10 @@
             "order" : 1
         },
         "blocks_tile" : true,
-        "stats" : {
-            "max_hp" : 16,
-            "hp" : 16,
-            "defense" : 1,
-            "power" : 4
-        },
         "vision_range" : 4,
-        "ai" : "vendor"
+        "ai" : "vendor",
+        "attributes" : {},
+        "equipped" : [ "Cudgel", "Cloth Tunic", "Cloth Pants", "Slippers" ]
     },
 
     {
@@ -344,15 +469,11 @@
             "order" : 1
         },
         "blocks_tile" : true,
-        "stats" : {
-            "max_hp" : 16,
-            "hp" : 16,
-            "defense" : 1,
-            "power" : 4
-        },
         "vision_range" : 4,
         "ai" : "bystander",
-        "quips" : [ "Hello, dear", "Off saving the world again?", "Be careful in the dungeon!", "Your father would be so proud, were he here." ]
+        "quips" : [ "Hello, dear", "Off saving the world again?", "Be careful in the dungeon!", "Your father would be so proud, were he here." ],
+        "attributes" : {},
+        "equipped" : [ "Cudgel", "Cloth Tunic", "Cloth Pants", "Slippers" ]
     },
 
     {
@@ -364,15 +485,11 @@
             "order" : 1
         },
         "blocks_tile" : true,
-        "stats" : {
-            "max_hp" : 16,
-            "hp" : 16,
-            "defense" : 1,
-            "power" : 4
-        },
         "vision_range" : 4,
         "ai" : "bystander",
-        "quips" : [ "Why are you in my house?" ]
+        "quips" : [ "Why are you in my house?" ],
+        "attributes" : {},
+        "equipped" : [ "Cudgel", "Cloth Tunic", "Cloth Pants", "Slippers" ]
     },
 
     {
@@ -384,15 +501,11 @@
             "order" : 1
         },
         "blocks_tile" : true,
-        "stats" : {
-            "max_hp" : 16,
-            "hp" : 16,
-            "defense" : 1,
-            "power" : 4
-        },
         "vision_range" : 4,
         "ai" : "bystander",
-        "quips" : [ "Lovely day, eh?", "Nice weather", "Hello" ]
+        "quips" : [ "Lovely day, eh?", "Nice weather", "Hello" ],
+        "attributes" : {},
+        "equipped" : [ "Cudgel", "Cloth Tunic", "Cloth Pants", "Slippers" ]
     },
 
     {
@@ -404,15 +517,11 @@
             "order" : 1
         },
         "blocks_tile" : true,
-        "stats" : {
-            "max_hp" : 16,
-            "hp" : 16,
-            "defense" : 1,
-            "power" : 4
-        },
         "vision_range" : 4,
         "ai" : "bystander",
-        "quips" : [ "They're biting today!", "I caught something, but it wasn't a fish!", "Looks like rain" ]
+        "quips" : [ "They're biting today!", "I caught something, but it wasn't a fish!", "Looks like rain" ],
+        "attributes" : {},
+        "equipped" : [ "Cudgel", "Cloth Tunic", "Cloth Pants", "Slippers" ]
     },
 
     {
@@ -424,15 +533,11 @@
             "order" : 1
         },
         "blocks_tile" : true,
-        "stats" : {
-            "max_hp" : 16,
-            "hp" : 16,
-            "defense" : 1,
-            "power" : 4
-        },
         "vision_range" : 4,
         "ai" : "bystander",
-        "quips" : [ "Arrr", "Grog!", "Booze!" ]
+        "quips" : [ "Arrr", "Grog!", "Booze!" ],
+        "attributes" : {},
+        "equipped" : [ "Cudgel", "Cloth Tunic", "Cloth Pants", "Slippers" ]
     },
 
     {
@@ -444,15 +549,11 @@
             "order" : 1
         },
         "blocks_tile" : true,
-        "stats" : {
-            "max_hp" : 16,
-            "hp" : 16,
-            "defense" : 1,
-            "power" : 4
-        },
         "vision_range" : 4,
         "ai" : "bystander",
-        "quips" : [ "Hic", "Need... more... booze!", "Spare a copper?" ]
+        "quips" : [ "Hic", "Need... more... booze!", "Spare a copper?" ],
+        "attributes" : {},
+        "equipped" : [ "Cudgel", "Cloth Tunic", "Cloth Pants", "Slippers" ]
     },
 
     {
@@ -464,14 +565,22 @@
             "order" : 1
         },
         "blocks_tile" : true,
-        "stats" : {
-            "max_hp" : 2,
-            "hp" : 2,
-            "defense" : 1,
-            "power" : 3
-        },
         "vision_range" : 8,
-        "ai" : "melee"
+        "ai" : "melee",
+        "attributes" : {
+            "Might" : 3,
+            "Fitness" : 3
+        },
+        "skills" : {
+            "Melee" : -1,
+            "Defense" : -1
+        },
+        "natural" : {
+            "armor_class" : 11,
+            "attacks" : [
+                { "name" : "bite", "hit_bonus" : 0, "damage" : "1d4" }
+            ]   
+        }
     },
 
     {
@@ -483,14 +592,9 @@
             "order" : 1
         },
         "blocks_tile" : true,
-        "stats" : {
-            "max_hp" : 16,
-            "hp" : 16,
-            "defense" : 1,
-            "power" : 4
-        },
         "vision_range" : 8,
-        "ai" : "melee"
+        "ai" : "melee",
+        "attributes" : {}
     },
 
     {
@@ -502,14 +606,9 @@
             "order" : 1
         },
         "blocks_tile" : true,
-        "stats" : {
-            "max_hp" : 8,
-            "hp" : 8,
-            "defense" : 1,
-            "power" : 3
-        },
         "vision_range" : 8,
-        "ai" : "melee"
+        "ai" : "melee",
+        "attributes" : {}
     },
 
     {
@@ -521,14 +620,9 @@
             "order" : 1
         },
         "blocks_tile" : true,
-        "stats" : {
-            "max_hp" : 4,
-            "hp" : 4,
-            "defense" : 0,
-            "power" : 2
-        },
         "vision_range" : 4,
-        "ai" : "melee"
+        "ai" : "melee",
+        "attributes" : {}
     }
 ],
 

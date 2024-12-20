@@ -275,10 +275,11 @@ dependencies = [
 ]
 
 [[package]]
-name = "chapter-49-town3"
+name = "chapter-51-gear"
 version = "0.1.0"
 dependencies = [
  "lazy_static",
+ "regex",
  "rltk",
  "serde",
  "serde_json",
