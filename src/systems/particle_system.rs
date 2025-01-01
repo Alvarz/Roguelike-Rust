@@ -8,7 +8,7 @@ pub fn update_particles(ecs : &mut World, ctx : &Rltk) {
         // Age out particles
         let mut particles = ecs.write_storage::<ParticleLifetime>();
         let entities = ecs.entities();
-        for (entity, mut particle) in (&entities, &mut particles).join() {
+        for (entity, particle) in (&entities, &mut particles).join() {
             if let Some(animation) = &mut particle.animation {
                 animation.timer += ctx.frame_time_ms;
                 if animation.timer > animation.step_time && animation.current_step < animation.path.len()-2 {

@@ -19,7 +19,7 @@ impl<'a> System<'a> for DefaultMoveAI {
             mut apply_move, entities) = data;
 
         let mut turn_done : Vec<Entity> = Vec::new();
-        for (entity, pos, mut mode, _myturn) in
+        for (entity, pos, mode, _myturn) in
             (&entities, &positions, &mut move_mode, &turns).join()
         {
             turn_done.push(entity);
