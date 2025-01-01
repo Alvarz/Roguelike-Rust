@@ -28,7 +28,7 @@ pub fn main_menu(gs: &mut State, ctx: &mut Rltk) -> MainMenuResult {
 
     draw_batch.print_color_centered(
         20,
-        "Untitle Roguelike",
+        "Untitled Roguelike",
         ColorPair::new(RGB::named(rltk::YELLOW), RGB::named(rltk::BLACK)),
     );
     draw_batch.print_color_centered(

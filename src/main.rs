@@ -29,6 +29,7 @@ pub mod rng;
 pub mod spatial;
 mod systems;
 
+const PROJECT_NAME: &str = "Untitled Roguelike";
 const SHOW_MAPGEN_VISUALIZER: bool = false;
 const SHOW_FPS: bool = true;
 
@@ -549,7 +550,7 @@ impl State {
         gamelog::Logger::new()
             .append("Welcome to")
             .color(rltk::CYAN)
-            .append("Untitled Roguelike")
+            .append(PROJECT_NAME)
             .log();
 
         gamelog::clear_events();
@@ -560,7 +561,7 @@ fn main() -> rltk::BError {
     use rltk::RltkBuilder;
     let mut context = RltkBuilder::simple(80, 60)
         .unwrap()
-        .with_title("Untitled Roguelike")
+        .with_title(PROJECT_NAME)
         .with_font("vga8x16.png", 8, 16)
         .with_sparse_console(80, 30, "vga8x16.png")
         .with_vsync(false)
