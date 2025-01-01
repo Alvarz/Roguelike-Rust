@@ -1,2 +1,4 @@
 /target
 savegame.json
+/wasm/*.js
+/wasm/*.wasm
