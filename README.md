@@ -18,3 +18,7 @@
 
 
 current chapter http://bfnightly.bracketproductions.com/rustbook/chapter_73.html
+
+
+### Doc
+https://bfnightly.bracketproductions.com/bracket-lib/consoles.html
