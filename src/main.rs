@@ -220,7 +220,7 @@ impl GameState for State {
                     gui::CheatMenuResult::Heal => {
                         let player = self.ecs.fetch::<Entity>();
                         let mut pools = self.ecs.write_storage::<Pools>();
-                        let mut player_pools = pools.get_mut(*player).unwrap();
+                        let player_pools = pools.get_mut(*player).unwrap();
                         player_pools.hit_points.current = player_pools.hit_points.max;
                         newrunstate = RunState::AwaitingInput;
                     }
@@ -234,7 +234,7 @@ impl GameState for State {
                     gui::CheatMenuResult::GodMode => {
                         let player = self.ecs.fetch::<Entity>();
                         let mut pools = self.ecs.write_storage::<Pools>();
-                        let mut player_pools = pools.get_mut(*player).unwrap();
+                        let player_pools = pools.get_mut(*player).unwrap();
                         player_pools.god_mode = true;
                         newrunstate = RunState::AwaitingInput;
                     }

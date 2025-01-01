@@ -122,7 +122,7 @@ impl RawMaster {
         if let Some(base_value) = base_item_copy.base_value.as_mut() {
             *base_value += (nmw.bonus as f32 + 1.0) * 50.0;
         }
-        if let Some(mut weapon) = base_item_copy.weapon.as_mut() {
+        if let Some(weapon) = base_item_copy.weapon.as_mut() {
             weapon.hit_bonus += nmw.bonus;
             let (n,die,plus) = parse_dice_string(&weapon.base_damage);
             let final_bonus = plus+nmw.bonus;
@@ -132,7 +132,7 @@ impl RawMaster {
                 weapon.base_damage = format!("{}d{}-{}", n, die, i32::abs(final_bonus));
             }
         }
-        if let Some(mut armor) = base_item_copy.wearable.as_mut() {
+        if let Some(armor) = base_item_copy.wearable.as_mut() {
             armor.armor_class += nmw.bonus as f32;
         }
         base_item_copy
@@ -160,7 +160,7 @@ impl RawMaster {
         items_to_build.iter().filter(|i| i.bonus > 0).for_each(|nmw| {
             for wt in self.raws.weapon_traits.iter() {
                 let mut base_item_copy = self.build_base_magic_item(&nmw);
-                if let Some(mut weapon) = base_item_copy.weapon.as_mut() {
+                if let Some(weapon) = base_item_copy.weapon.as_mut() {
                     base_item_copy.name = format!("{} {}", wt.name, base_item_copy.name);
                     if let Some(base_value) = base_item_copy.base_value.as_mut() {
                         *base_value *= 2.0;

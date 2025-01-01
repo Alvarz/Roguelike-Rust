@@ -43,7 +43,7 @@ impl MasterDungeonMap {
 
     pub fn get_map(&self, depth : i32) -> Option<Map> {
         if self.maps.contains_key(&depth) {
-            let mut result = self.maps[&depth].clone();
+            let result = self.maps[&depth].clone();
             Some(result)
         } else {
             None

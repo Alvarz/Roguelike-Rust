@@ -19,7 +19,7 @@ impl<'a> System<'a> for MovementSystem {
                         WriteExpect<'a, RunState>);
 
     fn run(&mut self, data : Self::SystemData) {
-        let (mut map, mut position, blockers, entities, mut apply_move,
+        let (map, mut position, blockers, entities, mut apply_move,
             mut apply_teleport, mut other_level, mut moved,
             mut viewsheds, player_entity, mut runstate) = data;
 
@@ -45,7 +45,7 @@ impl<'a> System<'a> for MovementSystem {
         apply_teleport.clear();
 
         // Apply broad movement
-        for (entity, movement, mut pos) in (&entities, &apply_move, &mut position).join() {
+        for (entity, movement, pos) in (&entities, &apply_move, &mut position).join() {
             let start_idx = map.xy_idx(pos.x, pos.y);
             let dest_idx = movement.dest_idx as usize;
             crate::spatial::move_entity(entity, start_idx, dest_idx);
