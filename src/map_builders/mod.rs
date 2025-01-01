@@ -68,6 +68,8 @@ use town::town_builder;
 use area_ending_point::*;
 mod mushroom_forest;
 use mushroom_forest::*;
+mod dark_elves;
+use dark_elves::*;
 
 pub struct BuilderMap {
     pub spawn_list : Vec<(usize, String)>,
@@ -316,6 +318,8 @@ pub fn level_builder(new_depth: i32, width: i32, height: i32) -> BuilderChain {
         7 => mushroom_entrance(new_depth, width, height),
         8 => mushroom_builder(new_depth, width, height),
         9 => mushroom_exit(new_depth, width, height),
+        10 => dark_elf_city(new_depth, width, height),
+        11 => dark_elf_plaza(new_depth, width, height),
         _ => random_builder(new_depth, width, height)
     }
 }
