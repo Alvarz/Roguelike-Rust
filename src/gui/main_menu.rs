@@ -93,7 +93,7 @@ pub fn main_menu(gs: &mut State, ctx: &mut Rltk) -> MainMenuResult {
             );
         }
 
-        draw_batch.submit(6000);
+        let _ = draw_batch.submit(6000);
 
         match ctx.key {
             None => {

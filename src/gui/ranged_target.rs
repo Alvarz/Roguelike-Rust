@@ -1,9 +1,13 @@
+use super::ItemMenuResult;
+use crate::{camera, State, Viewshed};
 use rltk::prelude::*;
 use specs::prelude::*;
-use crate::{State, camera, Viewshed };
-use super::ItemMenuResult;
 
-pub fn ranged_target(gs : &mut State, ctx : &mut Rltk, range : i32) -> (ItemMenuResult, Option<Point>) {
+pub fn ranged_target(
+    gs: &mut State,
+    ctx: &mut Rltk,
+    range: i32,
+) -> (ItemMenuResult, Option<Point>) {
     let (min_x, max_x, min_y, max_y) = camera::get_screen_bounds(&gs.ecs, ctx);
     let player_entity = gs.ecs.fetch::<Entity>();
     let player_pos = gs.ecs.fetch::<Point>();
@@ -12,9 +16,9 @@ pub fn ranged_target(gs : &mut State, ctx : &mut Rltk, range : i32) -> (ItemMenu
     let mut draw_batch = DrawBatch::new();
 
     draw_batch.print_color(
-        Point::new(5, 0), 
+        Point::new(5, 0),
         "Select Target:",
-        ColorPair::new(RGB::named(rltk::YELLOW), RGB::named(rltk::BLACK))
+        ColorPair::new(RGB::named(rltk::YELLOW), RGB::named(rltk::BLACK)),
     );
 
     // Highlight available target cells
@@ -27,7 +31,11 @@ pub fn ranged_target(gs : &mut State, ctx : &mut Rltk, range : i32) -> (ItemMenu
             if distance <= range as f32 {
                 let screen_x = idx.x - min_x;
                 let screen_y = idx.y - min_y;
-                if screen_x > 1 && screen_x < (max_x - min_x)-1 && screen_y > 1 && screen_y < (max_y - min_y)-1 {
+                if screen_x > 1
+                    && screen_x < (max_x - min_x) - 1
+                    && screen_y > 1
+                    && screen_y < (max_y - min_y) - 1
+                {
                     draw_batch.set_bg(Point::new(screen_x, screen_y), RGB::named(rltk::BLUE));
                     available_cells.push(idx);
                 }
@@ -43,11 +51,18 @@ pub fn ranged_target(gs : &mut State, ctx : &mut Rltk, range : i32) -> (ItemMenu
     mouse_map_pos.0 += min_x - 1;
     mouse_map_pos.1 += min_y - 1;
     let mut valid_target = false;
-    for idx in available_cells.iter() { if idx.x == mouse_map_pos.0 && idx.y == mouse_map_pos.1 { valid_target = true; } }
+    for idx in available_cells.iter() {
+        if idx.x == mouse_map_pos.0 && idx.y == mouse_map_pos.1 {
+            valid_target = true;
+        }
+    }
     if valid_target {
         draw_batch.set_bg(Point::new(mouse_pos.0, mouse_pos.1), RGB::named(rltk::CYAN));
         if ctx.left_click {
-            return (ItemMenuResult::Selected, Some(Point::new(mouse_map_pos.0, mouse_map_pos.1)));
+            return (
+                ItemMenuResult::Selected,
+                Some(Point::new(mouse_map_pos.0, mouse_map_pos.1)),
+            );
         }
     } else {
         draw_batch.set_bg(Point::new(mouse_pos.0, mouse_pos.1), RGB::named(rltk::RED));
@@ -56,7 +71,8 @@ pub fn ranged_target(gs : &mut State, ctx : &mut Rltk, range : i32) -> (ItemMenu
         }
     }
 
-    draw_batch.submit(5000);
+    let _ = draw_batch.submit(5000);
 
     (ItemMenuResult::NoResponse, None)
 }
+

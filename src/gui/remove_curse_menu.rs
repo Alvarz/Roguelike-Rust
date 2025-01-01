@@ -1,9 +1,9 @@
+use super::{get_item_display_name, item_result_menu, ItemMenuResult};
+use crate::{CursedItem, Equipped, InBackpack, Item, MasterDungeonMap, Name, State};
 use rltk::prelude::*;
 use specs::prelude::*;
-use crate::{Name, State, InBackpack, Equipped, MasterDungeonMap, CursedItem, Item };
-use super::{get_item_display_name, item_result_menu, ItemMenuResult};
 
-pub fn remove_curse_menu(gs : &mut State, ctx : &mut Rltk) -> (ItemMenuResult, Option<Entity>) {
+pub fn remove_curse_menu(gs: &mut State, ctx: &mut Rltk) -> (ItemMenuResult, Option<Entity>) {
     let player_entity = gs.ecs.fetch::<Entity>();
     let equipped = gs.ecs.read_storage::<Equipped>();
     let backpack = gs.ecs.read_storage::<InBackpack>();
@@ -15,9 +15,10 @@ pub fn remove_curse_menu(gs : &mut State, ctx : &mut Rltk) -> (ItemMenuResult, O
 
     let mut draw_batch = DrawBatch::new();
 
-    let mut items : Vec<(Entity, String)> = Vec::new();
-    (&entities, &item_components, &cursed).join()
-        .filter(|(item_entity,_item,_cursed)| {
+    let mut items: Vec<(Entity, String)> = Vec::new();
+    (&entities, &item_components, &cursed)
+        .join()
+        .filter(|(item_entity, _item, _cursed)| {
             let mut keep = false;
             if let Some(bp) = backpack.get(*item_entity) {
                 if bp.owner == *player_entity {
@@ -36,17 +37,9 @@ pub fn remove_curse_menu(gs : &mut State, ctx : &mut Rltk) -> (ItemMenuResult, O
             }
             keep
         })
-        .for_each(|item| {
-            items.push((item.0, get_item_display_name(&gs.ecs, item.0)))
-        });
+        .for_each(|item| items.push((item.0, get_item_display_name(&gs.ecs, item.0))));
 
-    let result = item_result_menu(
-        &mut draw_batch,
-        "Inventory",
-        items.len(),
-        &items,
-        ctx.key
-    );
-    draw_batch.submit(6000);
+    let result = item_result_menu(&mut draw_batch, "Inventory", items.len(), &items, ctx.key);
+    let _ = draw_batch.submit(6000);
     result
 }

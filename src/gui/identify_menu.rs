@@ -1,9 +1,9 @@
+use super::{get_item_display_name, item_result_menu, ItemMenuResult};
+use crate::{Equipped, InBackpack, Item, MasterDungeonMap, Name, ObfuscatedName, State};
 use rltk::prelude::*;
 use specs::prelude::*;
-use crate::{Name, State, InBackpack, Equipped, MasterDungeonMap, Item, ObfuscatedName };
-use super::{get_item_display_name, item_result_menu, ItemMenuResult};
 
-pub fn identify_menu(gs : &mut State, ctx : &mut Rltk) -> (ItemMenuResult, Option<Entity>) {
+pub fn identify_menu(gs: &mut State, ctx: &mut Rltk) -> (ItemMenuResult, Option<Entity>) {
     let mut draw_batch = DrawBatch::new();
 
     let player_entity = gs.ecs.fetch::<Entity>();
@@ -15,14 +15,17 @@ pub fn identify_menu(gs : &mut State, ctx : &mut Rltk) -> (ItemMenuResult, Optio
     let dm = gs.ecs.fetch::<MasterDungeonMap>();
     let obfuscated = gs.ecs.read_storage::<ObfuscatedName>();
 
-    let mut items : Vec<(Entity, String)> = Vec::new();
-    (&entities, &item_components).join()
-        .filter(|(item_entity,_item)| {
+    let mut items: Vec<(Entity, String)> = Vec::new();
+    (&entities, &item_components)
+        .join()
+        .filter(|(item_entity, _item)| {
             let mut keep = false;
             if let Some(bp) = backpack.get(*item_entity) {
                 if bp.owner == *player_entity {
                     if let Some(name) = names.get(*item_entity) {
-                        if obfuscated.get(*item_entity).is_some() && !dm.identified_items.contains(&name.name) {
+                        if obfuscated.get(*item_entity).is_some()
+                            && !dm.identified_items.contains(&name.name)
+                        {
                             keep = true;
                         }
                     }
@@ -32,7 +35,9 @@ pub fn identify_menu(gs : &mut State, ctx : &mut Rltk) -> (ItemMenuResult, Optio
             if let Some(equip) = equipped.get(*item_entity) {
                 if equip.owner == *player_entity {
                     if let Some(name) = names.get(*item_entity) {
-                        if obfuscated.get(*item_entity).is_some() && !dm.identified_items.contains(&name.name) {
+                        if obfuscated.get(*item_entity).is_some()
+                            && !dm.identified_items.contains(&name.name)
+                        {
                             keep = true;
                         }
                     }
@@ -40,17 +45,10 @@ pub fn identify_menu(gs : &mut State, ctx : &mut Rltk) -> (ItemMenuResult, Optio
             }
             keep
         })
-        .for_each(|item| {
-            items.push((item.0, get_item_display_name(&gs.ecs, item.0)))
-        });
+        .for_each(|item| items.push((item.0, get_item_display_name(&gs.ecs, item.0))));
 
-    let result = item_result_menu(
-        &mut draw_batch,
-        "Inventory",
-        items.len(),
-        &items,
-        ctx.key
-    );
-    draw_batch.submit(6000);
+    let result = item_result_menu(&mut draw_batch, "Inventory", items.len(), &items, ctx.key);
+    let _ = draw_batch.submit(6000);
     result
 }
+
