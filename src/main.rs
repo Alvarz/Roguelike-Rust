@@ -142,7 +142,7 @@ impl GameState for State {
             }
             RunState::PreRun => {
                 self.run_systems();
-                self.ecs.maintain();
+                // self.ecs.maintain();
                 newrunstate = RunState::AwaitingInput;
             }
             RunState::AwaitingInput => {
@@ -155,7 +155,7 @@ impl GameState for State {
                 let mut should_change_target = false;
                 while newrunstate == RunState::Ticking {
                     self.run_systems();
-                    self.ecs.maintain();
+                    // self.ecs.maintain();
                     match *self.ecs.fetch::<RunState>() {
                         RunState::AwaitingInput => {
                             newrunstate = RunState::AwaitingInput;
@@ -407,7 +407,11 @@ impl GameState for State {
                         }
                     }
                     gui::MainMenuResult::Selected { selected } => match selected {
-                        gui::MainMenuSelection::NewGame => newrunstate = RunState::PreRun,
+                        gui::MainMenuSelection::NewGame => {
+                            // https://github.com/amethyst/rustrogueliketutorial/issues/126
+                            self.game_over_cleanup();
+                            newrunstate = RunState::PreRun
+                        }
                         gui::MainMenuSelection::LoadGame => {
                             saveload_system::load_game(&mut self.ecs);
                             newrunstate = RunState::AwaitingInput;

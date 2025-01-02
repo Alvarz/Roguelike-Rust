@@ -299,11 +299,13 @@ impl PrefabBuilder {
                 let chunk_y = pos.y;
 
                 let width = build_data.map.width; // The borrow checker really doesn't like it
-                let height = build_data.map.height; // when we access `self` inside the `retain`
+                // let height = build_data.map.height; // when we access `self` inside the `retain`
                 build_data.spawn_list.retain(|e| {
                     let idx = e.0 as i32;
                     let x = idx % width;
-                    let y = idx / height;
+                    // let y = idx / height;
+                    // https://github.com/amethyst/rustrogueliketutorial/issues/207
+                    let y = idx / width;
                     x < chunk_x || x > chunk_x + vault.width as i32 || y < chunk_y || y > chunk_y + vault.height as i32
                 });
 
