@@ -407,7 +407,11 @@ impl GameState for State {
                         }
                     }
                     gui::MainMenuResult::Selected { selected } => match selected {
-                        gui::MainMenuSelection::NewGame => newrunstate = RunState::PreRun,
+                        gui::MainMenuSelection::NewGame => {
+                            // https://github.com/amethyst/rustrogueliketutorial/issues/126
+                            self.game_over_cleanup();
+                            newrunstate = RunState::PreRun
+                        }
                         gui::MainMenuSelection::LoadGame => {
                             saveload_system::load_game(&mut self.ecs);
                             newrunstate = RunState::AwaitingInput;
