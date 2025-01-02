@@ -142,7 +142,7 @@ impl GameState for State {
             }
             RunState::PreRun => {
                 self.run_systems();
-                self.ecs.maintain();
+                // self.ecs.maintain();
                 newrunstate = RunState::AwaitingInput;
             }
             RunState::AwaitingInput => {
@@ -155,7 +155,7 @@ impl GameState for State {
                 let mut should_change_target = false;
                 while newrunstate == RunState::Ticking {
                     self.run_systems();
-                    self.ecs.maintain();
+                    // self.ecs.maintain();
                     match *self.ecs.fetch::<RunState>() {
                         RunState::AwaitingInput => {
                             newrunstate = RunState::AwaitingInput;

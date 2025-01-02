@@ -69,7 +69,8 @@ impl RandomTable {
         let mut roll = crate::rng::roll_dice(1, self.total_weight)-1;
         let mut index : usize = 0;
 
-        while roll > 0 {
+        // https://github.com/amethyst/rustrogueliketutorial/issues/205
+        while roll >= 0 {
             if roll < self.entries[index].weight {
                 return self.entries[index].name.clone();
             }
