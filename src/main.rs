@@ -32,6 +32,7 @@ mod systems;
 const PROJECT_NAME: &str = "Untitled Roguelike";
 const SHOW_MAPGEN_VISUALIZER: bool = false;
 const SHOW_FPS: bool = true;
+const SHOW_SEED: bool = true;
 
 #[derive(PartialEq, Copy, Clone)]
 pub enum VendorMode {
@@ -510,6 +511,14 @@ impl GameState for State {
         let _ = rltk::render_draw_buffer(ctx);
         if SHOW_FPS {
             ctx.print(1, 59, &format!("FPS: {}", ctx.fps));
+        }
+
+        if SHOW_SEED {
+            ctx.print(
+                10,
+                59,
+                &format!("Seed: {}", crate::rng::get_current_seed().to_string()),
+            );
         }
     }
 }

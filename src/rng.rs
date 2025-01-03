@@ -3,21 +3,28 @@ use std::sync::Mutex;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 lazy_static! {
+    static ref CURRENT_SEED: Mutex<u64> = Mutex::new(generate_random_seed());
     static ref RNG: Mutex<RandomNumberGenerator> =
-        Mutex::new(RandomNumberGenerator::seeded(generate_random_seed()));
+        Mutex::new(RandomNumberGenerator::seeded(*CURRENT_SEED.lock().unwrap()));
 }
 fn generate_random_seed() -> u64 {
-    let seed: u64 = SystemTime::now()
+    let seed = SystemTime::now()
         .duration_since(UNIX_EPOCH)
         .unwrap()
         .as_secs();
 
-    println!("seed: {}", seed);
+    rltk::console::log(format!("seed: {}", seed));
     seed
 }
 
-pub fn reseed(seed: u64) {
-    *RNG.lock().unwrap() = RandomNumberGenerator::seeded(seed);
+// Function to get the current seed value
+pub fn get_current_seed() -> u64 {
+    *CURRENT_SEED.lock().unwrap()
+}
+
+pub fn reseed(new_seed: u64) {
+    *CURRENT_SEED.lock().unwrap() = new_seed; // Update the current seed
+    *RNG.lock().unwrap() = RandomNumberGenerator::seeded(new_seed);
 }
 
 pub fn roll_dice(n: i32, die_type: i32) -> i32 {
