@@ -14,7 +14,7 @@ pub fn show_option_menu(_gs: &mut State, ctx: &mut Rltk) -> OptionMenuResult {
     let mut draw_batch = DrawBatch::new();
     let count = 4;
     let mut y = (25 - (count / 2)) as i32;
-    menu_box(&mut draw_batch, 15, y, (count + 3) as i32, "Cheating!");
+    menu_box(&mut draw_batch, 15, y, (count + 3) as i32, "Options");
     draw_batch.print_color(
         Point::new(18, y + count as i32 + 1),
         "ESCAPE to cancel",
