@@ -23,15 +23,14 @@ impl<'a> System<'a> for ApproachAI {
             (&entities, &positions, &want_approach, &turns).join()
         {
             turn_done.push(entity);
-            // a start causing performance issues
-            // let path = rltk::a_star_search(
-            //     map.xy_idx(pos.x, pos.y),
-            //     map.xy_idx(approach.idx % map.width, approach.idx / map.width),
-            //     &mut *map
-            // );
-            // if path.success && path.steps.len()>1 {
-            //     apply_move.insert(entity, ApplyMove{ dest_idx: path.steps[1] }).expect("Unable to insert");
-            // }
+            let path = rltk::a_star_search(
+                map.xy_idx(pos.x, pos.y),
+                map.xy_idx(approach.idx % map.width, approach.idx / map.width),
+                &mut *map
+            );
+            if path.success && path.steps.len()>1 {
+                apply_move.insert(entity, ApplyMove{ dest_idx: path.steps[1] }).expect("Unable to insert");
+            }
         }
 
         want_approach.clear();
