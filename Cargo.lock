@@ -73,7 +73,7 @@ checksum = "0d8c1fef690941d3e7788d328517591fecc684c084084702d6ff1641e993699a"
 [[package]]
 name = "bracket-algorithm-traits"
 version = "0.8.7"
-source = "git+https://github.com/amethyst/bracket-lib#0d2d5e6a9a8e7c7ae3710cfef85be4cab0109a27"
+source = "git+https://github.com/VikingosTeam/bracket-lib#0d2d5e6a9a8e7c7ae3710cfef85be4cab0109a27"
 dependencies = [
  "bracket-geometry",
  "smallvec",
@@ -82,7 +82,7 @@ dependencies = [
 [[package]]
 name = "bracket-color"
 version = "0.8.7"
-source = "git+https://github.com/amethyst/bracket-lib#0d2d5e6a9a8e7c7ae3710cfef85be4cab0109a27"
+source = "git+https://github.com/VikingosTeam/bracket-lib#0d2d5e6a9a8e7c7ae3710cfef85be4cab0109a27"
 dependencies = [
  "lazy_static",
  "parking_lot 0.12.3",
@@ -92,7 +92,7 @@ dependencies = [
 [[package]]
 name = "bracket-embedding"
 version = "0.8.7"
-source = "git+https://github.com/amethyst/bracket-lib#0d2d5e6a9a8e7c7ae3710cfef85be4cab0109a27"
+source = "git+https://github.com/VikingosTeam/bracket-lib#0d2d5e6a9a8e7c7ae3710cfef85be4cab0109a27"
 dependencies = [
  "lazy_static",
  "parking_lot 0.12.3",
@@ -101,7 +101,7 @@ dependencies = [
 [[package]]
 name = "bracket-geometry"
 version = "0.8.7"
-source = "git+https://github.com/amethyst/bracket-lib#0d2d5e6a9a8e7c7ae3710cfef85be4cab0109a27"
+source = "git+https://github.com/VikingosTeam/bracket-lib#0d2d5e6a9a8e7c7ae3710cfef85be4cab0109a27"
 dependencies = [
  "serde",
  "ultraviolet",
@@ -110,7 +110,7 @@ dependencies = [
 [[package]]
 name = "bracket-lib"
 version = "0.8.7"
-source = "git+https://github.com/amethyst/bracket-lib#0d2d5e6a9a8e7c7ae3710cfef85be4cab0109a27"
+source = "git+https://github.com/VikingosTeam/bracket-lib#0d2d5e6a9a8e7c7ae3710cfef85be4cab0109a27"
 dependencies = [
  "bracket-algorithm-traits",
  "bracket-color",
@@ -124,7 +124,7 @@ dependencies = [
 [[package]]
 name = "bracket-noise"
 version = "0.8.7"
-source = "git+https://github.com/amethyst/bracket-lib#0d2d5e6a9a8e7c7ae3710cfef85be4cab0109a27"
+source = "git+https://github.com/VikingosTeam/bracket-lib#0d2d5e6a9a8e7c7ae3710cfef85be4cab0109a27"
 dependencies = [
  "bracket-random",
 ]
@@ -132,7 +132,7 @@ dependencies = [
 [[package]]
 name = "bracket-pathfinding"
 version = "0.8.7"
-source = "git+https://github.com/amethyst/bracket-lib#0d2d5e6a9a8e7c7ae3710cfef85be4cab0109a27"
+source = "git+https://github.com/VikingosTeam/bracket-lib#0d2d5e6a9a8e7c7ae3710cfef85be4cab0109a27"
 dependencies = [
  "bracket-algorithm-traits",
  "bracket-geometry",
@@ -143,7 +143,7 @@ dependencies = [
 [[package]]
 name = "bracket-random"
 version = "0.8.7"
-source = "git+https://github.com/amethyst/bracket-lib#0d2d5e6a9a8e7c7ae3710cfef85be4cab0109a27"
+source = "git+https://github.com/VikingosTeam/bracket-lib#0d2d5e6a9a8e7c7ae3710cfef85be4cab0109a27"
 dependencies = [
  "getrandom",
  "js-sys",
@@ -158,7 +158,7 @@ dependencies = [
 [[package]]
 name = "bracket-rex"
 version = "0.8.7"
-source = "git+https://github.com/amethyst/bracket-lib#0d2d5e6a9a8e7c7ae3710cfef85be4cab0109a27"
+source = "git+https://github.com/VikingosTeam/bracket-lib#0d2d5e6a9a8e7c7ae3710cfef85be4cab0109a27"
 dependencies = [
  "bracket-color",
  "bracket-embedding",
@@ -169,7 +169,7 @@ dependencies = [
 [[package]]
 name = "bracket-terminal"
 version = "0.8.7"
-source = "git+https://github.com/amethyst/bracket-lib#0d2d5e6a9a8e7c7ae3710cfef85be4cab0109a27"
+source = "git+https://github.com/VikingosTeam/bracket-lib#0d2d5e6a9a8e7c7ae3710cfef85be4cab0109a27"
 dependencies = [
  "anyhow",
  "bracket-color",
@@ -1478,7 +1478,7 @@ checksum = "2b15c43186be67a4fd63bee50d0303afffcef381492ebe2c5d87f324e1b8815c"
 [[package]]
 name = "rltk"
 version = "0.8.7"
-source = "git+https://github.com/amethyst/bracket-lib#0d2d5e6a9a8e7c7ae3710cfef85be4cab0109a27"
+source = "git+https://github.com/VikingosTeam/bracket-lib#0d2d5e6a9a8e7c7ae3710cfef85be4cab0109a27"
 dependencies = [
  "bracket-lib",
 ]
