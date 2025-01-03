@@ -75,6 +75,7 @@ pub enum RunState {
     },
     ShowRemoveCurse,
     ShowIdentify,
+    ShowOptionMenu,
 }
 
 pub struct State {
@@ -142,7 +143,6 @@ impl GameState for State {
             }
             RunState::PreRun => {
                 self.run_systems();
-                // self.ecs.maintain();
                 newrunstate = RunState::AwaitingInput;
             }
             RunState::AwaitingInput => {
@@ -155,7 +155,6 @@ impl GameState for State {
                 let mut should_change_target = false;
                 while newrunstate == RunState::Ticking {
                     self.run_systems();
-                    // self.ecs.maintain();
                     match *self.ecs.fetch::<RunState>() {
                         RunState::AwaitingInput => {
                             newrunstate = RunState::AwaitingInput;
@@ -205,6 +204,20 @@ impl GameState for State {
                             newrunstate = RunState::Ticking;
                         }
                     }
+                }
+            }
+            RunState::ShowOptionMenu => {
+                let result = gui::show_option_menu(self, ctx);
+                match result {
+                    gui::OptionMenuResult::Continue => newrunstate = RunState::AwaitingInput,
+                    gui::OptionMenuResult::NoResponse => {}
+                    gui::OptionMenuResult::ExitWithoutSaving => {
+                        self.game_over_cleanup(true);
+                        newrunstate = RunState::MainMenu {
+                            menu_selection: gui::MainMenuSelection::NewGame,
+                        };
+                    }
+                    gui::OptionMenuResult::SaveAndExit => newrunstate = RunState::SaveGame,
                 }
             }
             RunState::ShowCheatMenu => {
@@ -408,8 +421,7 @@ impl GameState for State {
                     }
                     gui::MainMenuResult::Selected { selected } => match selected {
                         gui::MainMenuSelection::NewGame => {
-                            // https://github.com/amethyst/rustrogueliketutorial/issues/126
-                            self.game_over_cleanup();
+                            self.game_over_cleanup(false);
                             newrunstate = RunState::PreRun
                         }
                         gui::MainMenuSelection::LoadGame => {
@@ -428,11 +440,10 @@ impl GameState for State {
                 match result {
                     gui::GameOverResult::NoSelection => {}
                     gui::GameOverResult::QuitToMenu => {
-                        self.game_over_cleanup();
-                        newrunstate = RunState::MapGeneration;
-                        self.mapgen_next_state = Some(RunState::MainMenu {
+                        self.game_over_cleanup(true);
+                        newrunstate = RunState::MainMenu {
                             menu_selection: gui::MainMenuSelection::NewGame,
-                        });
+                        };
                     }
                 }
             }
@@ -515,7 +526,7 @@ impl State {
         gamelog::Logger::new().append("You change level.").log();
     }
 
-    fn game_over_cleanup(&mut self) {
+    fn game_over_cleanup(&mut self, only_clean_up: bool) {
         // Delete everything
         let mut to_delete = Vec::new();
         for e in self.ecs.entities().join() {
@@ -523,6 +534,10 @@ impl State {
         }
         for del in to_delete.iter() {
             self.ecs.delete_entity(*del).expect("Deletion failed");
+        }
+
+        if (only_clean_up) {
+            return;
         }
 
         // Spawn a new player

@@ -473,7 +473,8 @@ pub fn player_input(gs: &mut State, ctx: &mut Rltk) -> RunState {
             VirtualKeyCode::F => return fire_on_target(&mut gs.ecs),
 
             // Save and Quit
-            VirtualKeyCode::Escape => return RunState::SaveGame,
+            //VirtualKeyCode::Escape => return RunState::SaveGame,
+            VirtualKeyCode::Escape => return RunState::ShowOptionMenu,
 
             // Cheating!
             VirtualKeyCode::Backslash => return RunState::ShowCheatMenu,
