@@ -6,19 +6,14 @@ lazy_static! {
     static ref RNG: Mutex<RandomNumberGenerator> =
         Mutex::new(RandomNumberGenerator::seeded(generate_random_seed()));
 }
-// problematic seeds
-/// 1735926381
-/// 1735926764
-/// 1735926948
 fn generate_random_seed() -> u64 {
-    1735926948
-    // let seed: u64 = SystemTime::now()
-    //     .duration_since(UNIX_EPOCH)
-    //     .unwrap()
-    //     .as_secs();
+    let seed: u64 = SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .unwrap()
+        .as_secs();
 
-    // println!("seed: {}", seed);
-    // seed
+    println!("seed: {}", seed);
+    seed
 }
 
 pub fn reseed(seed: u64) {

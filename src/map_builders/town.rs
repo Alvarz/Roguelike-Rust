@@ -109,7 +109,7 @@ impl TownBuilder {
                 for x in 31..build_data.width - 2 {
                     let gravel_idx = build_data.map.xy_idx(x, y);
                     build_data.map.tiles[gravel_idx] = TileType::Gravel;
-                    if y > 2 && y < build_data.height - 1 {
+                    if y > 2 && y < build_data.height - 1 && x > 31 && x < build_data.width - 3 {
                         available_building_tiles.insert(gravel_idx);
                     }
                 }
@@ -217,8 +217,7 @@ impl TownBuilder {
         let mut doors = Vec::new();
         for building in buildings.iter() {
             // to test not generate in the y wall;
-            // let door_x = building.0 + 2 + crate::rng::roll_dice(1, building.2 - 3) - 2;
-            let door_x = building.0 + 1 + crate::rng::roll_dice(1, building.2 - 3);
+            let door_x = building.0 + 1 + crate::rng::roll_dice(1, building.2 - 4);
             let cy = building.1 + (building.3 / 2);
             let idx = if cy > wall_gap_y {
                 // Door on the north wall
@@ -346,7 +345,7 @@ impl TownBuilder {
             let entity_x = building.0 + 1 + crate::rng::roll_dice(1, building.2 - 3);
             let idx = if cy > wall_gap_y {
                 // Door is on the north wall
-                let y = crate::rng::range(cy, (building.1 + building.3));
+                let y = crate::rng::range(cy, building.1 + building.3);
                 build_data.map.xy_idx(entity_x, y)
             } else {
                 let y = crate::rng::range(building.1, cy);

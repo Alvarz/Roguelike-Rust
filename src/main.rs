@@ -536,7 +536,7 @@ impl State {
             self.ecs.delete_entity(*del).expect("Deletion failed");
         }
 
-        if (only_clean_up) {
+        if only_clean_up {
             return;
         }
 
