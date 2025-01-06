@@ -1,22 +1,26 @@
+use crate::{AmuletOfYendor, Map, MyTurn, Name};
 use specs::prelude::*;
-
-use crate::{AmuletOfYendor, Name};
 
 pub struct AmuletSystem {}
 
 impl<'a> System<'a> for AmuletSystem {
     #[allow(clippy::type_complexity)]
     type SystemData = (
-        ReadStorage<'a, crate::components::Player>,
+        ReadExpect<'a, Map>,
         ReadStorage<'a, AmuletOfYendor>,
         ReadStorage<'a, Name>,
+        ReadStorage<'a, MyTurn>,
     );
 
     fn run(&mut self, data: Self::SystemData) {
-        let (player, amulet_if_yendor, name) = data;
+        let (map, amulet_if_yendor, name, turns) = data;
 
-        for (_p, _amulet, n) in (&player, &amulet_if_yendor, &name).join() {
-            rltk::console::log(format!("{} has the amulet", n.name));
+        for (_amulet, n, _my_turn) in (&amulet_if_yendor, &name, &turns).join() {
+            rltk::console::log(format!("{} has the amulet in depth: {}", n.name, map.depth));
+
+            if map.depth <= 1 {
+                rltk::console::log(format!("{} won the game!", n.name,));
+            }
         }
 
         // Clean up
