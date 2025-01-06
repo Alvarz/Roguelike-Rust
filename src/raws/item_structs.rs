@@ -6,7 +6,6 @@ pub struct Item {
     pub name: String,
     pub renderable: Option<Renderable>,
     pub consumable: Option<Consumable>,
-    pub on_pickup: Option<OnPickUp>,
     pub weapon: Option<Weapon>,
     pub wearable: Option<Wearable>,
     pub initiative_penalty: Option<f32>,
@@ -30,12 +29,6 @@ pub struct Renderable {
 
 #[derive(Deserialize, Debug, Clone)]
 pub struct Consumable {
-    pub effects: HashMap<String, String>,
-    pub charges: Option<i32>,
-}
-
-#[derive(Deserialize, Debug, Clone)]
-pub struct OnPickUp {
     pub effects: HashMap<String, String>,
     pub charges: Option<i32>,
 }
