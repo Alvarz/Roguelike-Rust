@@ -1,4 +1,5 @@
 extern crate serde;
+use gui::get_item_display_name;
 use rltk::{GameState, Point, Rltk};
 use specs::prelude::*;
 use specs::saveload::{SimpleMarker, SimpleMarkerAllocator};
@@ -250,6 +251,37 @@ impl GameState for State {
                         let mut pools = self.ecs.write_storage::<Pools>();
                         let player_pools = pools.get_mut(*player).unwrap();
                         player_pools.god_mode = true;
+                        newrunstate = RunState::AwaitingInput;
+                    }
+
+                    gui::CheatMenuResult::ListSpawnedEnemies => {
+                        let items = self.ecs.read_storage::<Item>();
+                        let entities = self.ecs.entities();
+
+                        let mut filtered_items: Vec<String> = Vec::new();
+                        (&entities, &items).join().for_each(|item| {
+                            filtered_items.push(get_item_display_name(&self.ecs, item.0))
+                        });
+
+                        for i in filtered_items.iter() {
+                            rltk::console::log(format!("Item {} spawned.", i));
+                        }
+                        newrunstate = RunState::AwaitingInput;
+                    }
+
+                    gui::CheatMenuResult::ListSpawnedItems => {
+                        let items = self.ecs.read_storage::<Item>();
+                        let entities = self.ecs.entities();
+                        let positions = self.ecs.read_storage::<Position>();
+
+                        let mut filtered_items: Vec<String> = Vec::new();
+                        (&entities, &items, &positions).join().for_each(|item| {
+                            filtered_items.push(get_item_display_name(&self.ecs, item.0))
+                        });
+
+                        for i in filtered_items.iter() {
+                            rltk::console::log(format!("Item {} spawned.", i));
+                        }
                         newrunstate = RunState::AwaitingInput;
                     }
                 }
@@ -688,6 +720,7 @@ fn main() -> rltk::BError {
     gs.ecs.register::<AlwaysTargetsSelf>();
     gs.ecs.register::<Target>();
     gs.ecs.register::<WantsToShoot>();
+    gs.ecs.register::<AmuletOfYendor>();
     gs.ecs.insert(SimpleMarkerAllocator::<SerializeMe>::new());
 
     raws::load_raws();
