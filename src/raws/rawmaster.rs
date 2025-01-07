@@ -541,6 +541,13 @@ pub fn spawn_named_item(
                 charges: max_charges,
             });
             apply_effects!(consumable.effects, eb);
+
+            let cloned_entity = eb.entity.clone();
+            if let Some(_up) = consumable.use_on_pickup {
+                eb = eb.with(UseOnPickUp {
+                    item: cloned_entity,
+                })
+            }
         }
 
         if let Some(weapon) = &item_template.weapon {

@@ -141,7 +141,8 @@ pub fn save_game(ecs: &mut World) {
             AlwaysTargetsSelf,
             Target,
             WantsToShoot,
-            AmuletOfYendor
+            AmuletOfYendor,
+            UseOnPickUp
         );
     }
 
@@ -275,7 +276,8 @@ pub fn load_game(ecs: &mut World) {
             AlwaysTargetsSelf,
             Target,
             WantsToShoot,
-            AmuletOfYendor
+            AmuletOfYendor,
+            UseOnPickUp
         );
     }
 
