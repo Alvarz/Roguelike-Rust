@@ -1,32 +1,49 @@
+use crate::{
+    Attributes, DamageOverTime, Duration, EquipmentChanged, Initiative, MyTurn, Pools, Position,
+    RunState, StatusEffect,
+};
 use specs::prelude::*;
-use crate::{Initiative, Position, MyTurn, Attributes, RunState, Pools, Duration, 
-    EquipmentChanged, StatusEffect, DamageOverTime};
 
 pub struct InitiativeSystem {}
 
 impl<'a> System<'a> for InitiativeSystem {
     #[allow(clippy::type_complexity)]
-    type SystemData = ( WriteStorage<'a, Initiative>,
-                        ReadStorage<'a, Position>,
-                        WriteStorage<'a, MyTurn>,
-                        Entities<'a>,
-                        ReadStorage<'a, Attributes>,
-                        WriteExpect<'a, RunState>,
-                        ReadExpect<'a, Entity>,
-                        ReadExpect<'a, rltk::Point>,
-                        ReadStorage<'a, Pools>,
-                        WriteStorage<'a, Duration>,
-                        WriteStorage<'a, EquipmentChanged>,
-                        ReadStorage<'a, StatusEffect>,
-                        ReadStorage<'a, DamageOverTime>
-                    );
+    type SystemData = (
+        WriteStorage<'a, Initiative>,
+        ReadStorage<'a, Position>,
+        WriteStorage<'a, MyTurn>,
+        Entities<'a>,
+        ReadStorage<'a, Attributes>,
+        WriteExpect<'a, RunState>,
+        ReadExpect<'a, Entity>,
+        ReadExpect<'a, rltk::Point>,
+        ReadStorage<'a, Pools>,
+        WriteStorage<'a, Duration>,
+        WriteStorage<'a, EquipmentChanged>,
+        ReadStorage<'a, StatusEffect>,
+        ReadStorage<'a, DamageOverTime>,
+    );
 
-    fn run(&mut self, data : Self::SystemData) {
-        let (mut initiatives, positions, mut turns, entities, attributes,
-            mut runstate, player, player_pos, pools, mut durations, mut dirty,
-            statuses, dots) = data;
+    fn run(&mut self, data: Self::SystemData) {
+        let (
+            mut initiatives,
+            positions,
+            mut turns,
+            entities,
+            attributes,
+            mut runstate,
+            player,
+            player_pos,
+            pools,
+            mut durations,
+            mut dirty,
+            statuses,
+            dots,
+        ) = data;
 
-        if *runstate != RunState::Ticking { return; }
+        if *runstate != RunState::Ticking {
+            return;
+        }
 
         // Clear any remaining MyTurn we left by mistkae
         turns.clear();
@@ -57,7 +74,8 @@ impl<'a> System<'a> for InitiativeSystem {
                     // Give control to the player
                     *runstate = RunState::AwaitingInput;
                 } else {
-                    let distance = rltk::DistanceAlg::Pythagoras.distance2d(*player_pos, rltk::Point::new(pos.x, pos.y));
+                    let distance = rltk::DistanceAlg::Manhattan
+                        .distance2d(*player_pos, rltk::Point::new(pos.x, pos.y));
                     if distance > 20.0 {
                         myturn = false;
                     }
@@ -65,9 +83,10 @@ impl<'a> System<'a> for InitiativeSystem {
 
                 // It's my turn!
                 if myturn {
-                    turns.insert(entity, MyTurn{}).expect("Unable to insert turn");
+                    turns
+                        .insert(entity, MyTurn {})
+                        .expect("Unable to insert turn");
                 }
-
             }
         }
 
@@ -79,14 +98,17 @@ impl<'a> System<'a> for InitiativeSystem {
                     duration.turns -= 1;
                     if let Some(dot) = dots.get(effect_entity) {
                         add_effect(
-                            None, 
-                            EffectType::Damage{ amount : dot.damage }, 
-                            Targets::Single{ target : status.target 
-                            }
+                            None,
+                            EffectType::Damage { amount: dot.damage },
+                            Targets::Single {
+                                target: status.target,
+                            },
                         );
                     }
                     if duration.turns < 1 {
-                        dirty.insert(status.target, EquipmentChanged{}).expect("Unable to insert");
+                        dirty
+                            .insert(status.target, EquipmentChanged {})
+                            .expect("Unable to insert");
                         entities.delete(effect_entity).expect("Unable to delete");
                     }
                 }

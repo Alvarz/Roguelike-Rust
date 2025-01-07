@@ -1,17 +1,19 @@
-use specs::prelude::*;
-use crate::{Viewshed, Position, Map, LightSource};
+use crate::{LightSource, Map, Position, Viewshed};
 use rltk::RGB;
+use specs::prelude::*;
 
 pub struct LightingSystem {}
 
 impl<'a> System<'a> for LightingSystem {
     #[allow(clippy::type_complexity)]
-    type SystemData = ( WriteExpect<'a, Map>,
-                        ReadStorage<'a, Viewshed>,
-                        ReadStorage<'a, Position>,
-                        ReadStorage<'a, LightSource>);
+    type SystemData = (
+        WriteExpect<'a, Map>,
+        ReadStorage<'a, Viewshed>,
+        ReadStorage<'a, Position>,
+        ReadStorage<'a, LightSource>,
+    );
 
-    fn run(&mut self, data : Self::SystemData) {
+    fn run(&mut self, data: Self::SystemData) {
         let (mut map, viewshed, positions, lighting) = data;
 
         if map.outdoors {
@@ -29,7 +31,7 @@ impl<'a> System<'a> for LightingSystem {
             for t in viewshed.visible_tiles.iter() {
                 if t.x > 0 && t.x < map.width && t.y > 0 && t.y < map.height {
                     let idx = map.xy_idx(t.x, t.y);
-                    let distance = rltk::DistanceAlg::Pythagoras.distance2d(light_point, *t);
+                    let distance = rltk::DistanceAlg::Manhattan.distance2d(light_point, *t);
                     let intensity = (range_f - distance) / range_f;
 
                     map.light[idx] = map.light[idx] + (light.color * intensity);

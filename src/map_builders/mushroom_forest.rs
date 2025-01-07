@@ -1,6 +1,8 @@
-use super::{BuilderChain, XStart, YStart, AreaStartingPosition, 
-    CullUnreachable, VoronoiSpawning,
-    AreaEndingPosition, XEnd, YEnd, CellularAutomataBuilder, PrefabBuilder, WaveformCollapseBuilder};
+use super::{
+    AreaEndingPosition, AreaStartingPosition, BuilderChain, CellularAutomataBuilder,
+    CullUnreachable, PrefabBuilder, VoronoiSpawning, WaveformCollapseBuilder, XEnd, XStart, YEnd,
+    YStart,
+};
 use crate::map_builders::prefab_builder::prefab_sections::*;
 
 pub fn mushroom_entrance(new_depth: i32, width: i32, height: i32) -> BuilderChain {

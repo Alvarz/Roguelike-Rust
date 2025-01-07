@@ -34,6 +34,7 @@ const PROJECT_NAME: &str = "Untitled Roguelike";
 const SHOW_MAPGEN_VISUALIZER: bool = false;
 const SHOW_FPS: bool = true;
 const SHOW_SEED: bool = true;
+const SHOW_DEPTH: bool = true;
 
 #[derive(PartialEq, Copy, Clone)]
 pub enum VendorMode {
@@ -570,6 +571,11 @@ impl GameState for State {
                 &format!("Seed: {}", crate::rng::get_current_seed().to_string()),
             );
         }
+
+        if SHOW_DEPTH {
+            let current_depth = self.ecs.fetch::<Map>().depth;
+            ctx.print(30, 59, &format!("Depth: {}", current_depth));
+        }
     }
 }
 
@@ -580,7 +586,6 @@ impl State {
         // Build a new map and place the player
         let current_depth = self.ecs.fetch::<Map>().depth;
         self.generate_world_map(current_depth + offset, offset);
-
         // Notify the player
         gamelog::Logger::new().append("You change level.").log();
     }
@@ -623,7 +628,6 @@ impl State {
         } else {
             map::thaw_level_entities(&mut self.ecs);
         }
-
         gamelog::clear_log();
         gamelog::Logger::new()
             .append("Welcome to")

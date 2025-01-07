@@ -18,8 +18,6 @@ impl<'a> System<'a> for AmuletSystem {
 
         let mut finished = false;
         for (_amulet, n, _my_turn) in (&amulet_if_yendor, &name, &turns).join() {
-            rltk::console::log(format!("{} has the amulet in depth: {}", n.name, map.depth));
-
             if map.depth <= 1 {
                 rltk::console::log(format!("{} won the game!", n.name,));
                 *runstate = RunState::FinishGame;
