@@ -743,6 +743,7 @@ fn main() -> rltk::BError {
     gs.ecs.register::<Target>();
     gs.ecs.register::<WantsToShoot>();
     gs.ecs.register::<AmuletOfYendor>();
+    gs.ecs.register::<UseOnPickUp>();
     gs.ecs.insert(SimpleMarkerAllocator::<SerializeMe>::new());
 
     raws::load_raws();

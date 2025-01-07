@@ -305,7 +305,8 @@
         "order": 2
       },
       "consumable": {
-        "effects": { "amulet_of_yendor": "1" }
+        "effects": { "amulet_of_yendor": "1" },
+        "use_on_pickup": true
       }
     },
     {

@@ -348,6 +348,11 @@ pub struct WantsToUseItem {
 }
 
 #[derive(Component, Debug, ConvertSaveload, Clone)]
+pub struct UseOnPickUp {
+    pub item: Entity,
+}
+
+#[derive(Component, Debug, ConvertSaveload, Clone)]
 pub struct WantsToCastSpell {
     pub spell: Entity,
     pub target: Option<rltk::Point>,

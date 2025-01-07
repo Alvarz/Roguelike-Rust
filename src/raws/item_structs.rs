@@ -31,6 +31,7 @@ pub struct Renderable {
 pub struct Consumable {
     pub effects: HashMap<String, String>,
     pub charges: Option<i32>,
+    pub use_on_pickup: Option<bool>,
 }
 
 #[derive(Deserialize, Debug, Clone)]
