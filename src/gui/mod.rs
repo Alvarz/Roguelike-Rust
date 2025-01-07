@@ -28,4 +28,5 @@ mod menus;
 pub use menus::*;
 mod option_menu;
 pub use option_menu::*;
-
+mod finish_game_menu;
+pub use finish_game_menu::*;

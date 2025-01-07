@@ -1,4 +1,5 @@
 extern crate serde;
+use gui::get_item_display_name;
 use rltk::{GameState, Point, Rltk};
 use specs::prelude::*;
 use specs::saveload::{SimpleMarker, SimpleMarkerAllocator};
@@ -77,6 +78,7 @@ pub enum RunState {
     ShowRemoveCurse,
     ShowIdentify,
     ShowOptionMenu,
+    FinishGame,
 }
 
 pub struct State {
@@ -113,6 +115,7 @@ impl GameState for State {
         match newrunstate {
             RunState::MainMenu { .. } => {}
             RunState::GameOver { .. } => {}
+            RunState::FinishGame { .. } => {}
             _ => {
                 camera::render_camera(&self.ecs, ctx);
                 gui::draw_ui(&self.ecs, ctx);
@@ -154,8 +157,11 @@ impl GameState for State {
             }
             RunState::Ticking => {
                 let mut should_change_target = false;
+
                 while newrunstate == RunState::Ticking {
                     self.run_systems();
+
+                    // all these is meant to avoid a infinite loop (while) when change state in systems
                     match *self.ecs.fetch::<RunState>() {
                         RunState::AwaitingInput => {
                             newrunstate = RunState::AwaitingInput;
@@ -170,6 +176,7 @@ impl GameState for State {
                         }
                         RunState::ShowRemoveCurse => newrunstate = RunState::ShowRemoveCurse,
                         RunState::ShowIdentify => newrunstate = RunState::ShowIdentify,
+                        RunState::FinishGame => newrunstate = RunState::FinishGame,
                         _ => newrunstate = RunState::Ticking,
                     }
                 }
@@ -250,6 +257,37 @@ impl GameState for State {
                         let mut pools = self.ecs.write_storage::<Pools>();
                         let player_pools = pools.get_mut(*player).unwrap();
                         player_pools.god_mode = true;
+                        newrunstate = RunState::AwaitingInput;
+                    }
+
+                    gui::CheatMenuResult::ListSpawnedEnemies => {
+                        let items = self.ecs.read_storage::<Item>();
+                        let entities = self.ecs.entities();
+
+                        let mut filtered_items: Vec<String> = Vec::new();
+                        (&entities, &items).join().for_each(|item| {
+                            filtered_items.push(get_item_display_name(&self.ecs, item.0))
+                        });
+
+                        for i in filtered_items.iter() {
+                            rltk::console::log(format!("Item {} spawned.", i));
+                        }
+                        newrunstate = RunState::AwaitingInput;
+                    }
+
+                    gui::CheatMenuResult::ListSpawnedItems => {
+                        let items = self.ecs.read_storage::<Item>();
+                        let entities = self.ecs.entities();
+                        let positions = self.ecs.read_storage::<Position>();
+
+                        let mut filtered_items: Vec<String> = Vec::new();
+                        (&entities, &items, &positions).join().for_each(|item| {
+                            filtered_items.push(get_item_display_name(&self.ecs, item.0))
+                        });
+
+                        for i in filtered_items.iter() {
+                            rltk::console::log(format!("Item {} spawned.", i));
+                        }
                         newrunstate = RunState::AwaitingInput;
                     }
                 }
@@ -434,6 +472,18 @@ impl GameState for State {
                             ::std::process::exit(0);
                         }
                     },
+                }
+            }
+            RunState::FinishGame => {
+                let result = gui::finish_game(ctx);
+                match result {
+                    gui::FinishGameResult::NoSelection => {}
+                    gui::FinishGameResult::QuitToMenu => {
+                        self.game_over_cleanup(true);
+                        newrunstate = RunState::MainMenu {
+                            menu_selection: gui::MainMenuSelection::NewGame,
+                        };
+                    }
                 }
             }
             RunState::GameOver => {
@@ -688,6 +738,7 @@ fn main() -> rltk::BError {
     gs.ecs.register::<AlwaysTargetsSelf>();
     gs.ecs.register::<Target>();
     gs.ecs.register::<WantsToShoot>();
+    gs.ecs.register::<AmuletOfYendor>();
     gs.ecs.insert(SimpleMarkerAllocator::<SerializeMe>::new());
 
     raws::load_raws();

@@ -24,6 +24,8 @@ pub mod particle_system;
 use particle_system::ParticleSpawnSystem;
 mod lighting_system;
 use lighting_system::LightingSystem;
+mod amulet_system;
+pub use amulet_system::AmuletSystem;
 
 pub fn build() -> Box<dyn UnifiedDispatcher + 'static> {
     dispatcher::new()

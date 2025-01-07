@@ -10,11 +10,13 @@ pub enum CheatMenuResult {
     Heal,
     Reveal,
     GodMode,
+    ListSpawnedItems,
+    ListSpawnedEnemies,
 }
 
 pub fn show_cheat_mode(_gs: &mut State, ctx: &mut Rltk) -> CheatMenuResult {
     let mut draw_batch = DrawBatch::new();
-    let count = 4;
+    let count = 6;
     let mut y = (25 - (count / 2)) as i32;
     menu_box(&mut draw_batch, 15, y, (count + 3) as i32, "Cheating!");
     draw_batch.print_color(
@@ -55,6 +57,24 @@ pub fn show_cheat_mode(_gs: &mut State, ctx: &mut Rltk) -> CheatMenuResult {
         "God Mode (No Death)",
     );
 
+    y += 1;
+    menu_option(
+        &mut draw_batch,
+        17,
+        y,
+        rltk::to_cp437('I'),
+        "List all spawned items",
+    );
+
+    y += 1;
+    menu_option(
+        &mut draw_batch,
+        17,
+        y,
+        rltk::to_cp437('E'),
+        "List all spawned Enemies",
+    );
+
     let _ = draw_batch.submit(6000);
 
     match ctx.key {
@@ -64,6 +84,8 @@ pub fn show_cheat_mode(_gs: &mut State, ctx: &mut Rltk) -> CheatMenuResult {
             VirtualKeyCode::H => CheatMenuResult::Heal,
             VirtualKeyCode::R => CheatMenuResult::Reveal,
             VirtualKeyCode::G => CheatMenuResult::GodMode,
+            VirtualKeyCode::E => CheatMenuResult::ListSpawnedEnemies,
+            VirtualKeyCode::I => CheatMenuResult::ListSpawnedItems,
             VirtualKeyCode::Escape => CheatMenuResult::Cancel,
             _ => CheatMenuResult::NoResponse,
         },
