@@ -1,5 +1,7 @@
-use super::{BuilderChain, CellularAutomataBuilder, XStart, YStart, AreaStartingPosition,
-    CullUnreachable, VoronoiSpawning, MetaMapBuilder, BuilderMap, TileType};
+use super::{
+    AreaStartingPosition, BuilderChain, BuilderMap, CellularAutomataBuilder, CullUnreachable,
+    MetaMapBuilder, TileType, VoronoiSpawning, XStart, YStart,
+};
 use crate::map;
 
 pub fn forest_builder(new_depth: i32, width: i32, height: i32) -> BuilderChain {
@@ -16,7 +18,7 @@ pub fn forest_builder(new_depth: i32, width: i32, height: i32) -> BuilderChain {
 pub struct YellowBrickRoad {}
 
 impl MetaMapBuilder for YellowBrickRoad {
-    fn build_map(&mut self, build_data : &mut BuilderMap)  {
+    fn build_map(&mut self, build_data: &mut BuilderMap) {
         self.build(build_data);
     }
 }
@@ -24,37 +26,38 @@ impl MetaMapBuilder for YellowBrickRoad {
 impl YellowBrickRoad {
     #[allow(dead_code)]
     pub fn new() -> Box<YellowBrickRoad> {
-        Box::new(YellowBrickRoad{})
+        Box::new(YellowBrickRoad {})
     }
 
-    fn find_exit(&self, build_data : &mut BuilderMap, seed_x : i32, seed_y: i32) -> (i32, i32) {
-        let mut available_floors : Vec<(usize, f32)> = Vec::new();
+    fn find_exit(&self, build_data: &mut BuilderMap, seed_x: i32, seed_y: i32) -> (i32, i32) {
+        let mut available_floors: Vec<(usize, f32)> = Vec::new();
         for (idx, tiletype) in build_data.map.tiles.iter().enumerate() {
             if map::tile_walkable(*tiletype) {
-                available_floors.push(
-                    (
-                        idx,
-                        rltk::DistanceAlg::PythagorasSquared.distance2d(
-                            rltk::Point::new(idx as i32 % build_data.map.width, idx as i32 / build_data.map.width),
-                            rltk::Point::new(seed_x, seed_y)
-                        )
-                    )
-                );
+                available_floors.push((
+                    idx,
+                    rltk::DistanceAlg::PythagorasSquared.distance2d(
+                        rltk::Point::new(
+                            idx as i32 % build_data.map.width,
+                            idx as i32 / build_data.map.width,
+                        ),
+                        rltk::Point::new(seed_x, seed_y),
+                    ),
+                ));
             }
         }
         if available_floors.is_empty() {
             panic!("No valid floors to start on");
         }
 
-        available_floors.sort_by(|a,b| a.1.partial_cmp(&b.1).unwrap());
+        available_floors.sort_by(|a, b| a.1.partial_cmp(&b.1).unwrap());
 
         let end_x = available_floors[0].0 as i32 % build_data.map.width;
         let end_y = available_floors[0].0 as i32 / build_data.map.width;
         (end_x, end_y)
     }
 
-    fn paint_road(&self, build_data : &mut BuilderMap, x: i32, y: i32) {
-        if x < 1 || x > build_data.map.width-2 || y < 1 || y > build_data.map.height-2 {
+    fn paint_road(&self, build_data: &mut BuilderMap, x: i32, y: i32) {
+        if x < 1 || x > build_data.map.width - 2 || y < 1 || y > build_data.map.height - 2 {
             return;
         }
         let idx = build_data.map.xy_idx(x, y);
@@ -63,11 +66,15 @@ impl YellowBrickRoad {
         }
     }
 
-    fn build(&mut self, build_data : &mut BuilderMap) {
+    fn build(&mut self, build_data: &mut BuilderMap) {
         let starting_pos = build_data.starting_position.as_ref().unwrap().clone();
         let start_idx = build_data.map.xy_idx(starting_pos.x, starting_pos.y);
 
-        let (end_x, end_y) = self.find_exit(build_data, build_data.map.width - 2, build_data.map.height / 2);
+        let (end_x, end_y) = self.find_exit(
+            build_data,
+            build_data.map.width - 2,
+            build_data.map.height / 2,
+        );
         let end_idx = build_data.map.xy_idx(end_x, end_y);
 
         build_data.map.populate_blocked();
@@ -79,10 +86,10 @@ impl YellowBrickRoad {
             let x = *idx as i32 % build_data.map.width;
             let y = *idx as i32 / build_data.map.width;
             self.paint_road(build_data, x, y);
-            self.paint_road(build_data, x-1, y);
-            self.paint_road(build_data, x+1, y);
-            self.paint_road(build_data, x, y-1);
-            self.paint_road(build_data, x, y+1);
+            self.paint_road(build_data, x - 1, y);
+            self.paint_road(build_data, x + 1, y);
+            self.paint_road(build_data, x, y - 1);
+            self.paint_road(build_data, x, y + 1);
         }
         build_data.map.tiles[end_idx] = TileType::DownStairs;
         build_data.take_snapshot();
@@ -90,9 +97,14 @@ impl YellowBrickRoad {
         // Place exit
         let exit_dir = crate::rng::roll_dice(1, 2);
         let (seed_x, seed_y, stream_startx, stream_starty) = if exit_dir == 1 {
-            (build_data.map.width-1, 1, 0, build_data.height-1)
+            (build_data.map.width - 1, 1, 0, build_data.height - 1)
         } else {
-            (build_data.map.width-1, build_data.height-1, 1, build_data.height-1)
+            (
+                build_data.map.width - 1,
+                build_data.height - 1,
+                1,
+                build_data.height - 1,
+            )
         };
 
         let (stairs_x, stairs_y) = self.find_exit(build_data, seed_x, seed_y);

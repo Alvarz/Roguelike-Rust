@@ -1,8 +1,9 @@
-use super::{BuilderChain, DrunkardsWalkBuilder, XStart, YStart, AreaStartingPosition,
-    CullUnreachable, VoronoiSpawning, MetaMapBuilder, BuilderMap, TileType, DistantExit,
-    DLABuilder, PrefabBuilder, CellularAutomataBuilder, AreaEndingPosition,
-    BspDungeonBuilder, RoomSorter, RoomSort, NearestCorridors, RoomExploder, RoomDrawer,
-    RoomBasedSpawner, XEnd, YEnd};
+use super::{
+    AreaEndingPosition, AreaStartingPosition, BspDungeonBuilder, BuilderChain, BuilderMap,
+    CellularAutomataBuilder, CullUnreachable, DLABuilder, DistantExit, DrunkardsWalkBuilder,
+    MetaMapBuilder, NearestCorridors, PrefabBuilder, RoomBasedSpawner, RoomDrawer, RoomExploder,
+    RoomSort, RoomSorter, TileType, VoronoiSpawning, XEnd, XStart, YEnd, YStart,
+};
 
 pub fn limestone_cavern_builder(new_depth: i32, width: i32, height: i32) -> BuilderChain {
     let mut chain = BuilderChain::new(new_depth, width, height, "Limestone Caverns");
@@ -23,7 +24,9 @@ pub fn limestone_deep_cavern_builder(new_depth: i32, width: i32, height: i32) ->
     chain.with(VoronoiSpawning::new());
     chain.with(DistantExit::new());
     chain.with(CaveDecorator::new());
-    chain.with(PrefabBuilder::sectional(super::prefab_builder::prefab_sections::ORC_CAMP));
+    chain.with(PrefabBuilder::sectional(
+        super::prefab_builder::prefab_sections::ORC_CAMP,
+    ));
     chain
 }
 
@@ -45,7 +48,7 @@ pub fn limestone_transition_builder(new_depth: i32, width: i32, height: i32) -> 
 pub struct CaveDecorator {}
 
 impl MetaMapBuilder for CaveDecorator {
-    fn build_map(&mut self, build_data : &mut BuilderMap)  {
+    fn build_map(&mut self, build_data: &mut BuilderMap) {
         self.build(build_data);
     }
 }
@@ -53,16 +56,16 @@ impl MetaMapBuilder for CaveDecorator {
 impl CaveDecorator {
     #[allow(dead_code)]
     pub fn new() -> Box<CaveDecorator> {
-        Box::new(CaveDecorator{})
+        Box::new(CaveDecorator {})
     }
 
-    fn build(&mut self, build_data : &mut BuilderMap) {
+    fn build(&mut self, build_data: &mut BuilderMap) {
         let old_map = build_data.map.clone();
-        for (idx,tt) in build_data.map.tiles.iter_mut().enumerate() {
+        for (idx, tt) in build_data.map.tiles.iter_mut().enumerate() {
             // Gravel Spawning
-            if *tt == TileType::Floor && crate::rng::roll_dice(1, 6)==1 {
+            if *tt == TileType::Floor && crate::rng::roll_dice(1, 6) == 1 {
                 *tt = TileType::Gravel;
-            } else if *tt == TileType::Floor && crate::rng::roll_dice(1, 10)==1 {
+            } else if *tt == TileType::Floor && crate::rng::roll_dice(1, 10) == 1 {
                 // Spawn passable pools
                 *tt = TileType::ShallowWater;
             } else if *tt == TileType::Wall {
@@ -70,10 +73,20 @@ impl CaveDecorator {
                 let mut neighbors = 0;
                 let x = idx as i32 % old_map.width;
                 let y = idx as i32 / old_map.width;
-                if x > 0 && old_map.tiles[idx-1] == TileType::Wall { neighbors += 1; }
-                if x < old_map.width - 2 && old_map.tiles[idx+1] == TileType::Wall { neighbors += 1; }
-                if y > 0 && old_map.tiles[idx-old_map.width as usize] == TileType::Wall { neighbors += 1; }
-                if y < old_map.height - 2 && old_map.tiles[idx+old_map.width as usize] == TileType::Wall { neighbors += 1; }
+                if x > 0 && old_map.tiles[idx - 1] == TileType::Wall {
+                    neighbors += 1;
+                }
+                if x < old_map.width - 2 && old_map.tiles[idx + 1] == TileType::Wall {
+                    neighbors += 1;
+                }
+                if y > 0 && old_map.tiles[idx - old_map.width as usize] == TileType::Wall {
+                    neighbors += 1;
+                }
+                if y < old_map.height - 2
+                    && old_map.tiles[idx + old_map.width as usize] == TileType::Wall
+                {
+                    neighbors += 1;
+                }
                 if neighbors == 2 {
                     *tt = TileType::DeepWater;
                 } else if neighbors == 1 {
@@ -94,7 +107,7 @@ impl CaveDecorator {
 pub struct CaveTransition {}
 
 impl MetaMapBuilder for CaveTransition {
-    fn build_map(&mut self, build_data : &mut BuilderMap)  {
+    fn build_map(&mut self, build_data: &mut BuilderMap) {
         self.build(build_data);
     }
 }
@@ -102,11 +115,10 @@ impl MetaMapBuilder for CaveTransition {
 impl CaveTransition {
     #[allow(dead_code)]
     pub fn new() -> Box<CaveTransition> {
-        Box::new(CaveTransition{})
+        Box::new(CaveTransition {})
     }
 
-    fn build(&mut self, build_data : &mut BuilderMap) {
-        build_data.map.depth = 5;
+    fn build(&mut self, build_data: &mut BuilderMap) {
         build_data.take_snapshot();
 
         // Build a BSP-based dungeon
@@ -126,8 +138,8 @@ impl CaveTransition {
         build_data.take_snapshot();
 
         // Copy the right half of the BSP map into our map
-        for x in build_data.map.width / 2 .. build_data.map.width {
-            for y in 0 .. build_data.map.height {
+        for x in build_data.map.width / 2..build_data.map.width {
+            for y in 0..build_data.map.height {
                 let idx = build_data.map.xy_idx(x, y);
                 build_data.map.tiles[idx] = builder.build_data.map.tiles[idx];
             }

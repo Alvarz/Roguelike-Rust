@@ -67,7 +67,7 @@ impl<'a> System<'a> for VisibleAI {
                 for reaction in reactions.iter() {
                     match reaction.1 {
                         Reaction::Attack => {
-                            let range = rltk::DistanceAlg::Pythagoras.distance2d(
+                            let range = rltk::DistanceAlg::Manhattan.distance2d(
                                 rltk::Point::new(pos.x, pos.y),
                                 rltk::Point::new(
                                     reaction.0 as i32 % map.width,
