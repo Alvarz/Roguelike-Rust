@@ -35,7 +35,7 @@ impl YellowBrickRoad {
             if map::tile_walkable(*tiletype) {
                 available_floors.push((
                     idx,
-                    rltk::DistanceAlg::PythagorasSquared.distance2d(
+                    rltk::DistanceAlg::Manhattan.distance2d(
                         rltk::Point::new(
                             idx as i32 % build_data.map.width,
                             idx as i32 / build_data.map.width,
@@ -91,7 +91,8 @@ impl YellowBrickRoad {
             self.paint_road(build_data, x, y - 1);
             self.paint_road(build_data, x, y + 1);
         }
-        build_data.map.tiles[end_idx] = TileType::DownStairs;
+        // stairs at the end of the road
+        //build_data.map.tiles[end_idx] = TileType::DownStairs;
         build_data.take_snapshot();
 
         // Place exit
@@ -119,6 +120,7 @@ impl YellowBrickRoad {
                 build_data.map.tiles[*tile as usize] = TileType::ShallowWater;
             }
         }
+        // stairs at the end of the river
         build_data.map.tiles[stairs_idx] = TileType::DownStairs;
         build_data.take_snapshot();
     }
