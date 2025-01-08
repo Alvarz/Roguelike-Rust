@@ -6,8 +6,6 @@ use specs::saveload::{SimpleMarker, SimpleMarkerAllocator};
 
 mod map;
 pub use map::*;
-mod player;
-use player::*;
 mod utils;
 pub use utils::*;
 pub mod game;
@@ -145,7 +143,7 @@ impl GameState for State {
                 newrunstate = RunState::AwaitingInput;
             }
             RunState::AwaitingInput => {
-                newrunstate = player_input(self, ctx);
+                newrunstate = player::player_input(self, ctx);
                 if newrunstate != RunState::AwaitingInput {
                     crate::gamelog::record_event("Turn", 1);
                 }

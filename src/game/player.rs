@@ -1,6 +1,6 @@
 use crate::Ranged;
 
-use super::{
+use crate::{
     raws::Reaction, Attributes, BlocksTile, BlocksVisibility, Door, EntityMoved, Equipped, Faction,
     HungerClock, HungerState, Item, Map, Name, Player, Pools, Position, Renderable, RunState,
     State, Target, TileType, Vendor, VendorMode, Viewshed, WantsToCastSpell, WantsToMelee,
@@ -9,6 +9,8 @@ use super::{
 use rltk::{Point, Rltk, VirtualKeyCode};
 use specs::prelude::*;
 use std::cmp::{max, min};
+
+use super::KnownSpells;
 
 fn get_player_target_list(ecs: &mut World) -> Vec<(f32, Entity)> {
     let mut possible_targets: Vec<(f32, Entity)> = Vec::new();
@@ -407,9 +409,6 @@ fn use_consumable_hotkey(gs: &mut State, key: i32) -> RunState {
 }
 
 fn use_spell_hotkey(gs: &mut State, key: i32) -> RunState {
-    use super::raws::find_spell_entity;
-    use super::KnownSpells;
-
     let player_entity = gs.ecs.fetch::<Entity>();
     let known_spells_storage = gs.ecs.read_storage::<KnownSpells>();
     let known_spells = &known_spells_storage.get(*player_entity).unwrap().spells;
@@ -419,7 +418,7 @@ fn use_spell_hotkey(gs: &mut State, key: i32) -> RunState {
         let player_pools = pools.get(*player_entity).unwrap();
         if player_pools.mana.current >= known_spells[key as usize].mana_cost {
             if let Some(spell_entity) =
-                find_spell_entity(&gs.ecs, &known_spells[key as usize].display_name)
+                crate::raws::find_spell_entity(&gs.ecs, &known_spells[key as usize].display_name)
             {
                 if let Some(ranged) = gs.ecs.read_storage::<Ranged>().get(spell_entity) {
                     return RunState::ShowTargeting {
