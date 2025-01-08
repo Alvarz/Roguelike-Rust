@@ -1,4 +1,4 @@
-use crate::{rex_assets::RexAssets, RunState, State};
+use crate::{rex_assets::RexAssets, RunState, State, PROJECT_NAME};
 use rltk::prelude::*;
 
 #[derive(PartialEq, Copy, Clone)]
@@ -28,7 +28,7 @@ pub fn main_menu(gs: &mut State, ctx: &mut Rltk) -> MainMenuResult {
 
     draw_batch.print_color_centered(
         20,
-        "Untitled Roguelike",
+        PROJECT_NAME,
         ColorPair::new(RGB::named(rltk::YELLOW), RGB::named(rltk::BLACK)),
     );
     draw_batch.print_color_centered(

@@ -6,14 +6,10 @@ use crate::{
     camera, freeze_level_entities, gamelog, gui, map, saveload, systems, Map, MasterDungeonMap,
 };
 
-use super::{components::*, spawner};
+use super::{
+    components::*, spawner, PROJECT_NAME, SHOW_DEPTH, SHOW_FPS, SHOW_MAPGEN_VISUALIZER, SHOW_SEED,
+};
 use super::{damage, player};
-
-const PROJECT_NAME: &str = "Untitled Roguelike";
-const SHOW_MAPGEN_VISUALIZER: bool = false;
-const SHOW_FPS: bool = true;
-const SHOW_SEED: bool = true;
-const SHOW_DEPTH: bool = true;
 
 #[derive(PartialEq, Copy, Clone)]
 pub enum VendorMode {
