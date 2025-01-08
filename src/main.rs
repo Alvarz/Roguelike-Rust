@@ -9,6 +9,7 @@ mod utils;
 pub use utils::*;
 pub mod game;
 pub use game::*;
+use wave::Waves;
 pub mod effects;
 mod gamelog;
 mod gui;
@@ -55,6 +56,9 @@ fn main() -> rltk::BError {
     gs.ecs
         .insert(systems::particle_system::ParticleBuilder::new());
     gs.ecs.insert(rex_assets::RexAssets::new());
+    let mut wave = Waves::new();
+    wave.configure_transitions(&mut gs.ecs);
+    gs.ecs.insert(wave);
 
     rltk::main_loop(context, gs)
 }

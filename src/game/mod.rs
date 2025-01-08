@@ -8,6 +8,7 @@ mod state;
 pub use components::*;
 use specs::{saveload::SimpleMarker, WorldExt};
 pub use state::*;
+pub mod wave;
 
 pub const PROJECT_NAME: &str = "Untitled Roguelike";
 pub const SHOW_MAPGEN_VISUALIZER: bool = false;

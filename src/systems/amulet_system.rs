@@ -1,4 +1,7 @@
-use crate::{AmuletOfYendor, Map, MyTurn, Name, RunState};
+use crate::{
+    wave::{WaveEvent, Waves},
+    AmuletOfYendor, Map, MyTurn, Name, RunState,
+};
 use specs::prelude::*;
 
 pub struct AmuletSystem {}
@@ -11,10 +14,13 @@ impl<'a> System<'a> for AmuletSystem {
         ReadStorage<'a, Name>,
         ReadStorage<'a, MyTurn>,
         WriteExpect<'a, RunState>,
+        WriteExpect<'a, Waves>,
     );
 
     fn run(&mut self, data: Self::SystemData) {
-        let (map, mut amulet_if_yendor, name, turns, mut runstate) = data;
+        let (map, mut amulet_if_yendor, name, turns, mut runstate, mut waves) = data;
+
+        waves.trigger_event(WaveEvent::Start);
 
         let mut finished = false;
         for (_amulet, n, _my_turn) in (&amulet_if_yendor, &name, &turns).join() {
