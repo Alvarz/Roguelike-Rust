@@ -14,7 +14,6 @@ pub mod effects;
 mod gamelog;
 mod gui;
 pub mod map_builders;
-pub mod random_table;
 pub mod raws;
 #[macro_use]
 extern crate lazy_static;
