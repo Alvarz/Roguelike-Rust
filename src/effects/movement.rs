@@ -1,6 +1,5 @@
 use super::*;
 use crate::game::components::ApplyTeleport;
-use specs::prelude::*;
 
 pub fn apply_teleport(ecs: &mut World, destination: &EffectSpawner, target: Entity) {
     let player_entity = ecs.fetch::<Entity>();

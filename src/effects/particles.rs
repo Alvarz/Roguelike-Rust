@@ -2,7 +2,6 @@ use super::*;
 use crate::game::components::{ParticleAnimation, ParticleLifetime, Position, Renderable};
 use crate::map::Map;
 use crate::systems::particle_system::ParticleBuilder;
-use specs::prelude::*;
 
 pub fn particle_to_tile(ecs: &mut World, tile_idx: i32, effect: &EffectSpawner) {
     if let EffectType::Particle {

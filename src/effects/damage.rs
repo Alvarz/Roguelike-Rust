@@ -5,7 +5,6 @@ use crate::{
     Attributes, Confusion, DamageOverTime, Duration, EquipmentChanged, Name, Player, Pools,
     SerializeMe, Skills, Slow, StatusEffect,
 };
-use specs::prelude::*;
 use specs::saveload::{MarkedBuilder, SimpleMarker};
 
 pub fn inflict_damage(ecs: &mut World, damage: &EffectSpawner, target: Entity) {
