@@ -1,3 +1,5 @@
+use crate::Ranged;
+
 use super::{
     raws::Reaction, Attributes, BlocksTile, BlocksVisibility, Door, EntityMoved, Equipped, Faction,
     HungerClock, HungerState, Item, Map, Name, Player, Pools, Position, Renderable, RunState,
@@ -379,7 +381,6 @@ fn use_consumable_hotkey(gs: &mut State, key: i32) -> RunState {
     }
 
     if (key as usize) < carried_consumables.len() {
-        use crate::components::Ranged;
         if let Some(ranged) = gs
             .ecs
             .read_storage::<Ranged>()
@@ -420,7 +421,6 @@ fn use_spell_hotkey(gs: &mut State, key: i32) -> RunState {
             if let Some(spell_entity) =
                 find_spell_entity(&gs.ecs, &known_spells[key as usize].display_name)
             {
-                use crate::components::Ranged;
                 if let Some(ranged) = gs.ecs.read_storage::<Ranged>().get(spell_entity) {
                     return RunState::ShowTargeting {
                         range: ranged.range,

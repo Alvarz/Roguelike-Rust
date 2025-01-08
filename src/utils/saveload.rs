@@ -1,4 +1,4 @@
-use crate::components::*;
+use crate::game::*;
 use specs::error::NoError;
 use specs::prelude::*;
 use specs::saveload::{

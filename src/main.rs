@@ -4,15 +4,13 @@ use rltk::{GameState, Point, Rltk};
 use specs::prelude::*;
 use specs::saveload::{SimpleMarker, SimpleMarkerAllocator};
 
-mod components;
-pub use components::*;
 mod map;
 pub use map::*;
 mod player;
 use player::*;
 mod utils;
 pub use utils::*;
-mod game;
+pub mod game;
 pub use game::*;
 pub mod effects;
 mod gamelog;

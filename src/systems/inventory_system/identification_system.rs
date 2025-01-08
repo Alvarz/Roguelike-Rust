@@ -1,21 +1,23 @@
+use crate::Player;
+
+use super::{IdentifiedItem, Item, Name, ObfuscatedName};
 use specs::prelude::*;
-use super::{Name, IdentifiedItem, Item, ObfuscatedName};
 
 pub struct ItemIdentificationSystem {}
 
 impl<'a> System<'a> for ItemIdentificationSystem {
     #[allow(clippy::type_complexity)]
     type SystemData = (
-                        ReadStorage<'a, crate::components::Player>,
-                        WriteStorage<'a, IdentifiedItem>,
-                        WriteExpect<'a, crate::map::MasterDungeonMap>,
-                        ReadStorage<'a, Item>,
-                        ReadStorage<'a, Name>,
-                        WriteStorage<'a, ObfuscatedName>,
-                        Entities<'a>
-                      );
+        ReadStorage<'a, Player>,
+        WriteStorage<'a, IdentifiedItem>,
+        WriteExpect<'a, crate::map::MasterDungeonMap>,
+        ReadStorage<'a, Item>,
+        ReadStorage<'a, Name>,
+        WriteStorage<'a, ObfuscatedName>,
+        Entities<'a>,
+    );
 
-    fn run(&mut self, data : Self::SystemData) {
+    fn run(&mut self, data: Self::SystemData) {
         let (player, mut identified, mut dm, items, names, mut obfuscated_names, entities) = data;
 
         for (_p, id) in (&player, &identified).join() {

@@ -1,6 +1,6 @@
 use super::{faction_structs::Reaction, Raws};
 use crate::attributes::{attr_bonus, mana_at_level, npc_hp};
-use crate::components::*;
+use crate::game::*;
 use crate::random_table::{MasterTable, RandomTable};
 use regex::Regex;
 use specs::prelude::*;
@@ -379,10 +379,8 @@ fn spawn_position<'a>(
     }
 }
 
-fn get_renderable_component(
-    renderable: &super::item_structs::Renderable,
-) -> crate::components::Renderable {
-    crate::components::Renderable {
+fn get_renderable_component(renderable: &super::item_structs::Renderable) -> Renderable {
+    Renderable {
         glyph: rltk::to_cp437(renderable.glyph.chars().next().unwrap()),
         fg: rltk::RGB::from_hex(&renderable.fg).expect("Invalid RGB"),
         bg: rltk::RGB::from_hex(&renderable.bg).expect("Invalid RGB"),
@@ -528,7 +526,7 @@ pub fn spawn_named_item(
             name: item_template.name.clone(),
         });
 
-        eb = eb.with(crate::components::Item {
+        eb = eb.with(Item {
             initiative_penalty: item_template.initiative_penalty.unwrap_or(0.0),
             weight_lbs: item_template.weight_lbs.unwrap_or(0.0),
             base_value: item_template.base_value.unwrap_or(0.0),
@@ -536,7 +534,7 @@ pub fn spawn_named_item(
 
         if let Some(consumable) = &item_template.consumable {
             let max_charges = consumable.charges.unwrap_or(1);
-            eb = eb.with(crate::components::Consumable {
+            eb = eb.with(Consumable {
                 max_charges,
                 charges: max_charges,
             });

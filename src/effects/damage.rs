@@ -1,10 +1,10 @@
 use super::*;
 use crate::attributes::{mana_at_level, player_hp_at_level};
-use crate::components::{
+use crate::map::Map;
+use crate::{
     Attributes, Confusion, DamageOverTime, Duration, EquipmentChanged, Name, Player, Pools,
     SerializeMe, Skills, Slow, StatusEffect,
 };
-use crate::map::Map;
 use specs::prelude::*;
 use specs::saveload::{MarkedBuilder, SimpleMarker};
 

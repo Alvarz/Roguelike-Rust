@@ -1,5 +1,5 @@
 use super::*;
-use crate::components::*;
+use crate::game::*;
 use crate::RunState;
 
 pub fn item_trigger(creator: Option<Entity>, item: Entity, targets: &Targets, ecs: &mut World) {

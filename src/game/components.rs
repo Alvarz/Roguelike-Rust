@@ -513,11 +513,11 @@ pub struct SerializeMe;
 // Special component that exists to help serialize the game data
 #[derive(Component, Serialize, Deserialize, Clone)]
 pub struct SerializationHelper {
-    pub map: super::map::Map,
+    pub map: crate::map::Map,
 }
 #[derive(Component, Serialize, Deserialize, Clone)]
 pub struct DMSerializationHelper {
-    pub map: super::map::MasterDungeonMap,
+    pub map: crate::map::MasterDungeonMap,
     pub log: Vec<Vec<crate::gamelog::LogFragment>>,
     pub events: HashMap<String, i32>,
 }
