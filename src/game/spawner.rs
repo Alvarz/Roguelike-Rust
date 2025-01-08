@@ -1,11 +1,11 @@
-use super::{
+use crate::attributes::{attr_bonus, mana_at_level, player_hp_at_level};
+use crate::{
     random_table::MasterTable, raws::*, Attribute, AttributeBonus, Attributes, Duration,
     EntryTrigger, EquipmentChanged, Faction, HungerClock, HungerState, Initiative, KnownSpells,
     LightSource, Map, MasterDungeonMap, Name, OtherLevelPosition, Player, Pool, Pools, Position,
     Rect, Renderable, SerializeMe, SingleActivation, Skill, Skills, StatusEffect, TeleportTo,
     TileType, Viewshed,
 };
-use crate::attributes::{attr_bonus, mana_at_level, player_hp_at_level};
 use rltk::RGB;
 use specs::prelude::*;
 use specs::saveload::{MarkedBuilder, SimpleMarker};
