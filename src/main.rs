@@ -21,7 +21,6 @@ pub mod map_builders;
 pub mod random_table;
 pub mod raws;
 pub mod rex_assets;
-pub mod saveload_system;
 mod spawner;
 #[macro_use]
 extern crate lazy_static;
@@ -464,9 +463,9 @@ impl GameState for State {
                             newrunstate = RunState::PreRun
                         }
                         gui::MainMenuSelection::LoadGame => {
-                            saveload_system::load_game(&mut self.ecs);
+                            saveload::load_game(&mut self.ecs);
                             newrunstate = RunState::AwaitingInput;
-                            saveload_system::delete_save();
+                            saveload::delete_save();
                         }
                         gui::MainMenuSelection::Quit => {
                             ::std::process::exit(0);
@@ -499,7 +498,7 @@ impl GameState for State {
                 }
             }
             RunState::SaveGame => {
-                saveload_system::save_game(&mut self.ecs);
+                saveload::save_game(&mut self.ecs);
                 newrunstate = RunState::MainMenu {
                     menu_selection: gui::MainMenuSelection::LoadGame,
                 };

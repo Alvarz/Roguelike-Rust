@@ -16,7 +16,7 @@ pub enum MainMenuResult {
 
 pub fn main_menu(gs: &mut State, ctx: &mut Rltk) -> MainMenuResult {
     let mut draw_batch = DrawBatch::new();
-    let save_exists = crate::saveload_system::does_save_exist();
+    let save_exists = crate::saveload::does_save_exist();
     let runstate = gs.ecs.fetch::<RunState>();
     let assets = gs.ecs.fetch::<RexAssets>();
     ctx.render_xp_sprite(&assets.menu, 0, 0);
