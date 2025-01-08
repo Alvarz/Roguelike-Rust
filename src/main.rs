@@ -20,11 +20,9 @@ mod gui;
 pub mod map_builders;
 pub mod random_table;
 pub mod raws;
-pub mod rex_assets;
 mod spawner;
 #[macro_use]
 extern crate lazy_static;
-pub mod rng;
 pub mod spatial;
 mod systems;
 
