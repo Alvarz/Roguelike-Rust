@@ -16,6 +16,9 @@ jobs:
         with:
           ref: ${{ github.head_ref }} # Use the branch of the PR as the checkout reference
 
+      - name: install dependencies
+        run: sudo apt -y install libfontconfig1-dev
+
       # Set up Rust
       - name: Set up Rust
         uses: actions-rs/toolchain@v1

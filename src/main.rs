@@ -30,7 +30,7 @@ pub mod rng;
 pub mod spatial;
 mod systems;
 
-const PROJECT_NAME: &str = "Untitled Roguelike";
+const PROJECT_NAME: &str = "Untitled Roguelikes";
 const SHOW_MAPGEN_VISUALIZER: bool = false;
 const SHOW_FPS: bool = true;
 const SHOW_SEED: bool = true;
