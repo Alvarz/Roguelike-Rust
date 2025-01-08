@@ -1,4 +1,4 @@
-use super::components::*;
+use crate::game::*;
 use specs::error::NoError;
 use specs::prelude::*;
 use specs::saveload::{
@@ -28,9 +28,9 @@ pub fn save_game(_ecs: &mut World) {}
 #[cfg(not(target_arch = "wasm32"))]
 pub fn save_game(ecs: &mut World) {
     // Create helper
-    let mapcopy = ecs.get_mut::<super::map::Map>().unwrap().clone();
+    let mapcopy = ecs.get_mut::<crate::map::Map>().unwrap().clone();
     let dungeon_master = ecs
-        .get_mut::<super::map::MasterDungeonMap>()
+        .get_mut::<crate::map::MasterDungeonMap>()
         .unwrap()
         .clone();
     let savehelper = ecs
@@ -290,13 +290,13 @@ pub fn load_game(ecs: &mut World) {
         let player = ecs.read_storage::<Player>();
         let position = ecs.read_storage::<Position>();
         for (e, h) in (&entities, &helper).join() {
-            let mut worldmap = ecs.write_resource::<super::map::Map>();
+            let mut worldmap = ecs.write_resource::<crate::map::Map>();
             *worldmap = h.map.clone();
             crate::spatial::set_size((worldmap.height * worldmap.width) as usize);
             deleteme = Some(e);
         }
         for (e, h) in (&entities, &helper2).join() {
-            let mut dungeonmaster = ecs.write_resource::<super::map::MasterDungeonMap>();
+            let mut dungeonmaster = ecs.write_resource::<crate::map::MasterDungeonMap>();
             *dungeonmaster = h.map.clone();
             deleteme2 = Some(e);
             crate::gamelog::restore_log(&mut h.log.clone());

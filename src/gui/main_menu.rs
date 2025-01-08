@@ -1,4 +1,4 @@
-use crate::{rex_assets::RexAssets, RunState, State};
+use crate::{rex_assets::RexAssets, RunState, State, PROJECT_NAME};
 use rltk::prelude::*;
 
 #[derive(PartialEq, Copy, Clone)]
@@ -16,7 +16,7 @@ pub enum MainMenuResult {
 
 pub fn main_menu(gs: &mut State, ctx: &mut Rltk) -> MainMenuResult {
     let mut draw_batch = DrawBatch::new();
-    let save_exists = crate::saveload_system::does_save_exist();
+    let save_exists = crate::saveload::does_save_exist();
     let runstate = gs.ecs.fetch::<RunState>();
     let assets = gs.ecs.fetch::<RexAssets>();
     ctx.render_xp_sprite(&assets.menu, 0, 0);
@@ -28,7 +28,7 @@ pub fn main_menu(gs: &mut State, ctx: &mut Rltk) -> MainMenuResult {
 
     draw_batch.print_color_centered(
         20,
-        "Untitled Roguelike",
+        PROJECT_NAME,
         ColorPair::new(RGB::named(rltk::YELLOW), RGB::named(rltk::BLACK)),
     );
     draw_batch.print_color_centered(

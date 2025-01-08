@@ -1,4 +1,4 @@
-use crate::{raws::Reaction, Faction, Map, MyTurn, Position, TileSize, WantsToMelee};
+use crate::{raws::Reaction, Faction, Map, MyTurn, Position, Rect, TileSize, WantsToMelee};
 use specs::prelude::*;
 
 pub struct AdjacentAI {}
@@ -28,7 +28,6 @@ impl<'a> System<'a> for AdjacentAI {
                 let h = map.height;
 
                 if let Some(size) = sizes.get(entity) {
-                    use crate::rect::Rect;
                     let mob_rect = Rect::new(pos.x, pos.y, size.x, size.y).get_all_tiles();
                     let parent_rect = Rect::new(pos.x - 1, pos.y - 1, size.x + 2, size.y + 2);
                     parent_rect

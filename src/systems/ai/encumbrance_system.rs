@@ -1,6 +1,8 @@
+use crate::{
+    attributes::attr_bonus, AttributeBonus, Attributes, EquipmentChanged, Equipped, InBackpack,
+    Item, Pools, Slow, StatusEffect,
+};
 use specs::prelude::*;
-use crate::{EquipmentChanged, Item, InBackpack, Equipped, Pools, Attributes, AttributeBonus,
-    gamesystem::attr_bonus, StatusEffect, Slow};
 use std::collections::HashMap;
 
 pub struct EncumbranceSystem {}
@@ -18,28 +20,51 @@ impl<'a> System<'a> for EncumbranceSystem {
         ReadExpect<'a, Entity>,
         ReadStorage<'a, AttributeBonus>,
         ReadStorage<'a, StatusEffect>,
-        ReadStorage<'a, Slow>
+        ReadStorage<'a, Slow>,
     );
 
-    fn run(&mut self, data : Self::SystemData) {
-        let (mut equip_dirty, entities, items, backpacks, wielded,
-            mut pools, mut attributes, player, attrbonus, statuses, slowed) = data;
+    fn run(&mut self, data: Self::SystemData) {
+        let (
+            mut equip_dirty,
+            entities,
+            items,
+            backpacks,
+            wielded,
+            mut pools,
+            mut attributes,
+            player,
+            attrbonus,
+            statuses,
+            slowed,
+        ) = data;
 
-        if equip_dirty.is_empty() { return; }
+        if equip_dirty.is_empty() {
+            return;
+        }
 
         struct ItemUpdate {
-            weight : f32,
-            initiative : f32,
-            might : i32,
-            fitness : i32,
-            quickness : i32,
-            intelligence : i32
+            weight: f32,
+            initiative: f32,
+            might: i32,
+            fitness: i32,
+            quickness: i32,
+            intelligence: i32,
         }
 
         // Build the map of who needs updating
-        let mut to_update : HashMap<Entity, ItemUpdate> = HashMap::new(); // (weight, intiative)
+        let mut to_update: HashMap<Entity, ItemUpdate> = HashMap::new(); // (weight, intiative)
         for (entity, _dirty) in (&entities, &equip_dirty).join() {
-            to_update.insert(entity, ItemUpdate{ weight: 0.0, initiative: 0.0, might: 0, fitness: 0, quickness: 0, intelligence: 0 });
+            to_update.insert(
+                entity,
+                ItemUpdate {
+                    weight: 0.0,
+                    initiative: 0.0,
+                    might: 0,
+                    fitness: 0,
+                    quickness: 0,
+                    intelligence: 0,
+                },
+            );
         }
 
         // Remove all dirty statements
@@ -101,8 +126,10 @@ impl<'a> System<'a> for EncumbranceSystem {
                     attr.intelligence.modifiers = item.intelligence;
                     attr.might.bonus = attr_bonus(attr.might.base + attr.might.modifiers);
                     attr.fitness.bonus = attr_bonus(attr.fitness.base + attr.fitness.modifiers);
-                    attr.quickness.bonus = attr_bonus(attr.quickness.base + attr.quickness.modifiers);
-                    attr.intelligence.bonus = attr_bonus(attr.intelligence.base + attr.intelligence.modifiers);
+                    attr.quickness.bonus =
+                        attr_bonus(attr.quickness.base + attr.quickness.modifiers);
+                    attr.intelligence.bonus =
+                        attr_bonus(attr.intelligence.base + attr.intelligence.modifiers);
 
                     let carry_capacity_lbs = (attr.might.base + attr.might.modifiers) * 15;
                     if pool.total_weight as i32 > carry_capacity_lbs {
@@ -111,7 +138,9 @@ impl<'a> System<'a> for EncumbranceSystem {
                         if *entity == *player {
                             crate::gamelog::Logger::new()
                                 .color(rltk::ORANGE)
-                                .append("You are overburdened, and suffering an initiative penalty.")
+                                .append(
+                                    "You are overburdened, and suffering an initiative penalty.",
+                                )
                                 .log();
                         }
                     }

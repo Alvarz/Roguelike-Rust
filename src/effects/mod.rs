@@ -9,7 +9,7 @@ mod hunger;
 mod movement;
 mod particles;
 mod triggers;
-use crate::components::AttributeBonus;
+use crate::AttributeBonus;
 use rltk::Point;
 mod world;
 
