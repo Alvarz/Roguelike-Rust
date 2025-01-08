@@ -10,11 +10,12 @@ mod map;
 pub use map::*;
 mod player;
 use player::*;
-mod rect;
-pub use rect::Rect;
-mod damage_system;
+mod utils;
+pub use utils::*;
+mod game;
+pub use game::*;
+pub mod effects;
 mod gamelog;
-mod gamesystem;
 mod gui;
 pub mod map_builders;
 pub mod random_table;
@@ -22,8 +23,6 @@ pub mod raws;
 pub mod rex_assets;
 pub mod saveload_system;
 mod spawner;
-pub use gamesystem::*;
-pub mod effects;
 #[macro_use]
 extern crate lazy_static;
 pub mod rng;
@@ -557,7 +556,7 @@ impl GameState for State {
             let mut runwriter = self.ecs.write_resource::<RunState>();
             *runwriter = newrunstate;
         }
-        damage_system::delete_the_dead(&mut self.ecs);
+        damage::delete_the_dead(&mut self.ecs);
 
         let _ = rltk::render_draw_buffer(ctx);
         if SHOW_FPS {
