@@ -524,3 +524,16 @@ pub struct DMSerializationHelper {
 
 #[derive(Component, Serialize, Deserialize, Clone)]
 pub struct AmuletOfYendor {}
+
+#[derive(Debug, Serialize, Deserialize, Clone, Eq, PartialEq, Hash, Copy)]
+pub enum WaveState {
+    WaitingToStart { turns_left: i32 },
+    WaveInProgress { amount_to_spawn: i32, depth: i32 },
+    WaitingToComplete,
+    WaveCompleted,
+}
+
+#[derive(Component, Debug, Serialize, Deserialize, Clone)]
+pub struct HordeMode {
+    pub state: WaveState,
+}

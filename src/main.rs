@@ -3,13 +3,14 @@ use rltk::{Point, Rltk};
 use specs::prelude::*;
 use specs::saveload::SimpleMarkerAllocator;
 
+mod config;
+pub use config::*;
 mod map;
 pub use map::*;
 mod utils;
 pub use utils::*;
 pub mod game;
 pub use game::*;
-use wave::WaveState;
 pub mod effects;
 mod gamelog;
 mod gui;
@@ -56,7 +57,6 @@ fn main() -> rltk::BError {
     gs.ecs
         .insert(systems::particle_system::ParticleBuilder::new());
     gs.ecs.insert(rex_assets::RexAssets::new());
-    gs.ecs.insert(WaveState::WaitingToStart { turns_left: 0 });
 
     rltk::main_loop(context, gs)
 }

@@ -26,6 +26,8 @@ mod lighting_system;
 use lighting_system::LightingSystem;
 mod amulet_system;
 pub use amulet_system::AmuletSystem;
+mod horde_system;
+pub use horde_system::HordeModeSystem;
 
 pub fn build() -> Box<dyn UnifiedDispatcher + 'static> {
     dispatcher::new()
