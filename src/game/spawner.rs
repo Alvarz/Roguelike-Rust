@@ -1,4 +1,6 @@
 use crate::attributes::{attr_bonus, mana_at_level, player_hp_at_level};
+use crate::spatial::is_blocked;
+use crate::{map, tile_walkable};
 use crate::{
     random_table::MasterTable, raws::*, Attribute, AttributeBonus, Attributes, Duration,
     EntryTrigger, EquipmentChanged, Faction, HungerClock, HungerState, Initiative, KnownSpells,
@@ -8,7 +10,9 @@ use crate::{
 };
 use rltk::RGB;
 use specs::prelude::*;
+use specs::rayon::slice::Windows;
 use specs::saveload::{MarkedBuilder, SimpleMarker};
+use specs::shred::Fetch;
 use std::collections::HashMap;
 
 /// Spawns the player and returns his/her entity object.
@@ -164,7 +168,7 @@ pub fn player(ecs: &mut World, player_x: i32, player_y: i32) -> Entity {
 
 const MAX_MONSTERS: i32 = 4;
 
-fn room_table(map_depth: i32) -> MasterTable {
+pub fn room_table(map_depth: i32) -> MasterTable {
     get_spawn_table_for_depth(&RAWS.lock().unwrap(), map_depth)
 }
 
@@ -301,4 +305,30 @@ pub fn spawn_town_portal(ecs: &mut World) {
             name: "Town Portal".to_string(),
         })
         .build();
+}
+
+pub fn spawn_mobs_by_depth(ecs: &mut World, table_type: SpawnTableType) {
+    let map = ecs.get_mut::<crate::map::Map>().unwrap().clone();
+    let spawn_list: &mut Vec<(usize, String)> = &mut Vec::new();
+
+    let max_spawn = 10;
+    let mut current_spawn = 0;
+    let mut spawn_table = room_table(map.depth);
+
+    while current_spawn < max_spawn {
+        let x = crate::rng::range(0, map.width - 1);
+        let y = crate::rng::range(0, map.height - 1);
+        let map_idx = map.xy_idx(x, y);
+
+        if !is_blocked(map_idx) && tile_walkable(map.tiles[map_idx]) && !map.visible_tiles[map_idx]
+        {
+            spawn_list.push((map_idx, spawn_table.roll_by_type(table_type.clone())));
+            current_spawn += 1;
+        }
+    }
+
+    for entity in spawn_list.iter() {
+        spawn_entity(ecs, &(&entity.0, &entity.1));
+    }
+    rltk::console::log(format!("Spawned enemies {:?}", max_spawn))
 }

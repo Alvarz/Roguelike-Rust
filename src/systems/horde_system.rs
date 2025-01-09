@@ -1,4 +1,4 @@
-use crate::{gamelog, HordeMode, Map, MyTurn, WaveState, TURNS_BETWEEN_BASE};
+use crate::{gamelog, HordeMode, Initiative, Map, MyTurn, RunState, WaveState, TURNS_BETWEEN_BASE};
 use specs::prelude::*;
 
 pub struct HordeModeSystem {}
@@ -10,10 +10,12 @@ impl<'a> System<'a> for HordeModeSystem {
         WriteStorage<'a, MyTurn>,
         WriteStorage<'a, HordeMode>,
         Entities<'a>,
+        WriteExpect<'a, RunState>,
+        WriteStorage<'a, Initiative>,
     );
 
     fn run(&mut self, data: Self::SystemData) {
-        let (_map, mut turns, mut horde_modes, entities) = data;
+        let (_map, mut turns, mut horde_modes, entities, mut runstate, initiatives) = data;
 
         let mut turn_done: Vec<Entity> = Vec::new();
         for (horde_mode, entity, _my_turn) in (&mut horde_modes, &entities, &mut turns).join() {
@@ -29,6 +31,7 @@ impl<'a> System<'a> for HordeModeSystem {
                             .append("a horde of enemies approach you!.")
                             .log();
                         horde_mode.state = WaveState::WaitingToComplete;
+                        *runstate = RunState::SpawnWave
                     } else {
                         let curent_amount_to_spawn = amount_to_spawn - 1;
                         horde_mode.state = WaveState::WaveInProgress {
@@ -40,11 +43,13 @@ impl<'a> System<'a> for HordeModeSystem {
 
                 WaveState::WaitingToComplete => {
                     // count how many enemies left
-                    horde_mode.state = WaveState::WaveCompleted;
-                    gamelog::Logger::new()
-                        .color(rltk::RED)
-                        .append("the horde is almost complete!.")
-                        .log();
+                    if (&entities, &initiatives).join().count() < 3 {
+                        horde_mode.state = WaveState::WaveCompleted;
+                        gamelog::Logger::new()
+                            .color(rltk::RED)
+                            .append("the horde is almost complete!.")
+                            .log();
+                    }
                 }
                 WaveState::WaveCompleted => {
                     horde_mode.state = WaveState::WaitingToStart {

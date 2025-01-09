@@ -2,12 +2,14 @@ extern crate serde;
 use rltk::{GameState, Rltk};
 use specs::prelude::*;
 use specs::saveload::{MarkedBuilder, SimpleMarker};
+use specs::shred::Fetch;
 
 use crate::{
     camera, freeze_level_entities, gamelog, gui, map, saveload, systems, Map, MasterDungeonMap,
     PROJECT_NAME, SHOW_DEPTH, SHOW_FPS, SHOW_MAPGEN_VISUALIZER, SHOW_SEED,
 };
 
+use super::spawner::spawn_mobs_by_depth;
 use super::{components::*, spawner};
 use super::{damage, player};
 
@@ -55,6 +57,7 @@ pub enum RunState {
     ShowIdentify,
     ShowOptionMenu,
     FinishGame,
+    SpawnWave,
 }
 
 pub struct State {
@@ -153,6 +156,7 @@ impl GameState for State {
                         RunState::ShowRemoveCurse => newrunstate = RunState::ShowRemoveCurse,
                         RunState::ShowIdentify => newrunstate = RunState::ShowIdentify,
                         RunState::FinishGame => newrunstate = RunState::FinishGame,
+                        RunState::SpawnWave => newrunstate = RunState::SpawnWave,
                         _ => newrunstate = RunState::Ticking,
                     }
                 }
@@ -525,6 +529,10 @@ impl GameState for State {
                 } else {
                     newrunstate = RunState::MagicMapReveal { row: row + 1 };
                 }
+            }
+            RunState::SpawnWave => {
+                spawner::spawn_mobs_by_depth(&mut self.ecs, crate::raws::SpawnTableType::Mob);
+                newrunstate = RunState::Ticking;
             }
         }
 
