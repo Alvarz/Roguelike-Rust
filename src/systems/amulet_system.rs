@@ -1,5 +1,5 @@
 use crate::{
-    wave::{WaveEvent, Waves},
+    wave::{handle_event, WaveEvent, WaveState},
     AmuletOfYendor, Map, MyTurn, Name, RunState,
 };
 use specs::prelude::*;
@@ -14,13 +14,35 @@ impl<'a> System<'a> for AmuletSystem {
         ReadStorage<'a, Name>,
         ReadStorage<'a, MyTurn>,
         WriteExpect<'a, RunState>,
-        WriteExpect<'a, Waves>,
+        WriteExpect<'a, WaveState>,
     );
 
     fn run(&mut self, data: Self::SystemData) {
-        let (map, mut amulet_if_yendor, name, turns, mut runstate, mut waves) = data;
+        let (map, mut amulet_if_yendor, name, turns, mut runstate, mut wave_state) = data;
 
-        waves.trigger_event(WaveEvent::Start);
+        if map.depth > 1 {
+            match *wave_state {
+                WaveState::WaitingToStart => {
+                    *wave_state = handle_event(&WaveEvent::Start, *wave_state)
+                }
+
+                WaveState::WaveInProgress => {
+                    *wave_state = handle_event(&WaveEvent::Wait, *wave_state)
+                }
+
+                WaveState::WaitingToComplete => {
+                    *wave_state = handle_event(&WaveEvent::Complete, *wave_state)
+                }
+
+                WaveState::WaveCompleted => {
+                    *wave_state = handle_event(&WaveEvent::WaitNextWave, *wave_state)
+                }
+            }
+        }
+
+        if map.depth > 1 && *wave_state == WaveState::WaitingToStart {
+            *wave_state = handle_event(&WaveEvent::Start, *wave_state);
+        }
 
         let mut finished = false;
         for (_amulet, n, _my_turn) in (&amulet_if_yendor, &name, &turns).join() {
