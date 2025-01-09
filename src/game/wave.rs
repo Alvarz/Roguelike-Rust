@@ -1,16 +1,14 @@
-// use crate::state_machine::{StateMachine, Transition};
+use serde::{Deserialize, Serialize};
 
-const TURNS_BETWEEN_WAVES: i32 = 10;
-
-#[derive(Debug, PartialEq, Eq, Hash, Clone, Copy)]
+#[derive(Debug, Serialize, Deserialize, Clone, Eq, PartialEq, Hash, Copy)]
 pub enum WaveState {
-    WaitingToStart,
-    WaveInProgress,
+    WaitingToStart { turns_left: i32 },
+    WaveInProgress { amount_to_spawn: i32, depth: i32 },
     WaitingToComplete,
     WaveCompleted,
 }
 
-#[derive(Debug, PartialEq, Eq, Clone, Hash, Copy)]
+#[derive(Debug, Serialize, Deserialize, Clone, Eq, PartialEq, Hash, Copy)]
 pub enum WaveEvent {
     Start,
     Wait,
@@ -21,17 +19,23 @@ pub enum WaveEvent {
 
 pub fn handle_event(event: &WaveEvent, mut wave_state: WaveState) -> WaveState {
     match (&wave_state, event) {
-        (WaveState::WaitingToStart, WaveEvent::Start) => {
+        (WaveState::WaitingToStart { .. }, WaveEvent::Start) => {
             rltk::console::log(format!(
                 "moved from {:?} to  {:?} with event {:?}",
                 wave_state,
-                WaveState::WaveInProgress,
+                WaveState::WaveInProgress {
+                    amount_to_spawn: 1,
+                    depth: 1
+                },
                 event,
             ));
-            wave_state = WaveState::WaveInProgress;
+            wave_state = WaveState::WaveInProgress {
+                amount_to_spawn: 1,
+                depth: 1,
+            };
         }
 
-        (WaveState::WaveInProgress, WaveEvent::Wait) => {
+        (WaveState::WaveInProgress { .. }, WaveEvent::Wait) => {
             rltk::console::log(format!(
                 "moved from {:?} to  {:?} with event {:?}",
                 wave_state,
@@ -53,10 +57,10 @@ pub fn handle_event(event: &WaveEvent, mut wave_state: WaveState) -> WaveState {
             rltk::console::log(format!(
                 "moved from {:?} to  {:?} with event {:?}",
                 wave_state,
-                WaveState::WaitingToStart,
+                WaveState::WaitingToStart { turns_left: 100 },
                 event,
             ));
-            wave_state = WaveState::WaitingToStart;
+            wave_state = WaveState::WaitingToStart { turns_left: 100 };
         }
         _ => {
             rltk::console::log(format!(

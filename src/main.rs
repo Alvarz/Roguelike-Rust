@@ -56,8 +56,7 @@ fn main() -> rltk::BError {
     gs.ecs
         .insert(systems::particle_system::ParticleBuilder::new());
     gs.ecs.insert(rex_assets::RexAssets::new());
-    // gs.ecs.insert(Waves::new());
-    gs.ecs.insert(WaveState::WaitingToStart);
+    gs.ecs.insert(WaveState::WaitingToStart { turns_left: 0 });
 
     rltk::main_loop(context, gs)
 }
