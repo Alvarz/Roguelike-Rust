@@ -1,15 +1,12 @@
 extern crate serde;
 use rltk::{GameState, Rltk};
 use specs::prelude::*;
-use specs::saveload::{MarkedBuilder, SimpleMarker};
-use specs::shred::Fetch;
 
 use crate::{
     camera, freeze_level_entities, gamelog, gui, map, saveload, systems, Map, MasterDungeonMap,
     PROJECT_NAME, SHOW_DEPTH, SHOW_FPS, SHOW_MAPGEN_VISUALIZER, SHOW_SEED,
 };
 
-use super::spawner::spawn_horde_mobs_by_depth;
 use super::{components::*, spawner};
 use super::{damage, player};
 
@@ -58,6 +55,7 @@ pub enum RunState {
     ShowOptionMenu,
     FinishGame,
     SpawnWave,
+    SpawnHordeMode,
 }
 
 pub struct State {
@@ -157,6 +155,7 @@ impl GameState for State {
                         RunState::ShowIdentify => newrunstate = RunState::ShowIdentify,
                         RunState::FinishGame => newrunstate = RunState::FinishGame,
                         RunState::SpawnWave => newrunstate = RunState::SpawnWave,
+                        RunState::SpawnHordeMode => newrunstate = RunState::SpawnHordeMode,
                         _ => newrunstate = RunState::Ticking,
                     }
                 }
@@ -532,6 +531,11 @@ impl GameState for State {
             }
             RunState::SpawnWave => {
                 spawner::spawn_horde_mobs_by_depth(&mut self.ecs, crate::raws::SpawnTableType::Mob);
+                newrunstate = RunState::Ticking;
+            }
+            RunState::SpawnHordeMode => {
+                rltk::console::log("state to spawn horde mode");
+                spawner::spawn_horde_mode(&mut self.ecs);
                 newrunstate = RunState::Ticking;
             }
         }

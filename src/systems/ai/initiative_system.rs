@@ -1,6 +1,6 @@
 use crate::{
-    Attributes, DamageOverTime, Duration, EquipmentChanged, Initiative, MyTurn, Pools, Position,
-    RunState, StatusEffect,
+    Attributes, DamageOverTime, Duration, EquipmentChanged, HordeMode, Initiative, MyTurn, Pools,
+    Position, RunState, StatusEffect,
 };
 use specs::prelude::*;
 
@@ -22,6 +22,7 @@ impl<'a> System<'a> for InitiativeSystem {
         WriteStorage<'a, EquipmentChanged>,
         ReadStorage<'a, StatusEffect>,
         ReadStorage<'a, DamageOverTime>,
+        ReadStorage<'a, HordeMode>,
     );
 
     fn run(&mut self, data: Self::SystemData) {
@@ -39,6 +40,7 @@ impl<'a> System<'a> for InitiativeSystem {
             mut dirty,
             statuses,
             dots,
+            horde_modes,
         ) = data;
 
         if *runstate != RunState::Ticking {
@@ -74,10 +76,13 @@ impl<'a> System<'a> for InitiativeSystem {
                     // Give control to the player
                     *runstate = RunState::AwaitingInput;
                 } else {
-                    let distance = rltk::DistanceAlg::Manhattan
-                        .distance2d(*player_pos, rltk::Point::new(pos.x, pos.y));
-                    if distance > 20.0 {
-                        myturn = false;
+                    // if it is a horde mode entity, we don't care about it's distance
+                    if !horde_modes.contains(entity) {
+                        let distance = rltk::DistanceAlg::Manhattan
+                            .distance2d(*player_pos, rltk::Point::new(pos.x, pos.y));
+                        if distance > 20.0 {
+                            myturn = false;
+                        }
                     }
                 }
 

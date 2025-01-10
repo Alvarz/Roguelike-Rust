@@ -1,4 +1,4 @@
-use crate::{AmuletOfYendor, HordeMode, Map, MyTurn, RunState, WaveState};
+use crate::{AmuletOfYendor, HordeMode, Map, MyTurn, Position, RunState};
 use specs::prelude::*;
 
 pub struct AmuletSystem {}
@@ -13,24 +13,39 @@ impl<'a> System<'a> for AmuletSystem {
         WriteStorage<'a, HordeMode>,
         ReadExpect<'a, Entity>, // The player
         Entities<'a>,
+        ReadStorage<'a, Position>,
     );
 
     fn run(&mut self, data: Self::SystemData) {
-        let (map, amulet_if_yendor, turns, mut runstate, mut horde_modes, player_entity, entities) =
-            data;
+        let (
+            map,
+            amulet_of_yendor,
+            turns,
+            mut runstate,
+            horde_modes,
+            player_entity,
+            entities,
+            positions,
+        ) = data;
 
-        for (_amulet, _my_turn, entity) in (&amulet_if_yendor, &turns, &entities).join() {
+        if !amulet_of_yendor.contains(*player_entity) {
+            return;
+        }
+
+        for (_my_turn, entity, _pos) in (&turns, &entities, &positions).join() {
+            // player doesn't have the AOY
+
             if map.depth <= 1 && entity == *player_entity {
                 rltk::console::log("{} You won the game!");
                 *runstate = RunState::FinishGame;
-            } else if horde_modes.get(entity).is_none() {
-                let _ = horde_modes.insert(
-                    entity,
-                    HordeMode {
-                        state: WaveState::WaitingToStart { turns_left: 1 },
-                    },
-                );
+                return;
             }
+        }
+
+        let horde_modes = (&horde_modes, &positions).join();
+        if horde_modes.into_iter().count() < 1 {
+            *runstate = RunState::SpawnHordeMode;
+            rltk::console::log("Spawn horde mode");
         }
     }
 }

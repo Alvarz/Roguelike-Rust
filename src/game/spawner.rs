@@ -1,6 +1,5 @@
 use crate::attributes::{attr_bonus, mana_at_level, player_hp_at_level};
 use crate::spatial::is_blocked;
-use crate::{map, tile_walkable};
 use crate::{
     random_table::MasterTable, raws::*, Attribute, AttributeBonus, Attributes, Duration,
     EntryTrigger, EquipmentChanged, Faction, HungerClock, HungerState, Initiative, KnownSpells,
@@ -8,14 +7,13 @@ use crate::{
     Rect, Renderable, SerializeMe, SingleActivation, Skill, Skills, StatusEffect, TeleportTo,
     TileType, Viewshed,
 };
+use crate::{tile_walkable, MAX_MONSTERS_BY_WAVE};
 use rltk::RGB;
 use specs::prelude::*;
-use specs::rayon::slice::Windows;
 use specs::saveload::{MarkedBuilder, SimpleMarker};
-use specs::shred::Fetch;
 use std::collections::HashMap;
 
-use super::HordeMember;
+use super::{HordeMember, HordeMode};
 
 /// Spawns the player and returns his/her entity object.
 pub fn player(ecs: &mut World, player_x: i32, player_y: i32) -> Entity {
@@ -314,7 +312,7 @@ pub fn spawn_horde_mobs_by_depth(ecs: &mut World, table_type: SpawnTableType) {
     let map = ecs.get_mut::<crate::map::Map>().unwrap().clone();
     let spawn_list: &mut Vec<(usize, String)> = &mut Vec::new();
 
-    let max_spawn = 10;
+    let max_spawn = MAX_MONSTERS_BY_WAVE;
     let mut current_spawn = 0;
     let mut spawn_table = room_table(map.depth);
 
@@ -339,4 +337,14 @@ pub fn spawn_horde_mobs_by_depth(ecs: &mut World, table_type: SpawnTableType) {
 pub fn add_horde_member_component_to_entity(entity: Entity, ecs: &mut World) {
     let mut horde_members = ecs.write_storage::<HordeMember>();
     let _ = horde_members.insert(entity, HordeMember {});
+}
+
+pub fn spawn_horde_mode(ecs: &mut World) {
+    ecs.create_entity()
+        .with(Position { x: 1, y: 1 })
+        .with(HordeMode {
+            state: super::WaveState::WaitingToStart { turns_left: 1 },
+        })
+        .with(Initiative { current: 1 })
+        .build();
 }

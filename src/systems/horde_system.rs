@@ -1,5 +1,5 @@
 use crate::{
-    gamelog, HordeMember, HordeMode, Initiative, Map, MyTurn, RunState, WaveState,
+    gamelog, HordeMember, HordeMode, Initiative, Map, MyTurn, Position, RunState, WaveState,
     TURNS_BETWEEN_BASE,
 };
 use specs::prelude::*;
@@ -16,14 +16,27 @@ impl<'a> System<'a> for HordeModeSystem {
         WriteExpect<'a, RunState>,
         WriteStorage<'a, Initiative>,
         ReadStorage<'a, HordeMember>,
+        ReadStorage<'a, Position>,
     );
 
     fn run(&mut self, data: Self::SystemData) {
-        let (_map, mut turns, mut horde_modes, entities, mut runstate, initiatives, horde_members) =
-            data;
+        let (
+            _map,
+            mut turns,
+            mut horde_modes,
+            entities,
+            mut runstate,
+            initiatives,
+            horde_members,
+            positions,
+        ) = data;
+
+        let active_horde_members_count = (&horde_members, &positions).join().count();
 
         let mut turn_done: Vec<Entity> = Vec::new();
-        for (horde_mode, entity, _my_turn) in (&mut horde_modes, &entities, &mut turns).join() {
+        for (horde_mode, entity, _my_turn, _pos) in
+            (&mut horde_modes, &entities, &mut turns, &positions).join()
+        {
             turn_done.push(entity);
             match horde_mode.state {
                 WaveState::WaveInProgress {
@@ -38,9 +51,9 @@ impl<'a> System<'a> for HordeModeSystem {
                         horde_mode.state = WaveState::WaitingToComplete;
                         *runstate = RunState::SpawnWave
                     } else {
-                        let curent_amount_to_spawn = amount_to_spawn - 1;
+                        let current_amount_to_spawn = amount_to_spawn - 1;
                         horde_mode.state = WaveState::WaveInProgress {
-                            amount_to_spawn: curent_amount_to_spawn,
+                            amount_to_spawn: current_amount_to_spawn,
                             depth,
                         }
                     }
@@ -48,19 +61,7 @@ impl<'a> System<'a> for HordeModeSystem {
 
                 WaveState::WaitingToComplete => {
                     // count how many enemies left
-                    rltk::console::log(format!(
-                        " number of horde members {:?}",
-                        horde_members.count()
-                    ));
-
-                    // if horde_members.count() == 6 {
-                    //     gamelog::Logger::new()
-                    //         .color(rltk::RED)
-                    //         .append("the horde is almost complete!.")
-                    //         .log();
-                    // }
-
-                    if horde_members.count() < 4 {
+                    if active_horde_members_count < 4 {
                         horde_mode.state = WaveState::WaveCompleted;
                     }
 
