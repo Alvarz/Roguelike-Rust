@@ -331,7 +331,6 @@ pub fn spawn_horde_mobs_by_depth(ecs: &mut World, table_type: SpawnTableType) {
         let entity = spawn_entity(ecs, &(&entity.0, &entity.1)).unwrap();
         add_horde_member_components_to_entity(entity, ecs);
     }
-    rltk::console::log(format!("Spawned enemies {:?}", max_spawn))
 }
 
 pub fn add_horde_member_components_to_entity(entity: Entity, ecs: &mut World) {
