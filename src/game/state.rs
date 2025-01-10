@@ -4,11 +4,10 @@ use specs::prelude::*;
 
 use crate::{
     camera, freeze_level_entities, gamelog, gui, map, saveload, systems, Map, MasterDungeonMap,
+    PROJECT_NAME, SHOW_DEPTH, SHOW_FPS, SHOW_MAPGEN_VISUALIZER, SHOW_SEED,
 };
 
-use super::{
-    components::*, spawner, PROJECT_NAME, SHOW_DEPTH, SHOW_FPS, SHOW_MAPGEN_VISUALIZER, SHOW_SEED,
-};
+use super::{components::*, spawner};
 use super::{damage, player};
 
 #[derive(PartialEq, Copy, Clone)]
@@ -55,6 +54,8 @@ pub enum RunState {
     ShowIdentify,
     ShowOptionMenu,
     FinishGame,
+    SpawnWave,
+    SpawnHordeMode,
 }
 
 pub struct State {
@@ -153,6 +154,8 @@ impl GameState for State {
                         RunState::ShowRemoveCurse => newrunstate = RunState::ShowRemoveCurse,
                         RunState::ShowIdentify => newrunstate = RunState::ShowIdentify,
                         RunState::FinishGame => newrunstate = RunState::FinishGame,
+                        RunState::SpawnWave => newrunstate = RunState::SpawnWave,
+                        RunState::SpawnHordeMode => newrunstate = RunState::SpawnHordeMode,
                         _ => newrunstate = RunState::Ticking,
                     }
                 }
@@ -236,18 +239,27 @@ impl GameState for State {
                         newrunstate = RunState::AwaitingInput;
                     }
 
-                    gui::CheatMenuResult::ListSpawnedEnemies => {
-                        let items = self.ecs.read_storage::<Item>();
+                    gui::CheatMenuResult::ListSpawnedMobs => {
+                        let initiatives = self.ecs.read_storage::<Initiative>();
                         let entities = self.ecs.entities();
+                        let positions = self.ecs.read_storage::<Position>();
 
-                        let mut filtered_items: Vec<String> = Vec::new();
-                        (&entities, &items).join().for_each(|item| {
-                            filtered_items.push(gui::get_item_display_name(&self.ecs, item.0))
-                        });
+                        let mut filtered_mobs: Vec<String> = Vec::new();
 
-                        for i in filtered_items.iter() {
-                            rltk::console::log(format!("Item {} spawned.", i));
+                        for (entity, _initiative, _pos) in
+                            (&entities, &initiatives, &positions).join()
+                        {
+                            filtered_mobs.push(gui::get_item_display_name(&self.ecs, entity))
                         }
+
+                        rltk::console::log(format!("{}.", filtered_mobs.join(", ")));
+                        crate::gamelog::Logger::new()
+                            .color(rltk::GRAY)
+                            .append(format!(
+                                "[DEBUG] Enemies in current map: {:?}",
+                                filtered_mobs.join(", ")
+                            ))
+                            .log();
                         newrunstate = RunState::AwaitingInput;
                     }
 
@@ -257,13 +269,20 @@ impl GameState for State {
                         let positions = self.ecs.read_storage::<Position>();
 
                         let mut filtered_items: Vec<String> = Vec::new();
-                        (&entities, &items, &positions).join().for_each(|item| {
-                            filtered_items.push(gui::get_item_display_name(&self.ecs, item.0))
-                        });
 
-                        for i in filtered_items.iter() {
-                            rltk::console::log(format!("Item {} spawned.", i));
+                        for (entity, _item, _pos) in (&entities, &items, &positions).join() {
+                            filtered_items.push(gui::get_item_display_name(&self.ecs, entity));
                         }
+
+                        rltk::console::log(format!("{}.", filtered_items.join(", ")));
+                        crate::gamelog::Logger::new()
+                            .color(rltk::GRAY)
+                            .append(format!(
+                                "[DEBUG] Items in current map: {:?}",
+                                filtered_items.join(", ")
+                            ))
+                            .log();
+
                         newrunstate = RunState::AwaitingInput;
                     }
                 }
@@ -525,6 +544,15 @@ impl GameState for State {
                 } else {
                     newrunstate = RunState::MagicMapReveal { row: row + 1 };
                 }
+            }
+            RunState::SpawnWave => {
+                spawner::spawn_horde_mobs_by_depth(&mut self.ecs, crate::raws::SpawnTableType::Mob);
+                newrunstate = RunState::Ticking;
+            }
+            RunState::SpawnHordeMode => {
+                rltk::console::log("state to spawn horde mode");
+                spawner::spawn_horde_mode(&mut self.ecs);
+                newrunstate = RunState::Ticking;
             }
         }
 

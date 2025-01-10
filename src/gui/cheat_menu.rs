@@ -11,7 +11,7 @@ pub enum CheatMenuResult {
     Reveal,
     GodMode,
     ListSpawnedItems,
-    ListSpawnedEnemies,
+    ListSpawnedMobs,
 }
 
 pub fn show_cheat_mode(_gs: &mut State, ctx: &mut Rltk) -> CheatMenuResult {
@@ -63,7 +63,7 @@ pub fn show_cheat_mode(_gs: &mut State, ctx: &mut Rltk) -> CheatMenuResult {
         17,
         y,
         rltk::to_cp437('I'),
-        "List all spawned items",
+        "List items current map",
     );
 
     y += 1;
@@ -72,7 +72,7 @@ pub fn show_cheat_mode(_gs: &mut State, ctx: &mut Rltk) -> CheatMenuResult {
         17,
         y,
         rltk::to_cp437('E'),
-        "List all spawned Enemies",
+        "List mobs current map",
     );
 
     let _ = draw_batch.submit(6000);
@@ -84,7 +84,7 @@ pub fn show_cheat_mode(_gs: &mut State, ctx: &mut Rltk) -> CheatMenuResult {
             VirtualKeyCode::H => CheatMenuResult::Heal,
             VirtualKeyCode::R => CheatMenuResult::Reveal,
             VirtualKeyCode::G => CheatMenuResult::GodMode,
-            VirtualKeyCode::E => CheatMenuResult::ListSpawnedEnemies,
+            VirtualKeyCode::E => CheatMenuResult::ListSpawnedMobs,
             VirtualKeyCode::I => CheatMenuResult::ListSpawnedItems,
             VirtualKeyCode::Escape => CheatMenuResult::Cancel,
             _ => CheatMenuResult::NoResponse,

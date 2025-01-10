@@ -46,7 +46,8 @@ construct_dispatcher!(
     (HungerSystem, "hunger", &[]),
     (ParticleSpawnSystem, "particle_spawn", &[]),
     (LightingSystem, "lighting", &[]),
-    (AmuletSystem, "amulet", &[])
+    (AmuletSystem, "amulet", &[]),
+    (HordeModeSystem, "horde_mode", &[])
 );
 
 pub fn new() -> Box<dyn UnifiedDispatcher + 'static> {

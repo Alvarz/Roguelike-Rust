@@ -1047,6 +1047,7 @@ pub fn spawn_named_entity(
     None
 }
 
+#[derive(Clone)]
 pub enum SpawnTableType {
     Item,
     Mob,

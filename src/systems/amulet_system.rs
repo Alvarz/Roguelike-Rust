@@ -1,4 +1,4 @@
-use crate::{AmuletOfYendor, Map, MyTurn, Name, RunState};
+use crate::{AmuletOfYendor, HordeMode, Map, MyTurn, Position, RunState};
 use specs::prelude::*;
 
 pub struct AmuletSystem {}
@@ -7,27 +7,45 @@ impl<'a> System<'a> for AmuletSystem {
     #[allow(clippy::type_complexity)]
     type SystemData = (
         ReadExpect<'a, Map>,
-        WriteStorage<'a, AmuletOfYendor>,
-        ReadStorage<'a, Name>,
+        ReadStorage<'a, AmuletOfYendor>,
         ReadStorage<'a, MyTurn>,
         WriteExpect<'a, RunState>,
+        WriteStorage<'a, HordeMode>,
+        ReadExpect<'a, Entity>, // The player
+        Entities<'a>,
+        ReadStorage<'a, Position>,
     );
 
     fn run(&mut self, data: Self::SystemData) {
-        let (map, mut amulet_if_yendor, name, turns, mut runstate) = data;
+        let (
+            map,
+            amulet_of_yendor,
+            turns,
+            mut runstate,
+            horde_modes,
+            player_entity,
+            entities,
+            positions,
+        ) = data;
 
-        let mut finished = false;
-        for (_amulet, n, _my_turn) in (&amulet_if_yendor, &name, &turns).join() {
-            if map.depth <= 1 {
-                rltk::console::log(format!("{} won the game!", n.name,));
+        if !amulet_of_yendor.contains(*player_entity) {
+            return;
+        }
+
+        for (_my_turn, entity, _pos) in (&turns, &entities, &positions).join() {
+            // player doesn't have the AOY
+
+            if map.depth <= 1 && entity == *player_entity {
+                rltk::console::log("{} You won the game!");
                 *runstate = RunState::FinishGame;
-                finished = true;
+                return;
             }
         }
 
-        if finished {
-            // Clean up
-            amulet_if_yendor.clear();
+        let horde_modes = (&horde_modes, &positions).join();
+        if horde_modes.into_iter().count() < 1 {
+            *runstate = RunState::SpawnHordeMode;
+            rltk::console::log("Spawn horde mode");
         }
     }
 }

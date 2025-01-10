@@ -9,12 +9,6 @@ pub use components::*;
 use specs::{saveload::SimpleMarker, WorldExt};
 pub use state::*;
 
-pub const PROJECT_NAME: &str = "Untitled Roguelike";
-pub const SHOW_MAPGEN_VISUALIZER: bool = false;
-const SHOW_FPS: bool = true;
-const SHOW_SEED: bool = true;
-const SHOW_DEPTH: bool = true;
-
 pub fn register_components(mut gs: State) -> State {
     gs.ecs.register::<Position>();
     gs.ecs.register::<Renderable>();
@@ -99,5 +93,7 @@ pub fn register_components(mut gs: State) -> State {
     gs.ecs.register::<WantsToShoot>();
     gs.ecs.register::<AmuletOfYendor>();
     gs.ecs.register::<UseOnPickUp>();
+    gs.ecs.register::<HordeMode>();
+    gs.ecs.register::<HordeMember>();
     gs
 }

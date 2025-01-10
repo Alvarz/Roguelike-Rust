@@ -3,6 +3,8 @@ use rltk::{Point, Rltk};
 use specs::prelude::*;
 use specs::saveload::SimpleMarkerAllocator;
 
+mod config;
+pub use config::*;
 mod map;
 pub use map::*;
 mod utils;
