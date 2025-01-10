@@ -15,6 +15,8 @@ use specs::saveload::{MarkedBuilder, SimpleMarker};
 use specs::shred::Fetch;
 use std::collections::HashMap;
 
+use super::HordeMember;
+
 /// Spawns the player and returns his/her entity object.
 pub fn player(ecs: &mut World, player_x: i32, player_y: i32) -> Entity {
     spawn_all_spells(ecs);
@@ -231,7 +233,7 @@ pub fn spawn_region(
 }
 
 /// Spawns a named entity (name in tuple.1) at the location in (tuple.0)
-pub fn spawn_entity(ecs: &mut World, spawn: &(&usize, &String)) {
+pub fn spawn_entity(ecs: &mut World, spawn: &(&usize, &String)) -> Option<Entity> {
     let map = ecs.fetch::<Map>();
     let width = map.width as usize;
     let x = (*spawn.0 % width) as i32;
@@ -245,7 +247,7 @@ pub fn spawn_entity(ecs: &mut World, spawn: &(&usize, &String)) {
         SpawnType::AtPosition { x, y },
     );
     if spawn_result.is_some() {
-        return;
+        return spawn_result;
     }
 
     if spawn.1 != "None" {
@@ -254,6 +256,7 @@ pub fn spawn_entity(ecs: &mut World, spawn: &(&usize, &String)) {
             spawn.1
         ));
     }
+    None
 }
 
 pub fn spawn_town_portal(ecs: &mut World) {
@@ -307,7 +310,7 @@ pub fn spawn_town_portal(ecs: &mut World) {
         .build();
 }
 
-pub fn spawn_mobs_by_depth(ecs: &mut World, table_type: SpawnTableType) {
+pub fn spawn_horde_mobs_by_depth(ecs: &mut World, table_type: SpawnTableType) {
     let map = ecs.get_mut::<crate::map::Map>().unwrap().clone();
     let spawn_list: &mut Vec<(usize, String)> = &mut Vec::new();
 
@@ -326,9 +329,14 @@ pub fn spawn_mobs_by_depth(ecs: &mut World, table_type: SpawnTableType) {
             current_spawn += 1;
         }
     }
-
     for entity in spawn_list.iter() {
-        spawn_entity(ecs, &(&entity.0, &entity.1));
+        let entity = spawn_entity(ecs, &(&entity.0, &entity.1)).unwrap();
+        add_horde_member_component_to_entity(entity, ecs);
     }
     rltk::console::log(format!("Spawned enemies {:?}", max_spawn))
+}
+
+pub fn add_horde_member_component_to_entity(entity: Entity, ecs: &mut World) {
+    let mut horde_members = ecs.write_storage::<HordeMember>();
+    let _ = horde_members.insert(entity, HordeMember {});
 }

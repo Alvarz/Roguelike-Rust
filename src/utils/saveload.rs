@@ -143,7 +143,8 @@ pub fn save_game(ecs: &mut World) {
             WantsToShoot,
             AmuletOfYendor,
             UseOnPickUp,
-            HordeMode
+            HordeMode,
+            HordeMember
         );
     }
 
@@ -279,7 +280,8 @@ pub fn load_game(ecs: &mut World) {
             WantsToShoot,
             AmuletOfYendor,
             UseOnPickUp,
-            HordeMode
+            HordeMode,
+            HordeMember
         );
     }
 

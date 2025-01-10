@@ -146,7 +146,7 @@ impl BuilderChain {
 
     pub fn spawn_entities(&mut self, ecs: &mut World) {
         for entity in self.build_data.spawn_list.iter() {
-            spawner::spawn_entity(ecs, &(&entity.0, &entity.1));
+            let _ = spawner::spawn_entity(ecs, &(&entity.0, &entity.1));
         }
     }
 }

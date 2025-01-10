@@ -9,7 +9,7 @@ use crate::{
     PROJECT_NAME, SHOW_DEPTH, SHOW_FPS, SHOW_MAPGEN_VISUALIZER, SHOW_SEED,
 };
 
-use super::spawner::spawn_mobs_by_depth;
+use super::spawner::spawn_horde_mobs_by_depth;
 use super::{components::*, spawner};
 use super::{damage, player};
 
@@ -531,7 +531,7 @@ impl GameState for State {
                 }
             }
             RunState::SpawnWave => {
-                spawner::spawn_mobs_by_depth(&mut self.ecs, crate::raws::SpawnTableType::Mob);
+                spawner::spawn_horde_mobs_by_depth(&mut self.ecs, crate::raws::SpawnTableType::Mob);
                 newrunstate = RunState::Ticking;
             }
         }

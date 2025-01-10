@@ -94,5 +94,6 @@ pub fn register_components(mut gs: State) -> State {
     gs.ecs.register::<AmuletOfYendor>();
     gs.ecs.register::<UseOnPickUp>();
     gs.ecs.register::<HordeMode>();
+    gs.ecs.register::<HordeMember>();
     gs
 }

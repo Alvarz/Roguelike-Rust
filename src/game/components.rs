@@ -537,3 +537,6 @@ pub enum WaveState {
 pub struct HordeMode {
     pub state: WaveState,
 }
+
+#[derive(Component, Debug, Serialize, Deserialize, Clone)]
+pub struct HordeMember {}
