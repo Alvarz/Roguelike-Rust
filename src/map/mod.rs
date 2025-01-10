@@ -28,6 +28,11 @@ impl Map {
     pub fn xy_idx(&self, x: i32, y: i32) -> usize {
         (y as usize * self.width as usize) + x as usize
     }
+    pub fn idx_xy(&self, idx: usize) -> (i32, i32) {
+        let x = (idx % self.width as usize) as i32;
+        let y = (idx / self.width as usize) as i32;
+        (x, y)
+    }
 
     fn is_exit_valid(&self, x: i32, y: i32) -> bool {
         if x < 1 || x > self.width - 1 || y < 1 || y > self.height - 1 {

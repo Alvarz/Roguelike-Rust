@@ -1,6 +1,5 @@
 use crate::{
-    gamelog, HordeMember, HordeMode, Initiative, Map, MyTurn, Position, RunState, WaveState,
-    TURNS_BETWEEN_BASE,
+    gamelog, HordeMember, HordeMode, Map, MyTurn, Position, RunState, WaveState, TURNS_BETWEEN_BASE,
 };
 use specs::prelude::*;
 
@@ -14,22 +13,13 @@ impl<'a> System<'a> for HordeModeSystem {
         WriteStorage<'a, HordeMode>,
         Entities<'a>,
         WriteExpect<'a, RunState>,
-        WriteStorage<'a, Initiative>,
         ReadStorage<'a, HordeMember>,
         ReadStorage<'a, Position>,
     );
 
     fn run(&mut self, data: Self::SystemData) {
-        let (
-            _map,
-            mut turns,
-            mut horde_modes,
-            entities,
-            mut runstate,
-            initiatives,
-            horde_members,
-            positions,
-        ) = data;
+        let (_map, mut turns, mut horde_modes, entities, mut runstate, horde_members, positions) =
+            data;
 
         let active_horde_members_count = (&horde_members, &positions).join().count();
 
@@ -65,7 +55,10 @@ impl<'a> System<'a> for HordeModeSystem {
                         horde_mode.state = WaveState::WaveCompleted;
                     }
 
-                    if (&entities, &initiatives).join().count() < 3 {}
+                    rltk::console::log(format!(
+                        "amount of horde members. {}",
+                        active_horde_members_count
+                    ));
                 }
                 WaveState::WaveCompleted => {
                     horde_mode.state = WaveState::WaitingToStart {

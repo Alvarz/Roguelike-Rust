@@ -13,7 +13,7 @@ use specs::prelude::*;
 use specs::saveload::{MarkedBuilder, SimpleMarker};
 use std::collections::HashMap;
 
-use super::{HordeMember, HordeMode};
+use super::{Chasing, HordeMember, HordeMode};
 
 /// Spawns the player and returns his/her entity object.
 pub fn player(ecs: &mut World, player_x: i32, player_y: i32) -> Entity {
@@ -276,8 +276,9 @@ pub fn spawn_town_portal(ecs: &mut World) {
             stairs_idx = idx;
         }
     }
-    let portal_x = (stairs_idx as i32 % town_map.width) - 2;
-    let portal_y = stairs_idx as i32 / town_map.width;
+    // let portal_x = (stairs_idx as i32 % town_map.width) - 2;
+    // let portal_y = stairs_idx as i32 / town_map.width;
+    let (portal_x, portal_y) = town_map.idx_xy(stairs_idx);
 
     std::mem::drop(dm);
 
@@ -321,22 +322,29 @@ pub fn spawn_horde_mobs_by_depth(ecs: &mut World, table_type: SpawnTableType) {
         let y = crate::rng::range(0, map.height - 1);
         let map_idx = map.xy_idx(x, y);
 
-        if !is_blocked(map_idx) && tile_walkable(map.tiles[map_idx]) && !map.visible_tiles[map_idx]
-        {
+        if can_spawn(map_idx, ecs) {
             spawn_list.push((map_idx, spawn_table.roll_by_type(table_type.clone())));
             current_spawn += 1;
         }
     }
     for entity in spawn_list.iter() {
         let entity = spawn_entity(ecs, &(&entity.0, &entity.1)).unwrap();
-        add_horde_member_component_to_entity(entity, ecs);
+        add_horde_member_components_to_entity(entity, ecs);
     }
     rltk::console::log(format!("Spawned enemies {:?}", max_spawn))
 }
 
-pub fn add_horde_member_component_to_entity(entity: Entity, ecs: &mut World) {
+pub fn add_horde_member_components_to_entity(entity: Entity, ecs: &mut World) {
+    let player_entity = ecs.fetch::<Entity>();
     let mut horde_members = ecs.write_storage::<HordeMember>();
+    let mut chasing = ecs.write_storage::<Chasing>();
     let _ = horde_members.insert(entity, HordeMember {});
+    let _ = chasing.insert(
+        entity,
+        Chasing {
+            target: *player_entity,
+        },
+    );
 }
 
 pub fn spawn_horde_mode(ecs: &mut World) {
@@ -347,4 +355,30 @@ pub fn spawn_horde_mode(ecs: &mut World) {
         })
         .with(Initiative { current: 1 })
         .build();
+}
+
+fn can_spawn(map_idx: usize, ecs: &mut World) -> bool {
+    let map = ecs.get_mut::<crate::map::Map>().unwrap().clone();
+    let player_entity = ecs.fetch::<Entity>();
+    let positions = ecs.read_storage::<Position>();
+    let player_pos = positions.get(*player_entity);
+
+    if let Some(player_pos) = player_pos {
+        let (x, y) = map.idx_xy(map_idx);
+
+        let distance = rltk::DistanceAlg::Manhattan.distance2d(
+            rltk::Point::new(player_pos.x, player_pos.y),
+            rltk::Point::new(x, y),
+        );
+
+        return !is_blocked(map_idx)
+            && tile_walkable(map.tiles[map_idx])
+            && !map.visible_tiles[map_idx]
+            && distance > 18.0
+            && distance < 25.0;
+    }
+
+    return !is_blocked(map_idx)
+        && tile_walkable(map.tiles[map_idx])
+        && !map.visible_tiles[map_idx];
 }

@@ -1,9 +1,9 @@
 use crate::game::*;
-use specs::error::NoError;
 use specs::prelude::*;
 use specs::saveload::{
     DeserializeComponents, MarkedBuilder, SerializeComponents, SimpleMarker, SimpleMarkerAllocator,
 };
+use std::convert::Infallible;
 use std::fs;
 use std::fs::File;
 use std::path::Path;
@@ -11,7 +11,7 @@ use std::path::Path;
 macro_rules! serialize_individually {
     ($ecs:expr, $ser:expr, $data:expr, $( $type:ty),*) => {
         $(
-        SerializeComponents::<NoError, SimpleMarker<SerializeMe>>::serialize(
+        SerializeComponents::<Infallible, SimpleMarker<SerializeMe>>::serialize(
             &( $ecs.read_storage::<$type>(), ),
             &$data.0,
             &$data.1,
@@ -160,7 +160,7 @@ pub fn does_save_exist() -> bool {
 macro_rules! deserialize_individually {
     ($ecs:expr, $de:expr, $data:expr, $( $type:ty),*) => {
         $(
-        DeserializeComponents::<NoError, _>::deserialize(
+        DeserializeComponents::<Infallible, _>::deserialize(
             &mut ( &mut $ecs.write_storage::<$type>(), ),
             &$data.0, // entities
             &mut $data.1, // marker

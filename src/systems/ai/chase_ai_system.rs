@@ -1,5 +1,5 @@
+use crate::{ApplyMove, Chasing, HordeMember, Map, MyTurn, Position, TileSize};
 use specs::prelude::*;
-use crate::{MyTurn, Chasing, Position, Map, ApplyMove, TileSize};
 use std::collections::HashMap;
 
 pub struct ChaseAI {}
@@ -13,15 +13,24 @@ impl<'a> System<'a> for ChaseAI {
         WriteExpect<'a, Map>,
         Entities<'a>,
         WriteStorage<'a, ApplyMove>,
-        ReadStorage<'a, TileSize>
+        ReadStorage<'a, TileSize>,
+        ReadStorage<'a, HordeMember>,
     );
 
-    fn run(&mut self, data : Self::SystemData) {
-        let (mut turns, mut chasing, positions, mut map,
-            entities, mut apply_move, sizes) = data;
+    fn run(&mut self, data: Self::SystemData) {
+        let (
+            mut turns,
+            mut chasing,
+            positions,
+            mut map,
+            entities,
+            mut apply_move,
+            sizes,
+            horde_members,
+        ) = data;
 
-        let mut targets : HashMap<Entity, (i32, i32)> = HashMap::new();
-        let mut end_chase : Vec<Entity> = Vec::new();
+        let mut targets: HashMap<Entity, (i32, i32)> = HashMap::new();
+        let mut end_chase: Vec<Entity> = Vec::new();
         for (entity, _turn, chasing) in (&entities, &turns, &chasing).join() {
             let target_pos = positions.get(chasing.target);
             if let Some(target_pos) = target_pos {
@@ -36,10 +45,8 @@ impl<'a> System<'a> for ChaseAI {
         }
         end_chase.clear();
 
-        let mut turn_done : Vec<Entity> = Vec::new();
-        for (entity, pos, _chase, _myturn) in
-            (&entities, &positions, &chasing, &turns).join()
-        {
+        let mut turn_done: Vec<Entity> = Vec::new();
+        for (entity, pos, _chase, _myturn) in (&entities, &positions, &chasing, &turns).join() {
             turn_done.push(entity);
             let target_pos = targets[&entity];
             let path;
@@ -50,17 +57,34 @@ impl<'a> System<'a> for ChaseAI {
                 path = rltk::a_star_search(
                     map_copy.xy_idx(pos.x, pos.y),
                     map_copy.xy_idx(target_pos.0, target_pos.1),
-                    &mut map_copy
+                    &mut map_copy,
                 );
             } else {
                 path = rltk::a_star_search(
                     map.xy_idx(pos.x, pos.y),
                     map.xy_idx(target_pos.0, target_pos.1),
-                    &mut *map
+                    &mut *map,
                 );
             }
-            if path.success && path.steps.len()>1 && path.steps.len()<15 {
-                apply_move.insert(entity, ApplyMove{ dest_idx: path.steps[1] }).expect("Unable to insert");
+            if path.success && path.steps.len() > 1 && path.steps.len() < 15 {
+                apply_move
+                    .insert(
+                        entity,
+                        ApplyMove {
+                            dest_idx: path.steps[1],
+                        },
+                    )
+                    .expect("Unable to insert");
+                turn_done.push(entity);
+            } else if path.success && path.steps.len() > 1 && horde_members.contains(entity) {
+                apply_move
+                    .insert(
+                        entity,
+                        ApplyMove {
+                            dest_idx: path.steps[1],
+                        },
+                    )
+                    .expect("Unable to insert");
                 turn_done.push(entity);
             } else {
                 end_chase.push(entity);
