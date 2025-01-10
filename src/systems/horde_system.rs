@@ -51,7 +51,7 @@ impl<'a> System<'a> for HordeModeSystem {
 
                 WaveState::WaitingToComplete => {
                     // count how many enemies left
-                    if active_horde_members_count < 4 {
+                    if active_horde_members_count < 1 {
                         horde_mode.state = WaveState::WaveCompleted;
                     }
 
@@ -66,7 +66,7 @@ impl<'a> System<'a> for HordeModeSystem {
                     };
                     gamelog::Logger::new()
                         .color(rltk::RED)
-                        .append("the horde is completed!.")
+                        .append("the horde is completed for now!.")
                         .log();
                 }
                 WaveState::WaitingToStart { turns_left } => {

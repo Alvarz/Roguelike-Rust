@@ -239,18 +239,27 @@ impl GameState for State {
                         newrunstate = RunState::AwaitingInput;
                     }
 
-                    gui::CheatMenuResult::ListSpawnedEnemies => {
-                        let items = self.ecs.read_storage::<Item>();
+                    gui::CheatMenuResult::ListSpawnedMobs => {
+                        let initiatives = self.ecs.read_storage::<Initiative>();
                         let entities = self.ecs.entities();
+                        let positions = self.ecs.read_storage::<Position>();
 
-                        let mut filtered_items: Vec<String> = Vec::new();
-                        (&entities, &items).join().for_each(|item| {
-                            filtered_items.push(gui::get_item_display_name(&self.ecs, item.0))
-                        });
+                        let mut filtered_mobs: Vec<String> = Vec::new();
 
-                        for i in filtered_items.iter() {
-                            rltk::console::log(format!("Item {} spawned.", i));
+                        for (entity, _initiative, _pos) in
+                            (&entities, &initiatives, &positions).join()
+                        {
+                            filtered_mobs.push(gui::get_item_display_name(&self.ecs, entity))
                         }
+
+                        rltk::console::log(format!("{}.", filtered_mobs.join(", ")));
+                        crate::gamelog::Logger::new()
+                            .color(rltk::GRAY)
+                            .append(format!(
+                                "[DEBUG] Enemies in current map: {:?}",
+                                filtered_mobs.join(", ")
+                            ))
+                            .log();
                         newrunstate = RunState::AwaitingInput;
                     }
 
@@ -260,13 +269,20 @@ impl GameState for State {
                         let positions = self.ecs.read_storage::<Position>();
 
                         let mut filtered_items: Vec<String> = Vec::new();
-                        (&entities, &items, &positions).join().for_each(|item| {
-                            filtered_items.push(gui::get_item_display_name(&self.ecs, item.0))
-                        });
 
-                        for i in filtered_items.iter() {
-                            rltk::console::log(format!("Item {} spawned.", i));
+                        for (entity, _item, _pos) in (&entities, &items, &positions).join() {
+                            filtered_items.push(gui::get_item_display_name(&self.ecs, entity));
                         }
+
+                        rltk::console::log(format!("{}.", filtered_items.join(", ")));
+                        crate::gamelog::Logger::new()
+                            .color(rltk::GRAY)
+                            .append(format!(
+                                "[DEBUG] Items in current map: {:?}",
+                                filtered_items.join(", ")
+                            ))
+                            .log();
+
                         newrunstate = RunState::AwaitingInput;
                     }
                 }
