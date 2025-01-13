@@ -65,7 +65,6 @@ impl<'a> System<'a> for DefaultMoveAI {
                             mode.mode = Movement::RandomWaypoint { path: None };
                         }
                     } else {
-                        // a start causing performance issues
                         let target_x = crate::rng::roll_dice(1, map.width - 2);
                         let target_y = crate::rng::roll_dice(1, map.height - 2);
                         let idx = map.xy_idx(target_x, target_y);

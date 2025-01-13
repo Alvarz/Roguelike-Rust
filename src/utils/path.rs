@@ -2,7 +2,13 @@ use rltk::NavigationPath;
 
 use crate::Map;
 
-fn bresenham_path(start_x: i32, start_y: i32, end_x: i32, end_y: i32, map: &Map) -> NavigationPath {
+fn bresenham_search(
+    start_x: i32,
+    start_y: i32,
+    end_x: i32,
+    end_y: i32,
+    map: &Map,
+) -> NavigationPath {
     let mut line = rltk::line2d(
         rltk::LineAlg::Bresenham,
         rltk::Point::new(start_x, start_y),
@@ -15,9 +21,9 @@ fn bresenham_path(start_x: i32, start_y: i32, end_x: i32, end_y: i32, map: &Map)
     result.success = true;
     result.destination = end_pt;
     result.steps.push(end_pt);
-
     let _ = line.remove(0);
-    for (i, point) in line.iter().enumerate() {
+
+    for point in line.iter() {
         if crate::spatial::is_blocked(map.xy_idx(point.x, point.y)) {
             result.success = false;
             return result;
@@ -35,13 +41,13 @@ pub fn get_path(
     target_y: i32,
     map: &mut Map,
 ) -> NavigationPath {
-    let path = bresenham_path(start_x, start_y, target_x, target_y, map);
+    let path = bresenham_search(start_x, start_y, target_x, target_y, map);
 
     if path.success && path.steps.len() > 1 {
-        rltk::console::log(format!(
-            "Using bresenham for path - it succeeded? {:?}",
-            path.success
-        ));
+        // rltk::console::log(format!(
+        //     "Using bresenham for path - it succeeded? {:?}",
+        //     path.success
+        // ));
         return path;
     }
 
@@ -51,9 +57,9 @@ pub fn get_path(
         &mut *map,
     );
 
-    rltk::console::log(format!(
-        "Using A* for path - it succeeded? {:?}",
-        path.success
-    ));
+    // rltk::console::log(format!(
+    //     "Using A* for path - it succeeded? {:?}",
+    //     path.success
+    // ));
     path
 }
