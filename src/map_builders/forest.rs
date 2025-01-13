@@ -35,7 +35,7 @@ impl YellowBrickRoad {
             if map::tile_walkable(*tiletype) {
                 available_floors.push((
                     idx,
-                    rltk::DistanceAlg::Manhattan.distance2d(
+                    rltk::DistanceAlg::Pythagoras.distance2d(
                         rltk::Point::new(
                             idx as i32 % build_data.map.width,
                             idx as i32 / build_data.map.width,

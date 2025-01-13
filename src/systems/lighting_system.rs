@@ -31,7 +31,7 @@ impl<'a> System<'a> for LightingSystem {
             for t in viewshed.visible_tiles.iter() {
                 if t.x > 0 && t.x < map.width && t.y > 0 && t.y < map.height {
                     let idx = map.xy_idx(t.x, t.y);
-                    let distance = rltk::DistanceAlg::Manhattan.distance2d(light_point, *t);
+                    let distance = rltk::DistanceAlg::Chebyshev.distance2d(light_point, *t);
                     let intensity = (range_f - distance) / range_f;
 
                     map.light[idx] = map.light[idx] + (light.color * intensity);
