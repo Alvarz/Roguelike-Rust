@@ -1,4 +1,4 @@
-use crate::{ApplyMove, Chasing, HordeMember, Map, MyTurn, Position, TileSize};
+use crate::{path::get_path, ApplyMove, Chasing, HordeMember, Map, MyTurn, Position, TileSize};
 use specs::prelude::*;
 use std::collections::HashMap;
 
@@ -54,17 +54,10 @@ impl<'a> System<'a> for ChaseAI {
             if let Some(size) = sizes.get(entity) {
                 let mut map_copy = map.clone();
                 map_copy.populate_blocked_multi(size.x, size.y);
-                path = rltk::a_star_search(
-                    map_copy.xy_idx(pos.x, pos.y),
-                    map_copy.xy_idx(target_pos.0, target_pos.1),
-                    &mut map_copy,
-                );
+
+                path = get_path(pos.x, pos.y, target_pos.0, target_pos.1, &mut map_copy);
             } else {
-                path = rltk::a_star_search(
-                    map.xy_idx(pos.x, pos.y),
-                    map.xy_idx(target_pos.0, target_pos.1),
-                    &mut *map,
-                );
+                path = get_path(pos.x, pos.y, target_pos.0, target_pos.1, &mut *map);
             }
             if path.success && path.steps.len() > 1 && path.steps.len() < 15 {
                 apply_move

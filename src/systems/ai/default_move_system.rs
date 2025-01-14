@@ -1,4 +1,6 @@
-use crate::{map::tile_walkable, ApplyMove, Map, MoveMode, Movement, MyTurn, Position};
+use crate::{
+    map::tile_walkable, path::get_path, ApplyMove, Map, MoveMode, Movement, MyTurn, Position,
+};
 use specs::prelude::*;
 
 pub struct DefaultMoveAI {}
@@ -63,16 +65,11 @@ impl<'a> System<'a> for DefaultMoveAI {
                             mode.mode = Movement::RandomWaypoint { path: None };
                         }
                     } else {
-                        // a start causing performance issues
                         let target_x = crate::rng::roll_dice(1, map.width - 2);
                         let target_y = crate::rng::roll_dice(1, map.height - 2);
                         let idx = map.xy_idx(target_x, target_y);
                         if tile_walkable(map.tiles[idx]) {
-                            let path = rltk::a_star_search(
-                                map.xy_idx(pos.x, pos.y),
-                                map.xy_idx(target_x, target_y),
-                                &mut *map,
-                            );
+                            let path = get_path(pos.x, pos.y, target_x, target_y, &mut *map);
                             if path.success && path.steps.len() > 1 {
                                 mode.mode = Movement::RandomWaypoint {
                                     path: Some(path.steps),

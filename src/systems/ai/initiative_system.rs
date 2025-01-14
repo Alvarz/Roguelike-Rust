@@ -80,7 +80,7 @@ impl<'a> System<'a> for InitiativeSystem {
                 } else {
                     // if it is a horde mode entity or a horde member, we don't care about it's distance
                     if !horde_modes.contains(entity) && !horde_members.contains(entity) {
-                        let distance = rltk::DistanceAlg::Manhattan
+                        let distance = rltk::DistanceAlg::PythagorasSquared
                             .distance2d(*player_pos, rltk::Point::new(pos.x, pos.y));
                         if distance > 20.0 {
                             myturn = false;
