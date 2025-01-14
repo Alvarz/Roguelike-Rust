@@ -398,7 +398,10 @@ pub fn string_to_slot(slot: &str) -> EquipmentSlot {
         "Hands" => EquipmentSlot::Hands,
         "Melee" => EquipmentSlot::Melee,
         _ => {
-            bracket_lib::prelude::console::log(format!("Warning: unknown equipment slot type [{}])", slot));
+            bracket_lib::prelude::console::log(format!(
+                "Warning: unknown equipment slot type [{}])",
+                slot
+            ));
             EquipmentSlot::Melee
         }
     }
@@ -651,7 +654,9 @@ pub fn spawn_named_mob(
         eb = spawn_position(pos, eb, key, raws);
 
         // Initiative of 2
-        eb = eb.with(Initiative { current: 2 });
+        eb = eb.with(Initiative {
+            current: 6 + crate::rng::roll_dice(1, 6),
+        });
 
         // Renderable
         if let Some(renderable) = &mob_template.renderable {
@@ -803,7 +808,10 @@ pub fn spawn_named_mob(
                         skills.skills.insert(Skill::Magic, *sk.1);
                     }
                     _ => {
-                        bracket_lib::prelude::console::log(format!("Unknown skill referenced: [{}]", sk.0));
+                        bracket_lib::prelude::console::log(format!(
+                            "Unknown skill referenced: [{}]",
+                            sk.0
+                        ));
                     }
                 }
             }
