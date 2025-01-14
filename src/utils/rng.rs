@@ -8,14 +8,13 @@ lazy_static! {
         Mutex::new(RandomNumberGenerator::seeded(*CURRENT_SEED.lock().unwrap()));
 }
 fn generate_random_seed() -> u64 {
-    1736891217
-    // let seed = SystemTime::now()
-    //     .duration_since(UNIX_EPOCH)
-    //     .unwrap()
-    //     .as_secs();
+    let seed = SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .unwrap()
+        .as_secs();
 
-    // bracket_lib::prelude::console::log(format!("seed: {}", seed));
-    // seed
+    bracket_lib::prelude::console::log(format!("seed: {}", seed));
+    seed
 }
 
 // Function to get the current seed value
