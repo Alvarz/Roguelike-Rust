@@ -19,7 +19,7 @@ impl DistantExit {
         let start_idx = build_data.map.xy_idx(starting_pos.x, starting_pos.y);
         build_data.map.populate_blocked();
         let map_starts: Vec<usize> = vec![start_idx];
-        let dijkstra_map = rltk::DijkstraMap::new(
+        let dijkstra_map = bracket_lib::prelude::DijkstraMap::new(
             build_data.map.width as usize,
             build_data.map.height as usize,
             &map_starts,

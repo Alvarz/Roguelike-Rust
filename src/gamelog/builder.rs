@@ -1,4 +1,4 @@
-use rltk::prelude::*;
+use bracket_lib::prelude::*;
 use super::{LogFragment, append_entry};
 
 pub struct Logger {
@@ -9,7 +9,7 @@ pub struct Logger {
 impl Logger {
     pub fn new() -> Self {
         Logger{
-            current_color : RGB::named(rltk::WHITE),
+            current_color : RGB::named(bracket_lib::terminal::WHITE),
             fragments : Vec::new()
         }
     }
@@ -36,7 +36,7 @@ impl Logger {
     pub fn npc_name<T: ToString>(mut self, text : T) -> Self {
         self.fragments.push(
             LogFragment{
-                color : RGB::named(rltk::YELLOW),
+                color : RGB::named(bracket_lib::terminal::YELLOW),
                 text : text.to_string()
             }
         );
@@ -46,7 +46,7 @@ impl Logger {
     pub fn item_name<T: ToString>(mut self, text : T) -> Self {
         self.fragments.push(
             LogFragment{
-                color : RGB::named(rltk::CYAN),
+                color : RGB::named(bracket_lib::terminal::CYAN),
                 text : text.to_string()
             }
         );
@@ -56,7 +56,7 @@ impl Logger {
     pub fn damage(mut self, damage: i32) -> Self {
         self.fragments.push(
             LogFragment{
-                color : RGB::named(rltk::RED),
+                color : RGB::named(bracket_lib::terminal::RED),
                 text : format!("{}", damage).to_string()
             }
         );

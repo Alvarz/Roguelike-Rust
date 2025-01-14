@@ -35,7 +35,7 @@ impl<'a> System<'a> for HordeModeSystem {
                 } => {
                     if amount_to_spawn < 1 {
                         gamelog::Logger::new()
-                            .color(rltk::RED)
+                            .color(bracket_lib::terminal::RED)
                             .append("a horde of enemies approach you!.")
                             .log();
                         horde_mode.state = WaveState::WaitingToComplete;
@@ -55,7 +55,7 @@ impl<'a> System<'a> for HordeModeSystem {
                         horde_mode.state = WaveState::WaveCompleted;
                     }
 
-                    rltk::console::log(format!(
+                    bracket_lib::prelude::console::log(format!(
                         "amount of horde members. {}",
                         active_horde_members_count
                     ));
@@ -65,7 +65,7 @@ impl<'a> System<'a> for HordeModeSystem {
                         turns_left: TURNS_BETWEEN_BASE,
                     };
                     gamelog::Logger::new()
-                        .color(rltk::RED)
+                        .color(bracket_lib::terminal::RED)
                         .append("the horde is completed for now!.")
                         .log();
                 }

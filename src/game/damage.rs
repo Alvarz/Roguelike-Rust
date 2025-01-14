@@ -18,7 +18,7 @@ pub fn delete_the_dead(ecs: &mut World) {
                         let victim_name = names.get(entity);
                         if let Some(victim_name) = victim_name {
                             crate::gamelog::Logger::new()
-                                .color(rltk::RED)
+                                .color(bracket_lib::terminal::RED)
                                 .append(&victim_name.name)
                                 .append("is dead!")
                                 .log();
@@ -115,7 +115,7 @@ pub fn delete_the_dead(ecs: &mut World) {
                             ecs.read_storage::<AreaOfEffect>().get(spell_entity)
                         {
                             Targets::Tiles {
-                                tiles: aoe_tiles(&map, rltk::Point::new(pos.x, pos.y), aoe.radius),
+                                tiles: aoe_tiles(&map, bracket_lib::prelude::Point::new(pos.x, pos.y), aoe.radius),
                             }
                         } else {
                             Targets::Tile {

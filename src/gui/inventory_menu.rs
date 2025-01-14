@@ -1,6 +1,6 @@
 use super::{get_item_display_name, item_result_menu};
 use crate::{InBackpack, State};
-use rltk::prelude::*;
+use bracket_lib::prelude::*;
 use specs::prelude::*;
 
 #[derive(PartialEq, Copy, Clone)]
@@ -10,7 +10,7 @@ pub enum ItemMenuResult {
     Selected,
 }
 
-pub fn show_inventory(gs: &mut State, ctx: &mut Rltk) -> (ItemMenuResult, Option<Entity>) {
+pub fn show_inventory(gs: &mut State, ctx: &mut BTerm) -> (ItemMenuResult, Option<Entity>) {
     let player_entity = gs.ecs.fetch::<Entity>();
     let backpack = gs.ecs.read_storage::<InBackpack>();
     let entities = gs.ecs.entities();

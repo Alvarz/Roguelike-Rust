@@ -1,6 +1,6 @@
 use super::get_item_display_name;
 use crate::{camera, Attributes, Duration, Hidden, Map, Name, Pools, StatusEffect};
-use rltk::prelude::*;
+use bracket_lib::prelude::*;
 use specs::prelude::*;
 
 struct Tooltip {
@@ -33,8 +33,8 @@ impl Tooltip {
     fn render(&self, draw_batch: &mut DrawBatch, x: i32, y: i32) {
         let box_gray: RGB = RGB::from_hex("#999999").expect("Oops");
         let light_gray: RGB = RGB::from_hex("#DDDDDD").expect("Oops");
-        let white = RGB::named(rltk::WHITE);
-        let black = RGB::named(rltk::BLACK);
+        let white = RGB::named(bracket_lib::terminal::WHITE);
+        let black = RGB::named(bracket_lib::terminal::BLACK);
         draw_batch.draw_box(
             Rect::with_size(x, y, self.width() - 1, self.height() - 1),
             ColorPair::new(white, box_gray),
@@ -50,7 +50,7 @@ impl Tooltip {
     }
 }
 
-pub fn draw_tooltips(ecs: &World, ctx: &mut Rltk) {
+pub fn draw_tooltips(ecs: &World, ctx: &mut BTerm) {
     let mut draw_batch = DrawBatch::new();
 
     let (min_x, _max_x, min_y, _max_y) = camera::get_screen_bounds(ecs, ctx);
@@ -73,7 +73,10 @@ pub fn draw_tooltips(ecs: &World, ctx: &mut Rltk) {
     {
         return;
     }
-    if !map.in_bounds(rltk::Point::new(mouse_map_pos.0, mouse_map_pos.1)) {
+    if !map.in_bounds(bracket_lib::prelude::Point::new(
+        mouse_map_pos.0,
+        mouse_map_pos.1,
+    )) {
         return;
     }
     let mouse_idx = map.xy_idx(mouse_map_pos.0, mouse_map_pos.1);
@@ -147,7 +150,7 @@ pub fn draw_tooltips(ecs: &World, ctx: &mut Rltk) {
     }
 
     let box_gray: RGB = RGB::from_hex("#999999").expect("Oops");
-    let white = RGB::named(rltk::WHITE);
+    let white = RGB::named(bracket_lib::terminal::WHITE);
 
     let arrow;
     let arrow_x;

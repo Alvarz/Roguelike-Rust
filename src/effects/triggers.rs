@@ -23,7 +23,7 @@ pub fn item_trigger(creator: Option<Entity>, item: Entity, targets: &Targets, ec
     // If it was a consumable, then it gets deleted
     if did_something {
         if let Some(c) = ecs.read_storage::<Consumable>().get(item) {
-            rltk::console::log(format!("{}", c.max_charges));
+            bracket_lib::prelude::console::log(format!("{}", c.max_charges));
             if c.max_charges < 2 {
                 ecs.entities().delete(item).expect("Delete Failed");
             }
@@ -49,7 +49,11 @@ pub fn spell_trigger(creator: Option<Entity>, spell: Entity, targets: &Targets, 
                     let map = ecs.fetch::<Map>();
                     targeting = if let Some(aoe) = ecs.read_storage::<AreaOfEffect>().get(spell) {
                         Targets::Tiles {
-                            tiles: aoe_tiles(&map, rltk::Point::new(pos.x, pos.y), aoe.radius),
+                            tiles: aoe_tiles(
+                                &map,
+                                bracket_lib::prelude::Point::new(pos.x, pos.y),
+                                aoe.radius,
+                            ),
                         }
                     } else {
                         Targets::Tile {
@@ -105,7 +109,7 @@ fn event_trigger(
             EffectType::Particle {
                 glyph: part.glyph,
                 fg: part.color,
-                bg: rltk::RGB::named(rltk::BLACK),
+                bg: bracket_lib::prelude::RGB::named(bracket_lib::terminal::BLACK),
                 lifespan: part.lifetime_ms,
             },
             targets.clone(),
@@ -333,16 +337,17 @@ fn event_trigger(
 
 fn spawn_line_particles(ecs: &World, start: i32, end: i32, part: &SpawnParticleLine) {
     let map = ecs.fetch::<Map>();
-    let start_pt = rltk::Point::new(start % map.width, end / map.width);
-    let end_pt = rltk::Point::new(end % map.width, end / map.width);
-    let line = rltk::line2d(rltk::LineAlg::Bresenham, start_pt, end_pt);
+    let start_pt = bracket_lib::prelude::Point::new(start % map.width, end / map.width);
+    let end_pt = bracket_lib::prelude::Point::new(end % map.width, end / map.width);
+    let line =
+        bracket_lib::prelude::line2d(bracket_lib::prelude::LineAlg::Bresenham, start_pt, end_pt);
     for pt in line.iter() {
         add_effect(
             None,
             EffectType::Particle {
                 glyph: part.glyph,
                 fg: part.color,
-                bg: rltk::RGB::named(rltk::BLACK),
+                bg: bracket_lib::prelude::RGB::named(bracket_lib::terminal::BLACK),
                 lifespan: part.lifetime_ms,
             },
             Targets::Tile {

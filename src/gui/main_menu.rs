@@ -1,5 +1,5 @@
 use crate::{rex_assets::RexAssets, RunState, State, PROJECT_NAME};
-use rltk::prelude::*;
+use bracket_lib::prelude::*;
 
 #[derive(PartialEq, Copy, Clone)]
 pub enum MainMenuSelection {
@@ -14,7 +14,7 @@ pub enum MainMenuResult {
     Selected { selected: MainMenuSelection },
 }
 
-pub fn main_menu(gs: &mut State, ctx: &mut Rltk) -> MainMenuResult {
+pub fn main_menu(gs: &mut State, ctx: &mut BTerm) -> MainMenuResult {
     let mut draw_batch = DrawBatch::new();
     let save_exists = crate::saveload::does_save_exist();
     let runstate = gs.ecs.fetch::<RunState>();
@@ -23,23 +23,35 @@ pub fn main_menu(gs: &mut State, ctx: &mut Rltk) -> MainMenuResult {
 
     draw_batch.draw_double_box(
         Rect::with_size(24, 18, 31, 10),
-        ColorPair::new(RGB::named(rltk::WHEAT), RGB::named(rltk::BLACK)),
+        ColorPair::new(
+            RGB::named(bracket_lib::terminal::WHEAT),
+            RGB::named(bracket_lib::terminal::BLACK),
+        ),
     );
 
     draw_batch.print_color_centered(
         20,
         PROJECT_NAME,
-        ColorPair::new(RGB::named(rltk::YELLOW), RGB::named(rltk::BLACK)),
+        ColorPair::new(
+            RGB::named(bracket_lib::terminal::YELLOW),
+            RGB::named(bracket_lib::terminal::BLACK),
+        ),
     );
     draw_batch.print_color_centered(
         21,
         "by Carlos Alvarez",
-        ColorPair::new(RGB::named(rltk::CYAN), RGB::named(rltk::BLACK)),
+        ColorPair::new(
+            RGB::named(bracket_lib::terminal::CYAN),
+            RGB::named(bracket_lib::terminal::BLACK),
+        ),
     );
     draw_batch.print_color_centered(
         22,
         "Use Up/Down Arrows and Enter",
-        ColorPair::new(RGB::named(rltk::GRAY), RGB::named(rltk::BLACK)),
+        ColorPair::new(
+            RGB::named(bracket_lib::terminal::GRAY),
+            RGB::named(bracket_lib::terminal::BLACK),
+        ),
     );
 
     let mut y = 24;
@@ -51,13 +63,19 @@ pub fn main_menu(gs: &mut State, ctx: &mut Rltk) -> MainMenuResult {
             draw_batch.print_color_centered(
                 y,
                 "Begin New Game",
-                ColorPair::new(RGB::named(rltk::MAGENTA), RGB::named(rltk::BLACK)),
+                ColorPair::new(
+                    RGB::named(bracket_lib::terminal::MAGENTA),
+                    RGB::named(bracket_lib::terminal::BLACK),
+                ),
             );
         } else {
             draw_batch.print_color_centered(
                 y,
                 "Begin New Game",
-                ColorPair::new(RGB::named(rltk::WHITE), RGB::named(rltk::BLACK)),
+                ColorPair::new(
+                    RGB::named(bracket_lib::terminal::WHITE),
+                    RGB::named(bracket_lib::terminal::BLACK),
+                ),
             );
         }
         y += 1;
@@ -67,13 +85,19 @@ pub fn main_menu(gs: &mut State, ctx: &mut Rltk) -> MainMenuResult {
                 draw_batch.print_color_centered(
                     y,
                     "Load Game",
-                    ColorPair::new(RGB::named(rltk::MAGENTA), RGB::named(rltk::BLACK)),
+                    ColorPair::new(
+                        RGB::named(bracket_lib::terminal::MAGENTA),
+                        RGB::named(bracket_lib::terminal::BLACK),
+                    ),
                 );
             } else {
                 draw_batch.print_color_centered(
                     y,
                     "Load Game",
-                    ColorPair::new(RGB::named(rltk::WHITE), RGB::named(rltk::BLACK)),
+                    ColorPair::new(
+                        RGB::named(bracket_lib::terminal::WHITE),
+                        RGB::named(bracket_lib::terminal::BLACK),
+                    ),
                 );
             }
             y += 1;
@@ -83,13 +107,19 @@ pub fn main_menu(gs: &mut State, ctx: &mut Rltk) -> MainMenuResult {
             draw_batch.print_color_centered(
                 y,
                 "Quit",
-                ColorPair::new(RGB::named(rltk::MAGENTA), RGB::named(rltk::BLACK)),
+                ColorPair::new(
+                    RGB::named(bracket_lib::terminal::MAGENTA),
+                    RGB::named(bracket_lib::terminal::BLACK),
+                ),
             );
         } else {
             draw_batch.print_color_centered(
                 y,
                 "Quit",
-                ColorPair::new(RGB::named(rltk::WHITE), RGB::named(rltk::BLACK)),
+                ColorPair::new(
+                    RGB::named(bracket_lib::terminal::WHITE),
+                    RGB::named(bracket_lib::terminal::BLACK),
+                ),
             );
         }
 

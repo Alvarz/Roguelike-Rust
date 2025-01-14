@@ -1,9 +1,9 @@
 use super::{get_item_display_name, item_result_menu, ItemMenuResult};
 use crate::{CursedItem, Equipped, InBackpack, Item, MasterDungeonMap, Name, State};
-use rltk::prelude::*;
+use bracket_lib::prelude::*;
 use specs::prelude::*;
 
-pub fn remove_curse_menu(gs: &mut State, ctx: &mut Rltk) -> (ItemMenuResult, Option<Entity>) {
+pub fn remove_curse_menu(gs: &mut State, ctx: &mut BTerm) -> (ItemMenuResult, Option<Entity>) {
     let player_entity = gs.ecs.fetch::<Entity>();
     let equipped = gs.ecs.read_storage::<Equipped>();
     let backpack = gs.ecs.read_storage::<InBackpack>();

@@ -45,13 +45,13 @@ impl VoronoiCellBuilder {
     #[allow(clippy::map_entry)]
     fn build(&mut self, build_data : &mut BuilderMap) {
         // Make a Voronoi diagram. We'll do this the hard way to learn about the technique!
-        let mut voronoi_seeds : Vec<(usize, rltk::Point)> = Vec::new();
+        let mut voronoi_seeds : Vec<(usize, bracket_lib::prelude::Point)> = Vec::new();
 
         while voronoi_seeds.len() < self.n_seeds {
             let vx = crate::rng::roll_dice(1, build_data.map.width-1);
             let vy = crate::rng::roll_dice(1, build_data.map.height-1);
             let vidx = build_data.map.xy_idx(vx, vy);
-            let candidate = (vidx, rltk::Point::new(vx, vy));
+            let candidate = (vidx, bracket_lib::prelude::Point::new(vx, vy));
             if !voronoi_seeds.contains(&candidate) {
                 voronoi_seeds.push(candidate);
             }
@@ -67,20 +67,20 @@ impl VoronoiCellBuilder {
                 let distance;
                 match self.distance_algorithm {
                     DistanceAlgorithm::Pythagoras => {
-                        distance = rltk::DistanceAlg::PythagorasSquared.distance2d(
-                            rltk::Point::new(x, y),
+                        distance = bracket_lib::prelude::DistanceAlg::PythagorasSquared.distance2d(
+                            bracket_lib::prelude::Point::new(x, y),
                             pos.1
                         );
                     }
                     DistanceAlgorithm::Manhattan => {
-                        distance = rltk::DistanceAlg::Manhattan.distance2d(
-                            rltk::Point::new(x, y),
+                        distance = bracket_lib::prelude::DistanceAlg::Manhattan.distance2d(
+                            bracket_lib::prelude::Point::new(x, y),
                             pos.1
                         );
                     }
                     DistanceAlgorithm::Chebyshev => {
-                        distance = rltk::DistanceAlg::Chebyshev.distance2d(
-                            rltk::Point::new(x, y),
+                        distance = bracket_lib::prelude::DistanceAlg::Chebyshev.distance2d(
+                            bracket_lib::prelude::Point::new(x, y),
                             pos.1
                         );
                     }

@@ -1,4 +1,4 @@
-use rltk::NavigationPath;
+use bracket_lib::prelude::NavigationPath;
 
 use crate::Map;
 
@@ -9,10 +9,10 @@ fn bresenham_search(
     end_y: i32,
     map: &Map,
 ) -> NavigationPath {
-    let mut line = rltk::line2d(
-        rltk::LineAlg::Bresenham,
-        rltk::Point::new(start_x, start_y),
-        rltk::Point::new(end_x, end_y),
+    let mut line = bracket_lib::prelude::line2d(
+        bracket_lib::prelude::LineAlg::Bresenham,
+        bracket_lib::prelude::Point::new(start_x, start_y),
+        bracket_lib::prelude::Point::new(end_x, end_y),
     );
     let mut result = NavigationPath::new();
 
@@ -44,20 +44,20 @@ pub fn get_path(
     let path = bresenham_search(start_x, start_y, target_x, target_y, map);
 
     if path.success && path.steps.len() > 1 {
-        // rltk::console::log(format!(
+        // bracket_lib::prelude::console::log(format!(
         //     "Using bresenham for path - it succeeded? {:?}",
         //     path.success
         // ));
         return path;
     }
 
-    let path = rltk::a_star_search(
+    let path = bracket_lib::prelude::a_star_search(
         map.xy_idx(start_x, start_y),
         map.xy_idx(target_x, target_y),
         &mut *map,
     );
 
-    // rltk::console::log(format!(
+    // bracket_lib::prelude::console::log(format!(
     //     "Using A* for path - it succeeded? {:?}",
     //     path.success
     // ));

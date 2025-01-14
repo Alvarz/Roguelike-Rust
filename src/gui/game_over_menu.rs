@@ -1,4 +1,4 @@
-use rltk::prelude::*;
+use bracket_lib::prelude::*;
 
 #[derive(PartialEq, Copy, Clone)]
 pub enum GameOverResult {
@@ -6,22 +6,31 @@ pub enum GameOverResult {
     QuitToMenu,
 }
 
-pub fn game_over(ctx: &mut Rltk) -> GameOverResult {
+pub fn game_over(ctx: &mut BTerm) -> GameOverResult {
     let mut draw_batch = DrawBatch::new();
     draw_batch.print_color_centered(
         15,
         "Your journey has ended!",
-        ColorPair::new(RGB::named(rltk::YELLOW), RGB::named(rltk::BLACK)),
+        ColorPair::new(
+            RGB::named(bracket_lib::terminal::YELLOW),
+            RGB::named(bracket_lib::terminal::BLACK),
+        ),
     );
     draw_batch.print_color_centered(
         17,
         "One day, we'll tell you all about how you did.",
-        ColorPair::new(RGB::named(rltk::WHITE), RGB::named(rltk::BLACK)),
+        ColorPair::new(
+            RGB::named(bracket_lib::terminal::WHITE),
+            RGB::named(bracket_lib::terminal::BLACK),
+        ),
     );
     draw_batch.print_color_centered(
         18,
         "That day, sadly, is not in this chapter..",
-        ColorPair::new(RGB::named(rltk::WHITE), RGB::named(rltk::BLACK)),
+        ColorPair::new(
+            RGB::named(bracket_lib::terminal::WHITE),
+            RGB::named(bracket_lib::terminal::BLACK),
+        ),
     );
 
     draw_batch.print_color_centered(
@@ -30,7 +39,10 @@ pub fn game_over(ctx: &mut Rltk) -> GameOverResult {
             "You lived for {} turns.",
             crate::gamelog::get_event_count("Turn")
         ),
-        ColorPair::new(RGB::named(rltk::WHITE), RGB::named(rltk::BLACK)),
+        ColorPair::new(
+            RGB::named(bracket_lib::terminal::WHITE),
+            RGB::named(bracket_lib::terminal::BLACK),
+        ),
     );
     draw_batch.print_color_centered(
         20,
@@ -38,7 +50,10 @@ pub fn game_over(ctx: &mut Rltk) -> GameOverResult {
             "You suffered {} points of damage.",
             crate::gamelog::get_event_count("Damage Taken")
         ),
-        ColorPair::new(RGB::named(rltk::RED), RGB::named(rltk::BLACK)),
+        ColorPair::new(
+            RGB::named(bracket_lib::terminal::RED),
+            RGB::named(bracket_lib::terminal::BLACK),
+        ),
     );
     draw_batch.print_color_centered(
         21,
@@ -46,13 +61,19 @@ pub fn game_over(ctx: &mut Rltk) -> GameOverResult {
             "You inflicted {} points of damage.",
             crate::gamelog::get_event_count("Damage Inflicted")
         ),
-        ColorPair::new(RGB::named(rltk::RED), RGB::named(rltk::BLACK)),
+        ColorPair::new(
+            RGB::named(bracket_lib::terminal::RED),
+            RGB::named(bracket_lib::terminal::BLACK),
+        ),
     );
 
     draw_batch.print_color_centered(
         23,
         "Press any key to return to the menu.",
-        ColorPair::new(RGB::named(rltk::MAGENTA), RGB::named(rltk::BLACK)),
+        ColorPair::new(
+            RGB::named(bracket_lib::terminal::MAGENTA),
+            RGB::named(bracket_lib::terminal::BLACK),
+        ),
     );
 
     let _ = draw_batch.submit(6000);

@@ -17,37 +17,40 @@ pub use weapon_traits::*;
 
 mod rawmaster;
 pub use rawmaster::*;
-use serde::{Deserialize};
+use serde::Deserialize;
 use std::sync::Mutex;
 
-rltk::embedded_resource!(RAW_FILE, "../../raws/spawns.json");
+use bracket_lib::prelude::*;
+
+embedded_resource!(RAW_FILE, "../../raws/spawns.json");
 
 lazy_static! {
-    pub static ref RAWS : Mutex<RawMaster> = Mutex::new(RawMaster::empty());
+    pub static ref RAWS: Mutex<RawMaster> = Mutex::new(RawMaster::empty());
 }
 
 #[derive(Deserialize, Debug)]
 pub struct Raws {
-    pub items : Vec<Item>,
-    pub mobs : Vec<Mob>,
-    pub props : Vec<Prop>,
-    pub spawn_table : Vec<SpawnTableEntry>,
-    pub loot_tables : Vec<LootTable>,
-    pub faction_table : Vec<FactionInfo>,
-    pub spells : Vec<Spell>,
-    pub weapon_traits : Vec<WeaponTrait>
+    pub items: Vec<Item>,
+    pub mobs: Vec<Mob>,
+    pub props: Vec<Prop>,
+    pub spawn_table: Vec<SpawnTableEntry>,
+    pub loot_tables: Vec<LootTable>,
+    pub faction_table: Vec<FactionInfo>,
+    pub spells: Vec<Spell>,
+    pub weapon_traits: Vec<WeaponTrait>,
 }
 
 pub fn load_raws() {
-    rltk::link_resource!(RAW_FILE, "../../raws/spawns.json");
+    link_resource!(RAW_FILE, "../../raws/spawns.json");
 
     // Retrieve the raw data as an array of u8 (8-bit unsigned chars)
-    let raw_data = rltk::embedding::EMBED
+    let raw_data = EMBED
         .lock()
         .get_resource("../../raws/spawns.json".to_string())
         .unwrap();
-    let raw_string = std::str::from_utf8(&raw_data).expect("Unable to convert to a valid UTF-8 string.");
-    let decoder : Raws = serde_json::from_str(&raw_string).expect("Unable to parse JSON");
+    let raw_string =
+        std::str::from_utf8(&raw_data).expect("Unable to convert to a valid UTF-8 string.");
+    let decoder: Raws = serde_json::from_str(&raw_string).expect("Unable to parse JSON");
 
     RAWS.lock().unwrap().load(decoder);
 }

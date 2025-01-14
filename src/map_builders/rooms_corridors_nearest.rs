@@ -29,12 +29,12 @@ impl NearestCorridors {
         for (i,room) in rooms.iter().enumerate() {
             let mut room_distance : Vec<(usize, f32)> = Vec::new();
             let room_center = room.center();
-            let room_center_pt = rltk::Point::new(room_center.0, room_center.1);
+            let room_center_pt = bracket_lib::prelude::Point::new(room_center.0, room_center.1);
             for (j,other_room) in rooms.iter().enumerate() {
                 if i != j && !connected.contains(&j) {
                     let other_center = other_room.center();
-                    let other_center_pt = rltk::Point::new(other_center.0, other_center.1);
-                    let distance = rltk::DistanceAlg::Pythagoras.distance2d(
+                    let other_center_pt = bracket_lib::prelude::Point::new(other_center.0, other_center.1);
+                    let distance = bracket_lib::prelude::DistanceAlg::Pythagoras.distance2d(
                         room_center_pt,
                         other_center_pt
                     );

@@ -9,7 +9,7 @@ impl<'a> System<'a> for QuipSystem {
         WriteStorage<'a, Quips>,
         ReadStorage<'a, Name>,
         ReadStorage<'a, MyTurn>,
-        ReadExpect<'a, rltk::Point>,
+        ReadExpect<'a, bracket_lib::prelude::Point>,
         ReadStorage<'a, Viewshed>);
 
     fn run(&mut self, data : Self::SystemData) {

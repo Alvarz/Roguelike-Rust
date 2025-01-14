@@ -1,6 +1,6 @@
 use super::{menu_box, menu_option};
 use crate::State;
-use rltk::prelude::*;
+use bracket_lib::prelude::*;
 
 #[derive(PartialEq, Copy, Clone)]
 pub enum CheatMenuResult {
@@ -14,7 +14,7 @@ pub enum CheatMenuResult {
     ListSpawnedMobs,
 }
 
-pub fn show_cheat_mode(_gs: &mut State, ctx: &mut Rltk) -> CheatMenuResult {
+pub fn show_cheat_mode(_gs: &mut State, ctx: &mut BTerm) -> CheatMenuResult {
     let mut draw_batch = DrawBatch::new();
     let count = 6;
     let mut y = (25 - (count / 2)) as i32;
@@ -22,14 +22,17 @@ pub fn show_cheat_mode(_gs: &mut State, ctx: &mut Rltk) -> CheatMenuResult {
     draw_batch.print_color(
         Point::new(18, y + count as i32 + 1),
         "ESCAPE to cancel",
-        ColorPair::new(RGB::named(rltk::YELLOW), RGB::named(rltk::BLACK)),
+        ColorPair::new(
+            RGB::named(bracket_lib::terminal::YELLOW),
+            RGB::named(bracket_lib::terminal::BLACK),
+        ),
     );
 
     menu_option(
         &mut draw_batch,
         17,
         y,
-        rltk::to_cp437('T'),
+        bracket_lib::prelude::to_cp437('T'),
         "Teleport to next level",
     );
     y += 1;
@@ -37,7 +40,7 @@ pub fn show_cheat_mode(_gs: &mut State, ctx: &mut Rltk) -> CheatMenuResult {
         &mut draw_batch,
         17,
         y,
-        rltk::to_cp437('H'),
+        bracket_lib::prelude::to_cp437('H'),
         "Heal all wounds",
     );
     y += 1;
@@ -45,7 +48,7 @@ pub fn show_cheat_mode(_gs: &mut State, ctx: &mut Rltk) -> CheatMenuResult {
         &mut draw_batch,
         17,
         y,
-        rltk::to_cp437('R'),
+        bracket_lib::prelude::to_cp437('R'),
         "Reveal the map",
     );
     y += 1;
@@ -53,7 +56,7 @@ pub fn show_cheat_mode(_gs: &mut State, ctx: &mut Rltk) -> CheatMenuResult {
         &mut draw_batch,
         17,
         y,
-        rltk::to_cp437('G'),
+        bracket_lib::prelude::to_cp437('G'),
         "God Mode (No Death)",
     );
 
@@ -62,7 +65,7 @@ pub fn show_cheat_mode(_gs: &mut State, ctx: &mut Rltk) -> CheatMenuResult {
         &mut draw_batch,
         17,
         y,
-        rltk::to_cp437('I'),
+        bracket_lib::prelude::to_cp437('I'),
         "List items current map",
     );
 
@@ -71,7 +74,7 @@ pub fn show_cheat_mode(_gs: &mut State, ctx: &mut Rltk) -> CheatMenuResult {
         &mut draw_batch,
         17,
         y,
-        rltk::to_cp437('E'),
+        bracket_lib::prelude::to_cp437('E'),
         "List mobs current map",
     );
 

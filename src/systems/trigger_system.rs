@@ -42,7 +42,7 @@ impl<'a> System<'a> for TriggerSystem {
                                 EffectType::TriggerFire{ trigger : entity_id },
                                 if let Some(aoe) = area_of_effect.get(entity_id) {
                                     Targets::Tiles{
-                                        tiles : aoe_tiles(&*map, rltk::Point::new(pos.x, pos.y), aoe.radius)
+                                        tiles : aoe_tiles(&*map, bracket_lib::prelude::Point::new(pos.x, pos.y), aoe.radius)
                                     }
                                 } else {
                                     Targets::Tile{ tile_idx: idx as i32 }

@@ -137,7 +137,7 @@ impl<'a> System<'a> for EncumbranceSystem {
                         pool.total_initiative_penalty += 4.0;
                         if *entity == *player {
                             crate::gamelog::Logger::new()
-                                .color(rltk::ORANGE)
+                                .color(bracket_lib::terminal::ORANGE)
                                 .append(
                                     "You are overburdened, and suffering an initiative penalty.",
                                 )

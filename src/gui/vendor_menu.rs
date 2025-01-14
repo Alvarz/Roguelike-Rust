@@ -1,6 +1,6 @@
 use super::{get_item_color, get_item_display_name, menu_box};
 use crate::{InBackpack, Item, Name, State, Vendor, VendorMode};
-use rltk::prelude::*;
+use bracket_lib::prelude::*;
 use specs::prelude::*;
 
 #[derive(PartialEq, Copy, Clone)]
@@ -15,7 +15,7 @@ pub enum VendorResult {
 
 fn vendor_sell_menu(
     gs: &mut State,
-    ctx: &mut Rltk,
+    ctx: &mut BTerm,
     _vendor: Entity,
     _mode: VendorMode,
 ) -> (VendorResult, Option<Entity>, Option<String>, Option<f32>) {
@@ -42,7 +42,10 @@ fn vendor_sell_menu(
     draw_batch.print_color(
         Point::new(18, y + count as i32 + 1),
         "ESCAPE to cancel",
-        ColorPair::new(RGB::named(rltk::YELLOW), RGB::named(rltk::BLACK)),
+        ColorPair::new(
+            RGB::named(bracket_lib::terminal::YELLOW),
+            RGB::named(bracket_lib::terminal::BLACK),
+        ),
     );
 
     let mut equippable: Vec<Entity> = Vec::new();
@@ -53,18 +56,27 @@ fn vendor_sell_menu(
     {
         draw_batch.set(
             Point::new(17, y),
-            ColorPair::new(RGB::named(rltk::WHITE), RGB::named(rltk::BLACK)),
-            rltk::to_cp437('('),
+            ColorPair::new(
+                RGB::named(bracket_lib::terminal::WHITE),
+                RGB::named(bracket_lib::terminal::BLACK),
+            ),
+            bracket_lib::prelude::to_cp437('('),
         );
         draw_batch.set(
             Point::new(18, y),
-            ColorPair::new(RGB::named(rltk::YELLOW), RGB::named(rltk::BLACK)),
-            97 + j as rltk::FontCharType,
+            ColorPair::new(
+                RGB::named(bracket_lib::terminal::YELLOW),
+                RGB::named(bracket_lib::terminal::BLACK),
+            ),
+            97 + j as bracket_lib::prelude::FontCharType,
         );
         draw_batch.set(
             Point::new(19, y),
-            ColorPair::new(RGB::named(rltk::WHITE), RGB::named(rltk::BLACK)),
-            rltk::to_cp437(')'),
+            ColorPair::new(
+                RGB::named(bracket_lib::terminal::WHITE),
+                RGB::named(bracket_lib::terminal::BLACK),
+            ),
+            bracket_lib::prelude::to_cp437(')'),
         );
 
         draw_batch.print_color(
@@ -92,7 +104,7 @@ fn vendor_sell_menu(
             VirtualKeyCode::Space => (VendorResult::BuyMode, None, None, None),
             VirtualKeyCode::Escape => (VendorResult::Cancel, None, None, None),
             _ => {
-                let selection = rltk::letter_to_option(key);
+                let selection = bracket_lib::prelude::letter_to_option(key);
                 if selection > -1 && selection < count as i32 {
                     return (
                         VendorResult::Sell,
@@ -109,7 +121,7 @@ fn vendor_sell_menu(
 
 fn vendor_buy_menu(
     gs: &mut State,
-    ctx: &mut Rltk,
+    ctx: &mut BTerm,
     vendor: Entity,
     _mode: VendorMode,
 ) -> (VendorResult, Option<Entity>, Option<String>, Option<f32>) {
@@ -135,24 +147,36 @@ fn vendor_buy_menu(
     draw_batch.print_color(
         Point::new(18, y + count as i32 + 1),
         "ESCAPE to cancel",
-        ColorPair::new(RGB::named(rltk::YELLOW), RGB::named(rltk::BLACK)),
+        ColorPair::new(
+            RGB::named(bracket_lib::terminal::YELLOW),
+            RGB::named(bracket_lib::terminal::BLACK),
+        ),
     );
 
     for (j, sale) in inventory.iter().enumerate() {
         draw_batch.set(
             Point::new(17, y),
-            ColorPair::new(RGB::named(rltk::WHITE), RGB::named(rltk::BLACK)),
-            rltk::to_cp437('('),
+            ColorPair::new(
+                RGB::named(bracket_lib::terminal::WHITE),
+                RGB::named(bracket_lib::terminal::BLACK),
+            ),
+            bracket_lib::prelude::to_cp437('('),
         );
         draw_batch.set(
             Point::new(18, y),
-            ColorPair::new(RGB::named(rltk::YELLOW), RGB::named(rltk::BLACK)),
-            97 + j as rltk::FontCharType,
+            ColorPair::new(
+                RGB::named(bracket_lib::terminal::YELLOW),
+                RGB::named(bracket_lib::terminal::BLACK),
+            ),
+            97 + j as bracket_lib::prelude::FontCharType,
         );
         draw_batch.set(
             Point::new(19, y),
-            ColorPair::new(RGB::named(rltk::WHITE), RGB::named(rltk::BLACK)),
-            rltk::to_cp437(')'),
+            ColorPair::new(
+                RGB::named(bracket_lib::terminal::WHITE),
+                RGB::named(bracket_lib::terminal::BLACK),
+            ),
+            bracket_lib::prelude::to_cp437(')'),
         );
 
         draw_batch.print(Point::new(21, y), &sale.0);
@@ -168,7 +192,7 @@ fn vendor_buy_menu(
             VirtualKeyCode::Space => (VendorResult::SellMode, None, None, None),
             VirtualKeyCode::Escape => (VendorResult::Cancel, None, None, None),
             _ => {
-                let selection = rltk::letter_to_option(key);
+                let selection = bracket_lib::prelude::letter_to_option(key);
                 if selection > -1 && selection < count as i32 {
                     return (
                         VendorResult::Buy,
@@ -185,7 +209,7 @@ fn vendor_buy_menu(
 
 pub fn show_vendor_menu(
     gs: &mut State,
-    ctx: &mut Rltk,
+    ctx: &mut BTerm,
     vendor: Entity,
     mode: VendorMode,
 ) -> (VendorResult, Option<Entity>, Option<String>, Option<f32>) {

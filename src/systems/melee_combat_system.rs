@@ -189,21 +189,21 @@ impl<'a> System<'a> for MeleeCombatSystem {
                 } else if natural_roll == 1 {
                     // Natural 1 miss
                     crate::gamelog::Logger::new()
-                        .color(rltk::CYAN)
+                        .color(bracket_lib::terminal::CYAN)
                         .append(&name.name)
-                        .color(rltk::WHITE)
+                        .color(bracket_lib::terminal::WHITE)
                         .append("considers attacking")
-                        .color(rltk::CYAN)
+                        .color(bracket_lib::terminal::CYAN)
                         .append(&target_name.name)
-                        .color(rltk::WHITE)
+                        .color(bracket_lib::terminal::WHITE)
                         .append("but misjudges the timing!")
                         .log();
                     add_effect(
                         None,
                         EffectType::Particle {
-                            glyph: rltk::to_cp437('‼'),
-                            fg: rltk::RGB::named(rltk::BLUE),
-                            bg: rltk::RGB::named(rltk::BLACK),
+                            glyph: bracket_lib::prelude::to_cp437('‼'),
+                            fg: bracket_lib::prelude::RGB::named(bracket_lib::terminal::BLUE),
+                            bg: bracket_lib::prelude::RGB::named(bracket_lib::terminal::BLACK),
                             lifespan: 200.0,
                         },
                         Targets::Single {
@@ -213,21 +213,21 @@ impl<'a> System<'a> for MeleeCombatSystem {
                 } else {
                     // Miss
                     crate::gamelog::Logger::new()
-                        .color(rltk::CYAN)
+                        .color(bracket_lib::terminal::CYAN)
                         .append(&name.name)
-                        .color(rltk::WHITE)
+                        .color(bracket_lib::terminal::WHITE)
                         .append("attacks")
-                        .color(rltk::CYAN)
+                        .color(bracket_lib::terminal::CYAN)
                         .append(&target_name.name)
-                        .color(rltk::WHITE)
+                        .color(bracket_lib::terminal::WHITE)
                         .append("but can't connect.")
                         .log();
                     add_effect(
                         None,
                         EffectType::Particle {
-                            glyph: rltk::to_cp437('‼'),
-                            fg: rltk::RGB::named(rltk::CYAN),
-                            bg: rltk::RGB::named(rltk::BLACK),
+                            glyph: bracket_lib::prelude::to_cp437('‼'),
+                            fg: bracket_lib::prelude::RGB::named(bracket_lib::terminal::CYAN),
+                            bg: bracket_lib::prelude::RGB::named(bracket_lib::terminal::BLACK),
                             lifespan: 200.0,
                         },
                         Targets::Single {

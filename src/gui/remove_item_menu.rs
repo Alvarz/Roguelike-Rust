@@ -1,9 +1,9 @@
 use super::{get_item_display_name, item_result_menu, ItemMenuResult};
 use crate::{Equipped, State};
-use rltk::prelude::*;
+use bracket_lib::prelude::*;
 use specs::prelude::*;
 
-pub fn remove_item_menu(gs: &mut State, ctx: &mut Rltk) -> (ItemMenuResult, Option<Entity>) {
+pub fn remove_item_menu(gs: &mut State, ctx: &mut BTerm) -> (ItemMenuResult, Option<Entity>) {
     let mut draw_batch = DrawBatch::new();
 
     let player_entity = gs.ecs.fetch::<Entity>();

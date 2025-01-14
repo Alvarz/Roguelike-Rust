@@ -23,9 +23,9 @@ pub fn inflict_damage(ecs: &mut World, damage: &EffectSpawner, target: Entity) {
                 add_effect(
                     None,
                     EffectType::Particle {
-                        glyph: rltk::to_cp437('‼'),
-                        fg: rltk::RGB::named(rltk::ORANGE),
-                        bg: rltk::RGB::named(rltk::BLACK),
+                        glyph: bracket_lib::prelude::to_cp437('‼'),
+                        fg: bracket_lib::prelude::RGB::named(bracket_lib::terminal::ORANGE),
+                        bg: bracket_lib::prelude::RGB::named(bracket_lib::terminal::BLACK),
                         lifespan: 200.0,
                     },
                     Targets::Single { target },
@@ -83,7 +83,7 @@ pub fn death(ecs: &mut World, effect: &EffectSpawner, target: Entity) {
                     // We've gone up a level!
                     player_stats.level += 1;
                     crate::gamelog::Logger::new()
-                        .color(rltk::MAGENTA)
+                        .color(bracket_lib::terminal::MAGENTA)
                         .append("Congratulations, you are now level")
                         .append(format!("{}", player_stats.level))
                         .log();
@@ -94,28 +94,28 @@ pub fn death(ecs: &mut World, effect: &EffectSpawner, target: Entity) {
                         1 => {
                             player_attributes.might.base += 1;
                             crate::gamelog::Logger::new()
-                                .color(rltk::GREEN)
+                                .color(bracket_lib::terminal::GREEN)
                                 .append("You feel stronger!")
                                 .log();
                         }
                         2 => {
                             player_attributes.fitness.base += 1;
                             crate::gamelog::Logger::new()
-                                .color(rltk::GREEN)
+                                .color(bracket_lib::terminal::GREEN)
                                 .append("You feel healthier!")
                                 .log();
                         }
                         3 => {
                             player_attributes.quickness.base += 1;
                             crate::gamelog::Logger::new()
-                                .color(rltk::GREEN)
+                                .color(bracket_lib::terminal::GREEN)
                                 .append("You feel quicker!")
                                 .log();
                         }
                         _ => {
                             player_attributes.intelligence.base += 1;
                             crate::gamelog::Logger::new()
-                                .color(rltk::GREEN)
+                                .color(bracket_lib::terminal::GREEN)
                                 .append("You feel smarter!")
                                 .log();
                         }
@@ -144,16 +144,20 @@ pub fn death(ecs: &mut World, effect: &EffectSpawner, target: Entity) {
                     );
                     player_stats.mana.current = player_stats.mana.max;
 
-                    let player_pos = ecs.fetch::<rltk::Point>();
+                    let player_pos = ecs.fetch::<bracket_lib::prelude::Point>();
                     let map = ecs.fetch::<Map>();
                     for i in 0..10 {
                         if player_pos.y - i > 1 {
                             add_effect(
                                 None,
                                 EffectType::Particle {
-                                    glyph: rltk::to_cp437('░'),
-                                    fg: rltk::RGB::named(rltk::GOLD),
-                                    bg: rltk::RGB::named(rltk::BLACK),
+                                    glyph: bracket_lib::prelude::to_cp437('░'),
+                                    fg: bracket_lib::prelude::RGB::named(
+                                        bracket_lib::terminal::GOLD,
+                                    ),
+                                    bg: bracket_lib::prelude::RGB::named(
+                                        bracket_lib::terminal::BLACK,
+                                    ),
                                     lifespan: 400.0,
                                 },
                                 Targets::Tile {
@@ -177,9 +181,9 @@ pub fn heal_damage(ecs: &mut World, heal: &EffectSpawner, target: Entity) {
             add_effect(
                 None,
                 EffectType::Particle {
-                    glyph: rltk::to_cp437('‼'),
-                    fg: rltk::RGB::named(rltk::GREEN),
-                    bg: rltk::RGB::named(rltk::BLACK),
+                    glyph: bracket_lib::prelude::to_cp437('‼'),
+                    fg: bracket_lib::prelude::RGB::named(bracket_lib::terminal::GREEN),
+                    bg: bracket_lib::prelude::RGB::named(bracket_lib::terminal::BLACK),
                     lifespan: 200.0,
                 },
                 Targets::Single { target },
@@ -196,9 +200,9 @@ pub fn restore_mana(ecs: &mut World, mana: &EffectSpawner, target: Entity) {
             add_effect(
                 None,
                 EffectType::Particle {
-                    glyph: rltk::to_cp437('‼'),
-                    fg: rltk::RGB::named(rltk::BLUE),
-                    bg: rltk::RGB::named(rltk::BLACK),
+                    glyph: bracket_lib::prelude::to_cp437('‼'),
+                    fg: bracket_lib::prelude::RGB::named(bracket_lib::terminal::BLUE),
+                    bg: bracket_lib::prelude::RGB::named(bracket_lib::terminal::BLACK),
                     lifespan: 200.0,
                 },
                 Targets::Single { target },

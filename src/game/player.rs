@@ -6,7 +6,7 @@ use crate::{
     State, Target, TileType, Vendor, VendorMode, Viewshed, WantsToCastSpell, WantsToMelee,
     WantsToPickupItem, WantsToShoot, Weapon,
 };
-use rltk::{Point, Rltk, VirtualKeyCode};
+use bracket_lib::prelude::{BTerm, Point, VirtualKeyCode};
 use specs::prelude::*;
 use std::cmp::{max, min};
 
@@ -29,8 +29,11 @@ fn get_player_target_list(ecs: &mut World) -> Vec<(f32, Entity)> {
                 let player_pos = positions.get(*player_entity).unwrap();
                 for tile_point in vs.visible_tiles.iter() {
                     let tile_idx = map.xy_idx(tile_point.x, tile_point.y);
-                    let distance_to_target = rltk::DistanceAlg::Pythagoras
-                        .distance2d(*tile_point, rltk::Point::new(player_pos.x, player_pos.y));
+                    let distance_to_target = bracket_lib::prelude::DistanceAlg::Pythagoras
+                        .distance2d(
+                            *tile_point,
+                            bracket_lib::prelude::Point::new(player_pos.x, player_pos.y),
+                        );
                     if distance_to_target < range as f32 {
                         crate::spatial::for_each_tile_content(tile_idx, |possible_target| {
                             if possible_target != *player_entity
@@ -77,7 +80,7 @@ fn fire_on_target(ecs: &mut World) -> RunState {
         if let Some(name) = names.get(target) {
             crate::gamelog::Logger::new()
                 .append("You fire at")
-                .color(rltk::CYAN)
+                .color(bracket_lib::terminal::CYAN)
                 .append(&name.name)
                 .log();
         }
@@ -217,7 +220,7 @@ pub fn try_move_player(delta_x: i32, delta_y: i32, ecs: &mut World) -> RunState 
                     blocks_visibility.remove(potential_target);
                     blocks_movement.remove(potential_target);
                     let glyph = renderables.get_mut(potential_target).unwrap();
-                    glyph.glyph = rltk::to_cp437('/');
+                    glyph.glyph = bracket_lib::prelude::to_cp437('/');
                     viewshed.dirty = true;
                     return Some(RunState::Ticking);
                 }
@@ -448,7 +451,7 @@ fn use_spell_hotkey(gs: &mut State, key: i32) -> RunState {
     RunState::Ticking
 }
 
-pub fn player_input(gs: &mut State, ctx: &mut Rltk) -> RunState {
+pub fn player_input(gs: &mut State, ctx: &mut BTerm) -> RunState {
     // Hotkeys
     if ctx.shift && ctx.key.is_some() {
         let key: Option<i32> = match ctx.key.unwrap() {

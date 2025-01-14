@@ -16,7 +16,7 @@ impl<'a> System<'a> for InitiativeSystem {
         ReadStorage<'a, Attributes>,
         WriteExpect<'a, RunState>,
         ReadExpect<'a, Entity>,
-        ReadExpect<'a, rltk::Point>,
+        ReadExpect<'a, bracket_lib::prelude::Point>,
         ReadStorage<'a, Pools>,
         WriteStorage<'a, Duration>,
         WriteStorage<'a, EquipmentChanged>,
@@ -80,8 +80,8 @@ impl<'a> System<'a> for InitiativeSystem {
                 } else {
                     // if it is a horde mode entity or a horde member, we don't care about it's distance
                     if !horde_modes.contains(entity) && !horde_members.contains(entity) {
-                        let distance = rltk::DistanceAlg::PythagorasSquared
-                            .distance2d(*player_pos, rltk::Point::new(pos.x, pos.y));
+                        let distance = bracket_lib::prelude::DistanceAlg::PythagorasSquared
+                            .distance2d(*player_pos, bracket_lib::prelude::Point::new(pos.x, pos.y));
                         if distance > 20.0 {
                             myturn = false;
                         }
