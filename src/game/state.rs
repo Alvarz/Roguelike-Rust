@@ -1,5 +1,5 @@
 extern crate serde;
-use rltk::{GameState, Rltk};
+use bracket_lib::prelude::{BTerm, GameState};
 use specs::prelude::*;
 
 use crate::{
@@ -76,7 +76,7 @@ impl State {
 
 impl GameState for State {
     #[allow(clippy::cognitive_complexity)]
-    fn tick(&mut self, ctx: &mut Rltk) {
+    fn tick(&mut self, ctx: &mut BTerm) {
         let mut newrunstate;
         {
             let runstate = self.ecs.fetch::<RunState>();
@@ -252,9 +252,12 @@ impl GameState for State {
                             filtered_mobs.push(gui::get_item_display_name(&self.ecs, entity))
                         }
 
-                        rltk::console::log(format!("{}.", filtered_mobs.join(", ")));
+                        bracket_lib::prelude::console::log(format!(
+                            "{}.",
+                            filtered_mobs.join(", ")
+                        ));
                         crate::gamelog::Logger::new()
-                            .color(rltk::GRAY)
+                            .color(bracket_lib::terminal::GRAY)
                             .append(format!(
                                 "[DEBUG] Enemies in current map: {:?}",
                                 filtered_mobs.join(", ")
@@ -274,9 +277,12 @@ impl GameState for State {
                             filtered_items.push(gui::get_item_display_name(&self.ecs, entity));
                         }
 
-                        rltk::console::log(format!("{}.", filtered_items.join(", ")));
+                        bracket_lib::prelude::console::log(format!(
+                            "{}.",
+                            filtered_items.join(", ")
+                        ));
                         crate::gamelog::Logger::new()
-                            .color(rltk::GRAY)
+                            .color(bracket_lib::terminal::GRAY)
                             .append(format!(
                                 "[DEBUG] Items in current map: {:?}",
                                 filtered_items.join(", ")
@@ -527,7 +533,7 @@ impl GameState for State {
                     pos.x = x;
                     pos.y = y;
                 }
-                let mut ppos = self.ecs.fetch_mut::<rltk::Point>();
+                let mut ppos = self.ecs.fetch_mut::<bracket_lib::prelude::Point>();
                 ppos.x = x;
                 ppos.y = y;
                 self.mapgen_next_state = Some(RunState::PreRun);
@@ -550,7 +556,7 @@ impl GameState for State {
                 newrunstate = RunState::Ticking;
             }
             RunState::SpawnHordeMode => {
-                rltk::console::log("state to spawn horde mode");
+                bracket_lib::prelude::console::log("state to spawn horde mode");
                 spawner::spawn_horde_mode(&mut self.ecs);
                 newrunstate = RunState::Ticking;
             }
@@ -562,7 +568,7 @@ impl GameState for State {
         }
         damage::delete_the_dead(&mut self.ecs);
 
-        let _ = rltk::render_draw_buffer(ctx);
+        let _ = bracket_lib::prelude::render_draw_buffer(ctx);
         if SHOW_FPS {
             ctx.print(1, 59, &format!("FPS: {}", ctx.fps));
         }
@@ -634,7 +640,7 @@ impl State {
         gamelog::clear_log();
         gamelog::Logger::new()
             .append("Welcome to")
-            .color(rltk::CYAN)
+            .color(bracket_lib::terminal::CYAN)
             .append(PROJECT_NAME)
             .log();
 

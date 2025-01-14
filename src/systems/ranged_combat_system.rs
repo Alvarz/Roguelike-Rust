@@ -3,7 +3,10 @@ use crate::{
     HungerState, Map, Name, NaturalAttackDefense, Pools, Position, Skill, Skills, WantsToShoot,
     Weapon, WeaponAttribute, Wearable,
 };
-use rltk::{to_cp437, Point, RGB};
+use bracket_lib::{
+    color::RGB,
+    prelude::{to_cp437, Point},
+};
 use specs::prelude::*;
 
 pub struct RangedCombatSystem {}
@@ -67,12 +70,12 @@ impl<'a> System<'a> for RangedCombatSystem {
                     None,
                     EffectType::ParticleProjectile {
                         glyph: to_cp437('*'),
-                        fg: RGB::named(rltk::CYAN),
-                        bg: RGB::named(rltk::BLACK),
+                        fg: RGB::named(bracket_lib::terminal::CYAN),
+                        bg: RGB::named(bracket_lib::terminal::BLACK),
                         lifespan: 300.0,
                         speed: 50.0,
-                        path: rltk::line2d(
-                            rltk::LineAlg::Bresenham,
+                        path: bracket_lib::prelude::line2d(
+                            bracket_lib::prelude::LineAlg::Bresenham,
                             Point::new(apos.x, apos.y),
                             Point::new(dpos.x, dpos.y),
                         ),
@@ -224,9 +227,9 @@ impl<'a> System<'a> for RangedCombatSystem {
                     add_effect(
                         None,
                         EffectType::Particle {
-                            glyph: rltk::to_cp437('‼'),
-                            fg: rltk::RGB::named(rltk::BLUE),
-                            bg: rltk::RGB::named(rltk::BLACK),
+                            glyph: bracket_lib::prelude::to_cp437('‼'),
+                            fg: bracket_lib::prelude::RGB::named(bracket_lib::terminal::BLUE),
+                            bg: bracket_lib::prelude::RGB::named(bracket_lib::terminal::BLACK),
                             lifespan: 200.0,
                         },
                         Targets::Single {
@@ -239,15 +242,15 @@ impl<'a> System<'a> for RangedCombatSystem {
                         .npc_name(&name.name)
                         .append("attacks")
                         .npc_name(&target_name.name)
-                        .color(rltk::WHITE)
+                        .color(bracket_lib::terminal::WHITE)
                         .append("but can't connect.")
                         .log();
                     add_effect(
                         None,
                         EffectType::Particle {
-                            glyph: rltk::to_cp437('‼'),
-                            fg: rltk::RGB::named(rltk::CYAN),
-                            bg: rltk::RGB::named(rltk::BLACK),
+                            glyph: bracket_lib::prelude::to_cp437('‼'),
+                            fg: bracket_lib::prelude::RGB::named(bracket_lib::terminal::CYAN),
+                            bg: bracket_lib::prelude::RGB::named(bracket_lib::terminal::BLACK),
                             lifespan: 200.0,
                         },
                         Targets::Single {

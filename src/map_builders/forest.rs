@@ -35,12 +35,12 @@ impl YellowBrickRoad {
             if map::tile_walkable(*tiletype) {
                 available_floors.push((
                     idx,
-                    rltk::DistanceAlg::Pythagoras.distance2d(
-                        rltk::Point::new(
+                    bracket_lib::prelude::DistanceAlg::Pythagoras.distance2d(
+                        bracket_lib::prelude::Point::new(
                             idx as i32 % build_data.map.width,
                             idx as i32 / build_data.map.width,
                         ),
-                        rltk::Point::new(seed_x, seed_y),
+                        bracket_lib::prelude::Point::new(seed_x, seed_y),
                     ),
                 ));
             }
@@ -78,7 +78,7 @@ impl YellowBrickRoad {
         let end_idx = build_data.map.xy_idx(end_x, end_y);
 
         build_data.map.populate_blocked();
-        let path = rltk::a_star_search(start_idx, end_idx, &build_data.map);
+        let path = bracket_lib::prelude::a_star_search(start_idx, end_idx, &build_data.map);
         if !path.success {
             panic!("No valid path for the road");
         }
@@ -114,7 +114,8 @@ impl YellowBrickRoad {
 
         let (stream_x, stream_y) = self.find_exit(build_data, stream_startx, stream_starty);
         let stream_idx = build_data.map.xy_idx(stream_x, stream_y) as usize;
-        let stream = rltk::a_star_search(stairs_idx, stream_idx, &mut build_data.map);
+        let stream =
+            bracket_lib::prelude::a_star_search(stairs_idx, stream_idx, &mut build_data.map);
         for tile in stream.steps.iter() {
             if build_data.map.tiles[*tile as usize] == TileType::Floor {
                 build_data.map.tiles[*tile as usize] = TileType::ShallowWater;

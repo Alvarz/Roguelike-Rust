@@ -8,7 +8,7 @@ use crate::{
     TileType, Viewshed,
 };
 use crate::{rng, tile_walkable, MAX_MONSTERS_BY_WAVE, MIN_MONSTERS_BY_WAVE};
-use rltk::RGB;
+use bracket_lib::prelude::RGB;
 use specs::prelude::*;
 use specs::saveload::{MarkedBuilder, SimpleMarker};
 use std::collections::HashMap;
@@ -33,9 +33,9 @@ pub fn player(ecs: &mut World, player_x: i32, player_y: i32) -> Entity {
             y: player_y,
         })
         .with(Renderable {
-            glyph: rltk::to_cp437('@'),
-            fg: RGB::named(rltk::YELLOW),
-            bg: RGB::named(rltk::BLACK),
+            glyph: bracket_lib::prelude::to_cp437('@'),
+            fg: RGB::named(bracket_lib::terminal::YELLOW),
+            bg: RGB::named(bracket_lib::terminal::BLACK),
             render_order: 0,
         })
         .with(Player {})
@@ -92,7 +92,7 @@ pub fn player(ecs: &mut World, player_x: i32, player_y: i32) -> Entity {
         })
         .with(EquipmentChanged {})
         .with(LightSource {
-            color: rltk::RGB::from_f32(1.0, 1.0, 0.5),
+            color: bracket_lib::prelude::RGB::from_f32(1.0, 1.0, 0.5),
             range: 8,
         })
         .with(Initiative { current: 0 })
@@ -249,7 +249,7 @@ pub fn spawn_entity(ecs: &mut World, spawn: &(&usize, &String)) -> Option<Entity
     }
 
     if spawn.1 != "None" {
-        rltk::console::log(format!(
+        bracket_lib::prelude::console::log(format!(
             "WARNING: We don't know how to spawn [{}]!",
             spawn.1
         ));
@@ -261,7 +261,7 @@ pub fn spawn_town_portal(ecs: &mut World) {
     // Get current position & depth
     let map = ecs.fetch::<Map>();
     let player_depth = map.depth;
-    let player_pos = ecs.fetch::<rltk::Point>();
+    let player_pos = ecs.fetch::<bracket_lib::prelude::Point>();
     let player_x = player_pos.x;
     let player_y = player_pos.y;
     std::mem::drop(player_pos);
@@ -290,9 +290,9 @@ pub fn spawn_town_portal(ecs: &mut World) {
             depth: 1,
         })
         .with(Renderable {
-            glyph: rltk::to_cp437('♥'),
-            fg: RGB::named(rltk::CYAN),
-            bg: RGB::named(rltk::BLACK),
+            glyph: bracket_lib::prelude::to_cp437('♥'),
+            fg: RGB::named(bracket_lib::terminal::CYAN),
+            bg: RGB::named(bracket_lib::terminal::BLACK),
             render_order: 0,
         })
         .with(EntryTrigger {})
@@ -342,7 +342,7 @@ pub fn add_horde_member_components_to_entity(entity: Entity, ecs: &mut World) {
     // let mut renderers = ecs.write_storage::<Renderable>();
     // let entity_renderer = renderers.get_mut(entity);
     // if let Some(entity_renderer) = entity_renderer {
-    //     entity_renderer.bg = rltk::RGB::named(rltk::REBECCAPURPLE);
+    //     entity_renderer.bg = bracket_lib::prelude::RGB::named(bracket_lib::REBECCAPURPLE);
     // }
 
     let _ = horde_members.insert(entity, HordeMember {});
@@ -366,8 +366,9 @@ pub fn spawn_horde_mode(ecs: &mut World) {
 
 fn can_spawn_at_position(map_idx: usize, ecs: &mut World, x: i32, y: i32) -> bool {
     let map = ecs.get_mut::<crate::map::Map>().unwrap().clone();
-    let player_pos = ecs.fetch::<rltk::Point>();
-    let distance = rltk::DistanceAlg::Manhattan.distance2d(*player_pos, rltk::Point::new(x, y));
+    let player_pos = ecs.fetch::<bracket_lib::prelude::Point>();
+    let distance =
+        bracket_lib::prelude::DistanceAlg::Manhattan.distance2d(*player_pos, bracket_lib::prelude::Point::new(x, y));
 
     return !is_blocked(map_idx)
         && tile_walkable(map.tiles[map_idx])

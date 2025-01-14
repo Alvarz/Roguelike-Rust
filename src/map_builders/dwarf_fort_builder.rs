@@ -82,12 +82,12 @@ impl DragonSpawner {
             if crate::map::tile_walkable(*tiletype) {
                 available_floors.push((
                     idx,
-                    rltk::DistanceAlg::PythagorasSquared.distance2d(
-                        rltk::Point::new(
+                    bracket_lib::prelude::DistanceAlg::PythagorasSquared.distance2d(
+                        bracket_lib::prelude::Point::new(
                             idx as i32 % build_data.map.width,
                             idx as i32 / build_data.map.width,
                         ),
-                        rltk::Point::new(seed_x, seed_y),
+                        bracket_lib::prelude::Point::new(seed_x, seed_y),
                     ),
                 ));
             }
@@ -100,13 +100,13 @@ impl DragonSpawner {
 
         let start_x = available_floors[0].0 as i32 % build_data.map.width;
         let start_y = available_floors[0].0 as i32 / build_data.map.width;
-        let dragon_pt = rltk::Point::new(start_x, start_y);
+        let dragon_pt = bracket_lib::prelude::Point::new(start_x, start_y);
 
         // Remove all spawns within 25 tiles of the drake
         let w = build_data.map.width as i32;
         build_data.spawn_list.retain(|spawn| {
-            let spawn_pt = rltk::Point::new(spawn.0 as i32 % w, spawn.0 as i32 / w);
-            let distance = rltk::DistanceAlg::Pythagoras.distance2d(dragon_pt, spawn_pt);
+            let spawn_pt = bracket_lib::prelude::Point::new(spawn.0 as i32 % w, spawn.0 as i32 / w);
+            let distance = bracket_lib::prelude::DistanceAlg::Pythagoras.distance2d(dragon_pt, spawn_pt);
             distance > 25.0
         });
 

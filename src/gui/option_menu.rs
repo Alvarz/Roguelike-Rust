@@ -1,6 +1,6 @@
 use super::{menu_box, menu_option};
 use crate::State;
-use rltk::prelude::*;
+use bracket_lib::prelude::*;
 
 #[derive(PartialEq, Copy, Clone)]
 pub enum OptionMenuResult {
@@ -10,7 +10,7 @@ pub enum OptionMenuResult {
     ExitWithoutSaving,
 }
 
-pub fn show_option_menu(_gs: &mut State, ctx: &mut Rltk) -> OptionMenuResult {
+pub fn show_option_menu(_gs: &mut State, ctx: &mut BTerm) -> OptionMenuResult {
     let mut draw_batch = DrawBatch::new();
     let count = 4;
     let mut y = (25 - (count / 2)) as i32;
@@ -18,18 +18,33 @@ pub fn show_option_menu(_gs: &mut State, ctx: &mut Rltk) -> OptionMenuResult {
     draw_batch.print_color(
         Point::new(18, y + count as i32 + 1),
         "ESCAPE to cancel",
-        ColorPair::new(RGB::named(rltk::YELLOW), RGB::named(rltk::BLACK)),
+        ColorPair::new(
+            RGB::named(bracket_lib::terminal::YELLOW),
+            RGB::named(bracket_lib::terminal::BLACK),
+        ),
     );
 
-    menu_option(&mut draw_batch, 17, y, rltk::to_cp437('C'), "Continue");
-    y += 1;
-    menu_option(&mut draw_batch, 17, y, rltk::to_cp437('S'), "Save and exit");
+    menu_option(
+        &mut draw_batch,
+        17,
+        y,
+        bracket_lib::prelude::to_cp437('C'),
+        "Continue",
+    );
     y += 1;
     menu_option(
         &mut draw_batch,
         17,
         y,
-        rltk::to_cp437('E'),
+        bracket_lib::prelude::to_cp437('S'),
+        "Save and exit",
+    );
+    y += 1;
+    menu_option(
+        &mut draw_batch,
+        17,
+        y,
+        bracket_lib::prelude::to_cp437('E'),
         "Exit without saving",
     );
 

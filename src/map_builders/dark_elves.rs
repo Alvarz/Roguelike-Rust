@@ -47,13 +47,13 @@ impl PlazaMapBuilder {
     }
 
     fn spawn_zones(&mut self, build_data : &mut BuilderMap) {
-        let mut voronoi_seeds : Vec<(usize, rltk::Point)> = Vec::new();
+        let mut voronoi_seeds : Vec<(usize, bracket_lib::prelude::Point)> = Vec::new();
 
         while voronoi_seeds.len() < 32 {
             let vx = crate::rng::roll_dice(1, build_data.map.width-1);
             let vy = crate::rng::roll_dice(1, build_data.map.height-1);
             let vidx = build_data.map.xy_idx(vx, vy);
-            let candidate = (vidx, rltk::Point::new(vx, vy));
+            let candidate = (vidx, bracket_lib::prelude::Point::new(vx, vy));
             if !voronoi_seeds.contains(&candidate) {
                 voronoi_seeds.push(candidate);
             }
@@ -66,8 +66,8 @@ impl PlazaMapBuilder {
             let y = i as i32 / build_data.map.width;
 
             for (seed, pos) in voronoi_seeds.iter().enumerate() {
-                let distance = rltk::DistanceAlg::PythagorasSquared.distance2d(
-                    rltk::Point::new(x, y),
+                let distance = bracket_lib::prelude::DistanceAlg::PythagorasSquared.distance2d(
+                    bracket_lib::prelude::Point::new(x, y),
                     pos.1
                 );
                 voronoi_distance[seed] = (seed, distance);
@@ -110,7 +110,7 @@ impl PlazaMapBuilder {
         self.make_roads(build_data, &voronoi_membership);
     }
 
-    fn portal_park(&mut self, build_data : &mut BuilderMap, voronoi_membership: &[i32], zone: i32, seeds: &[(usize, rltk::Point)]) {
+    fn portal_park(&mut self, build_data : &mut BuilderMap, voronoi_membership: &[i32], zone: i32, seeds: &[(usize, bracket_lib::prelude::Point)]) {
         let zone_tiles : Vec<usize> = voronoi_membership
             .iter()
             .enumerate()
@@ -161,7 +161,7 @@ impl PlazaMapBuilder {
             });
     }
 
-    fn park(&mut self, build_data : &mut BuilderMap, voronoi_membership: &[i32], zone: i32, seeds: &[(usize, rltk::Point)]) {
+    fn park(&mut self, build_data : &mut BuilderMap, voronoi_membership: &[i32], zone: i32, seeds: &[(usize, bracket_lib::prelude::Point)]) {
         let zone_tiles : Vec<usize> = voronoi_membership
             .iter()
             .enumerate()

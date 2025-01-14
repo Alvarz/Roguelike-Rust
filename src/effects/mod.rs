@@ -10,7 +10,7 @@ mod movement;
 mod particles;
 mod triggers;
 use crate::AttributeBonus;
-use rltk::Point;
+use bracket_lib::prelude::Point;
 mod world;
 
 lazy_static! {
@@ -24,15 +24,15 @@ pub enum EffectType {
     },
     Bloodstain,
     Particle {
-        glyph: rltk::FontCharType,
-        fg: rltk::RGB,
-        bg: rltk::RGB,
+        glyph: bracket_lib::prelude::FontCharType,
+        fg: bracket_lib::prelude::RGB,
+        bg: bracket_lib::prelude::RGB,
         lifespan: f32,
     },
     ParticleProjectile {
-        glyph: rltk::FontCharType,
-        fg: rltk::RGB,
-        bg: rltk::RGB,
+        glyph: bracket_lib::prelude::FontCharType,
+        fg: bracket_lib::prelude::RGB,
+        bg: bracket_lib::prelude::RGB,
         lifespan: f32,
         speed: f32,
         path: Vec<Point>,

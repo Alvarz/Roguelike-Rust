@@ -88,7 +88,7 @@ impl RawMaster {
                     });
                 }
             } else {
-                rltk::console::log(format!(
+                bracket_lib::prelude::console::log(format!(
                     "{} is marked as templated, but isn't a weapon or armor.",
                     item.name
                 ));
@@ -204,7 +204,7 @@ impl RawMaster {
 
         for (i, item) in self.raws.items.iter().enumerate() {
             if used_names.contains(&item.name) {
-                rltk::console::log(format!(
+                bracket_lib::prelude::console::log(format!(
                     "WARNING -  duplicate item name in raws [{}]",
                     item.name
                 ));
@@ -216,7 +216,7 @@ impl RawMaster {
         }
         for (i, mob) in self.raws.mobs.iter().enumerate() {
             if used_names.contains(&mob.name) {
-                rltk::console::log(format!(
+                bracket_lib::prelude::console::log(format!(
                     "WARNING -  duplicate mob name in raws [{}]",
                     mob.name
                 ));
@@ -226,7 +226,7 @@ impl RawMaster {
         }
         for (i, prop) in self.raws.props.iter().enumerate() {
             if used_names.contains(&prop.name) {
-                rltk::console::log(format!(
+                bracket_lib::prelude::console::log(format!(
                     "WARNING -  duplicate prop name in raws [{}]",
                     prop.name
                 ));
@@ -237,7 +237,7 @@ impl RawMaster {
 
         for spawn in self.raws.spawn_table.iter() {
             if !used_names.contains(&spawn.name) {
-                rltk::console::log(format!(
+                bracket_lib::prelude::console::log(format!(
                     "WARNING - Spawn tables references unspecified entity {}",
                     spawn.name
                 ));
@@ -381,9 +381,9 @@ fn spawn_position<'a>(
 
 fn get_renderable_component(renderable: &super::item_structs::Renderable) -> Renderable {
     Renderable {
-        glyph: rltk::to_cp437(renderable.glyph.chars().next().unwrap()),
-        fg: rltk::RGB::from_hex(&renderable.fg).expect("Invalid RGB"),
-        bg: rltk::RGB::from_hex(&renderable.bg).expect("Invalid RGB"),
+        glyph: bracket_lib::prelude::to_cp437(renderable.glyph.chars().next().unwrap()),
+        fg: bracket_lib::prelude::RGB::from_hex(&renderable.fg).expect("Invalid RGB"),
+        bg: bracket_lib::prelude::RGB::from_hex(&renderable.bg).expect("Invalid RGB"),
         render_order: renderable.order,
     }
 }
@@ -398,7 +398,7 @@ pub fn string_to_slot(slot: &str) -> EquipmentSlot {
         "Hands" => EquipmentSlot::Hands,
         "Melee" => EquipmentSlot::Melee,
         _ => {
-            rltk::console::log(format!("Warning: unknown equipment slot type [{}])", slot));
+            bracket_lib::prelude::console::log(format!("Warning: unknown equipment slot type [{}])", slot));
             EquipmentSlot::Melee
         }
     }
@@ -407,8 +407,8 @@ pub fn string_to_slot(slot: &str) -> EquipmentSlot {
 fn parse_particle_line(n: &str) -> SpawnParticleLine {
     let tokens: Vec<_> = n.split(';').collect();
     SpawnParticleLine {
-        glyph: rltk::to_cp437(tokens[0].chars().next().unwrap()),
-        color: rltk::RGB::from_hex(tokens[1]).expect("Bad RGB"),
+        glyph: bracket_lib::prelude::to_cp437(tokens[0].chars().next().unwrap()),
+        color: bracket_lib::prelude::RGB::from_hex(tokens[1]).expect("Bad RGB"),
         lifetime_ms: tokens[2].parse::<f32>().unwrap(),
     }
 }
@@ -416,8 +416,8 @@ fn parse_particle_line(n: &str) -> SpawnParticleLine {
 fn parse_particle(n: &str) -> SpawnParticleBurst {
     let tokens: Vec<_> = n.split(';').collect();
     SpawnParticleBurst {
-        glyph: rltk::to_cp437(tokens[0].chars().next().unwrap()),
-        color: rltk::RGB::from_hex(tokens[1]).expect("Bad RGB"),
+        glyph: bracket_lib::prelude::to_cp437(tokens[0].chars().next().unwrap()),
+        color: bracket_lib::prelude::RGB::from_hex(tokens[1]).expect("Bad RGB"),
         lifetime_ms: tokens[2].parse::<f32>().unwrap(),
     }
 }
@@ -483,7 +483,7 @@ macro_rules! apply_effects {
                     })
                 }
                 "target_self" => $eb = $eb.with(AlwaysTargetsSelf {}),
-                _ => rltk::console::log(format!(
+                _ => bracket_lib::prelude::console::log(format!(
                     "Warning: consumable effect {} not implemented.",
                     effect_name
                 )),
@@ -803,7 +803,7 @@ pub fn spawn_named_mob(
                         skills.skills.insert(Skill::Magic, *sk.1);
                     }
                     _ => {
-                        rltk::console::log(format!("Unknown skill referenced: [{}]", sk.0));
+                        bracket_lib::prelude::console::log(format!("Unknown skill referenced: [{}]", sk.0));
                     }
                 }
             }
@@ -846,7 +846,7 @@ pub fn spawn_named_mob(
         if let Some(light) = &mob_template.light {
             eb = eb.with(LightSource {
                 range: light.range,
-                color: rltk::RGB::from_hex(&light.color).expect("Bad color"),
+                color: bracket_lib::prelude::RGB::from_hex(&light.color).expect("Bad color"),
             });
         }
 
@@ -964,7 +964,7 @@ pub fn spawn_named_prop(
         if let Some(light) = &prop_template.light {
             eb = eb.with(LightSource {
                 range: light.range,
-                color: rltk::RGB::from_hex(&light.color).expect("Bad color"),
+                color: bracket_lib::prelude::RGB::from_hex(&light.color).expect("Bad color"),
             });
             eb = eb.with(Viewshed {
                 range: light.range,

@@ -1,5 +1,5 @@
 extern crate serde;
-use rltk::{Point, Rltk};
+use bracket_lib::prelude::{BError, Point};
 use specs::prelude::*;
 use specs::saveload::SimpleMarkerAllocator;
 
@@ -21,9 +21,9 @@ extern crate lazy_static;
 pub mod spatial;
 mod systems;
 
-fn main() -> rltk::BError {
-    use rltk::RltkBuilder;
-    let mut context = RltkBuilder::simple(80, 60)
+fn main() -> BError {
+    use bracket_lib::prelude::BTermBuilder;
+    let mut context = BTermBuilder::simple(80, 60)
         .unwrap()
         .with_title(PROJECT_NAME)
         .with_font("vga8x16.png", 8, 16)
@@ -58,5 +58,5 @@ fn main() -> rltk::BError {
         .insert(systems::particle_system::ParticleBuilder::new());
     gs.ecs.insert(rex_assets::RexAssets::new());
 
-    rltk::main_loop(context, gs)
+    bracket_lib::prelude::main_loop(context, gs)
 }

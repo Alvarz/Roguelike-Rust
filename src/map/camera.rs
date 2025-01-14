@@ -1,9 +1,9 @@
 use crate::map::tile_glyph;
 use crate::{Hidden, Map, Position, Renderable, Target, TileSize};
-use rltk::prelude::*;
+use bracket_lib::prelude::*;
 use specs::prelude::*;
 
-pub fn get_screen_bounds(ecs: &World, _ctx: &mut Rltk) -> (i32, i32, i32, i32) {
+pub fn get_screen_bounds(ecs: &World, _ctx: &mut BTerm) -> (i32, i32, i32, i32) {
     let player_pos = ecs.fetch::<Point>();
     //let (x_chars, y_chars) = ctx.get_char_size();
     let (x_chars, y_chars) = (48, 44);
@@ -21,7 +21,7 @@ pub fn get_screen_bounds(ecs: &World, _ctx: &mut Rltk) -> (i32, i32, i32, i32) {
 
 const SHOW_BOUNDARIES: bool = false;
 
-pub fn render_camera(ecs: &World, ctx: &mut Rltk) {
+pub fn render_camera(ecs: &World, ctx: &mut BTerm) {
     let mut draw_batch = DrawBatch::new();
     let map = ecs.fetch::<Map>();
     let (min_x, max_x, min_y, max_y) = get_screen_bounds(ecs, ctx);
@@ -42,7 +42,10 @@ pub fn render_camera(ecs: &World, ctx: &mut Rltk) {
             } else if SHOW_BOUNDARIES {
                 draw_batch.set(
                     Point::new(x + 1, y + 1),
-                    ColorPair::new(RGB::named(rltk::GRAY), RGB::named(rltk::BLACK)),
+                    ColorPair::new(
+                        RGB::named(bracket_lib::terminal::GRAY),
+                        RGB::named(bracket_lib::terminal::BLACK),
+                    ),
                     to_cp437('·'),
                 );
             }
@@ -110,12 +113,18 @@ pub fn render_camera(ecs: &World, ctx: &mut Rltk) {
             let entity_screen_y = pos.y - min_y;
             draw_batch.set(
                 Point::new(entity_screen_x, entity_screen_y + 1),
-                ColorPair::new(RGB::named(rltk::RED), RGB::named(rltk::YELLOW)),
+                ColorPair::new(
+                    RGB::named(bracket_lib::terminal::RED),
+                    RGB::named(bracket_lib::terminal::YELLOW),
+                ),
                 to_cp437('['),
             );
             draw_batch.set(
                 Point::new(entity_screen_x + 2, entity_screen_y + 1),
-                ColorPair::new(RGB::named(rltk::RED), RGB::named(rltk::YELLOW)),
+                ColorPair::new(
+                    RGB::named(bracket_lib::terminal::RED),
+                    RGB::named(bracket_lib::terminal::YELLOW),
+                ),
                 to_cp437(']'),
             );
         }
@@ -124,7 +133,7 @@ pub fn render_camera(ecs: &World, ctx: &mut Rltk) {
     let _ = draw_batch.submit(0);
 }
 
-pub fn render_debug_map(map: &Map, ctx: &mut Rltk) {
+pub fn render_debug_map(map: &Map, ctx: &mut BTerm) {
     let player_pos = Point::new(map.width / 2, map.height / 2);
     let (x_chars, y_chars) = ctx.get_char_size();
 
@@ -151,9 +160,9 @@ pub fn render_debug_map(map: &Map, ctx: &mut Rltk) {
                 ctx.set(
                     x as i32,
                     y as i32,
-                    RGB::named(rltk::GRAY),
-                    RGB::named(rltk::BLACK),
-                    rltk::to_cp437('·'),
+                    RGB::named(bracket_lib::terminal::GRAY),
+                    RGB::named(bracket_lib::terminal::BLACK),
+                    bracket_lib::prelude::to_cp437('·'),
                 );
             }
         }

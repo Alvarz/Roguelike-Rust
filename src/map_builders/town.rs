@@ -247,16 +247,16 @@ impl TownBuilder {
         build_data.map.populate_blocked();
         for door_idx in doors.iter() {
             let mut nearest_roads: Vec<(usize, f32)> = Vec::new();
-            let door_pt = rltk::Point::new(
+            let door_pt = bracket_lib::prelude::Point::new(
                 *door_idx as i32 % build_data.map.width as i32,
                 *door_idx as i32 / build_data.map.width as i32,
             );
             for r in roads.iter() {
                 nearest_roads.push((
                     *r,
-                    rltk::DistanceAlg::PythagorasSquared.distance2d(
+                    bracket_lib::prelude::DistanceAlg::PythagorasSquared.distance2d(
                         door_pt,
-                        rltk::Point::new(
+                        bracket_lib::prelude::Point::new(
                             *r as i32 % build_data.map.width,
                             *r as i32 / build_data.map.width,
                         ),
@@ -266,7 +266,7 @@ impl TownBuilder {
             nearest_roads.sort_by(|a, b| a.1.partial_cmp(&b.1).unwrap());
 
             let destination = nearest_roads[0].0;
-            let path = rltk::a_star_search(*door_idx, destination, &build_data.map);
+            let path = bracket_lib::prelude::a_star_search(*door_idx, destination, &build_data.map);
             if path.success {
                 for step in path.steps.iter() {
                     let idx = *step as usize;

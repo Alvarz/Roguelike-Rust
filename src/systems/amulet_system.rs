@@ -36,7 +36,7 @@ impl<'a> System<'a> for AmuletSystem {
             // player doesn't have the AOY
 
             if map.depth <= 1 && entity == *player_entity {
-                rltk::console::log("{} You won the game!");
+                bracket_lib::prelude::console::log("{} You won the game!");
                 *runstate = RunState::FinishGame;
                 return;
             }
@@ -45,7 +45,7 @@ impl<'a> System<'a> for AmuletSystem {
         let horde_modes = (&horde_modes, &positions).join();
         if horde_modes.into_iter().count() < 1 {
             *runstate = RunState::SpawnHordeMode;
-            rltk::console::log("Spawn horde mode");
+            bracket_lib::prelude::console::log("Spawn horde mode");
         }
     }
 }

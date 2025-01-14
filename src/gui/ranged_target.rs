@@ -1,11 +1,11 @@
 use super::ItemMenuResult;
 use crate::{camera, State, Viewshed};
-use rltk::prelude::*;
+use bracket_lib::prelude::*;
 use specs::prelude::*;
 
 pub fn ranged_target(
     gs: &mut State,
-    ctx: &mut Rltk,
+    ctx: &mut BTerm,
     range: i32,
 ) -> (ItemMenuResult, Option<Point>) {
     let (min_x, max_x, min_y, max_y) = camera::get_screen_bounds(&gs.ecs, ctx);
@@ -18,7 +18,10 @@ pub fn ranged_target(
     draw_batch.print_color(
         Point::new(5, 0),
         "Select Target:",
-        ColorPair::new(RGB::named(rltk::YELLOW), RGB::named(rltk::BLACK)),
+        ColorPair::new(
+            RGB::named(bracket_lib::terminal::YELLOW),
+            RGB::named(bracket_lib::terminal::BLACK),
+        ),
     );
 
     // Highlight available target cells
@@ -27,7 +30,8 @@ pub fn ranged_target(
     if let Some(visible) = visible {
         // We have a viewshed
         for idx in visible.visible_tiles.iter() {
-            let distance = rltk::DistanceAlg::Pythagoras.distance2d(*player_pos, *idx);
+            let distance =
+                bracket_lib::prelude::DistanceAlg::Pythagoras.distance2d(*player_pos, *idx);
             if distance <= range as f32 {
                 let screen_x = idx.x - min_x;
                 let screen_y = idx.y - min_y;
@@ -36,7 +40,10 @@ pub fn ranged_target(
                     && screen_y > 1
                     && screen_y < (max_y - min_y) - 1
                 {
-                    draw_batch.set_bg(Point::new(screen_x, screen_y), RGB::named(rltk::BLUE));
+                    draw_batch.set_bg(
+                        Point::new(screen_x, screen_y),
+                        RGB::named(bracket_lib::terminal::BLUE),
+                    );
                     available_cells.push(idx);
                 }
             }
@@ -57,7 +64,10 @@ pub fn ranged_target(
         }
     }
     if valid_target {
-        draw_batch.set_bg(Point::new(mouse_pos.0, mouse_pos.1), RGB::named(rltk::CYAN));
+        draw_batch.set_bg(
+            Point::new(mouse_pos.0, mouse_pos.1),
+            RGB::named(bracket_lib::terminal::CYAN),
+        );
         if ctx.left_click {
             return (
                 ItemMenuResult::Selected,
@@ -65,7 +75,10 @@ pub fn ranged_target(
             );
         }
     } else {
-        draw_batch.set_bg(Point::new(mouse_pos.0, mouse_pos.1), RGB::named(rltk::RED));
+        draw_batch.set_bg(
+            Point::new(mouse_pos.0, mouse_pos.1),
+            RGB::named(bracket_lib::terminal::RED),
+        );
         if ctx.left_click {
             return (ItemMenuResult::Cancel, None);
         }
@@ -75,4 +88,3 @@ pub fn ranged_target(
 
     (ItemMenuResult::NoResponse, None)
 }
-

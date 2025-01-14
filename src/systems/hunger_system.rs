@@ -1,18 +1,18 @@
+use crate::{effects::*, HungerClock, HungerState, MyTurn};
 use specs::prelude::*;
-use crate::{HungerClock, HungerState, MyTurn, effects::*};
 
 pub struct HungerSystem {}
 
 impl<'a> System<'a> for HungerSystem {
     #[allow(clippy::type_complexity)]
     type SystemData = (
-                        Entities<'a>,
-                        WriteStorage<'a, HungerClock>,
-                        ReadExpect<'a, Entity>, // The player
-                        ReadStorage<'a, MyTurn>
-                      );
+        Entities<'a>,
+        WriteStorage<'a, HungerClock>,
+        ReadExpect<'a, Entity>, // The player
+        ReadStorage<'a, MyTurn>,
+    );
 
-    fn run(&mut self, data : Self::SystemData) {
+    fn run(&mut self, data: Self::SystemData) {
         let (entities, mut hunger_clock, player_entity, turns) = data;
 
         for (entity, clock, _myturn) in (&entities, &mut hunger_clock, &turns).join() {
@@ -24,7 +24,7 @@ impl<'a> System<'a> for HungerSystem {
                         clock.duration = 200;
                         if entity == *player_entity {
                             crate::gamelog::Logger::new()
-                                .color(rltk::ORANGE)
+                                .color(bracket_lib::terminal::ORANGE)
                                 .append("You are no longer well fed")
                                 .log();
                         }
@@ -34,7 +34,7 @@ impl<'a> System<'a> for HungerSystem {
                         clock.duration = 200;
                         if entity == *player_entity {
                             crate::gamelog::Logger::new()
-                                .color(rltk::ORANGE)
+                                .color(bracket_lib::terminal::ORANGE)
                                 .append("You are hungry")
                                 .log();
                         }
@@ -44,7 +44,7 @@ impl<'a> System<'a> for HungerSystem {
                         clock.duration = 200;
                         if entity == *player_entity {
                             crate::gamelog::Logger::new()
-                                .color(rltk::RED)
+                                .color(bracket_lib::terminal::RED)
                                 .append("You are starving!")
                                 .log();
                         }
@@ -53,14 +53,14 @@ impl<'a> System<'a> for HungerSystem {
                         // Inflict damage from hunger
                         if entity == *player_entity {
                             crate::gamelog::Logger::new()
-                                .color(rltk::RED)
+                                .color(bracket_lib::terminal::RED)
                                 .append("Your hunger pangs are getting painful! You suffer 1 hp damage.")
                                 .log();
                         }
                         add_effect(
                             None,
-                            EffectType::Damage{ amount: 1},
-                            Targets::Single{ target: entity }
+                            EffectType::Damage { amount: 1 },
+                            Targets::Single { target: entity },
                         );
                     }
                 }

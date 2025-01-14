@@ -1,4 +1,4 @@
-use rltk::prelude::*;
+use bracket_lib::prelude::*;
 use std::sync::Mutex;
 use std::time::{SystemTime, UNIX_EPOCH};
 
@@ -13,7 +13,7 @@ fn generate_random_seed() -> u64 {
         .unwrap()
         .as_secs();
 
-    rltk::console::log(format!("seed: {}", seed));
+    bracket_lib::prelude::console::log(format!("seed: {}", seed));
     seed
 }
 

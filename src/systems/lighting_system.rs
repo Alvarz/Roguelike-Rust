@@ -1,5 +1,5 @@
 use crate::{LightSource, Map, Position, Viewshed};
-use rltk::RGB;
+use bracket_lib::prelude::RGB;
 use specs::prelude::*;
 
 pub struct LightingSystem {}
@@ -26,12 +26,13 @@ impl<'a> System<'a> for LightingSystem {
         }
 
         for (viewshed, pos, light) in (&viewshed, &positions, &lighting).join() {
-            let light_point = rltk::Point::new(pos.x, pos.y);
+            let light_point = bracket_lib::prelude::Point::new(pos.x, pos.y);
             let range_f = light.range as f32;
             for t in viewshed.visible_tiles.iter() {
                 if t.x > 0 && t.x < map.width && t.y > 0 && t.y < map.height {
                     let idx = map.xy_idx(t.x, t.y);
-                    let distance = rltk::DistanceAlg::Chebyshev.distance2d(light_point, *t);
+                    let distance =
+                        bracket_lib::prelude::DistanceAlg::Chebyshev.distance2d(light_point, *t);
                     let intensity = (range_f - distance) / range_f;
 
                     map.light[idx] = map.light[idx] + (light.color * intensity);

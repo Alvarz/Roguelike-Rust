@@ -1,4 +1,4 @@
-use rltk::{Algorithm2D, BaseMap, Point};
+use bracket_lib::prelude::{Algorithm2D, BaseMap, Point};
 use serde::{Deserialize, Serialize};
 use std::collections::HashSet;
 mod tiletype;
@@ -21,7 +21,7 @@ pub struct Map {
     pub view_blocked: HashSet<usize>,
     pub name: String,
     pub outdoors: bool,
-    pub light: Vec<rltk::RGB>,
+    pub light: Vec<bracket_lib::prelude::RGB>,
 }
 
 impl Map {
@@ -90,7 +90,7 @@ impl Map {
             view_blocked: HashSet::new(),
             name: name.to_string(),
             outdoors: true,
-            light: vec![rltk::RGB::from_f32(0.0, 0.0, 0.0); map_tile_count],
+            light: vec![bracket_lib::prelude::RGB::from_f32(0.0, 0.0, 0.0); map_tile_count],
         }
     }
 }
@@ -104,9 +104,12 @@ impl BaseMap for Map {
         }
     }
 
-    fn get_available_exits(&self, idx: usize) -> rltk::SmallVec<[(usize, f32); 10]> {
+    fn get_available_exits(
+        &self,
+        idx: usize,
+    ) -> bracket_lib::prelude::SmallVec<[(usize, f32); 10]> {
         const DIAGONAL_COST: f32 = 1.5;
-        let mut exits = rltk::SmallVec::new();
+        let mut exits = bracket_lib::prelude::SmallVec::new();
         let x = idx as i32 % self.width;
         let y = idx as i32 / self.width;
         let tt = self.tiles[idx as usize];
@@ -147,7 +150,7 @@ impl BaseMap for Map {
         let w = self.width as usize;
         let p1 = Point::new(idx1 % w, idx1 / w);
         let p2 = Point::new(idx2 % w, idx2 / w);
-        rltk::DistanceAlg::Pythagoras.distance2d(p1, p2)
+        bracket_lib::prelude::DistanceAlg::Pythagoras.distance2d(p1, p2)
     }
 }
 

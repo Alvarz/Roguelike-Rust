@@ -1,4 +1,4 @@
-use rltk::{Point, RGB};
+use bracket_lib::prelude::{Point, RGB};
 use serde::{Deserialize, Serialize};
 use specs::error::NoError;
 use specs::prelude::*;
@@ -27,7 +27,7 @@ pub struct OtherLevelPosition {
 
 #[derive(Component, ConvertSaveload, Clone)]
 pub struct Renderable {
-    pub glyph: rltk::FontCharType,
+    pub glyph: bracket_lib::prelude::FontCharType,
     pub fg: RGB,
     pub bg: RGB,
     pub render_order: i32,
@@ -78,7 +78,7 @@ pub struct SpellTemplate {
 
 #[derive(Component, ConvertSaveload, Clone)]
 pub struct Viewshed {
-    pub visible_tiles: Vec<rltk::Point>,
+    pub visible_tiles: Vec<bracket_lib::prelude::Point>,
     pub range: i32,
     pub dirty: bool,
 }
@@ -344,7 +344,7 @@ pub struct WantsToPickupItem {
 #[derive(Component, Debug, ConvertSaveload, Clone)]
 pub struct WantsToUseItem {
     pub item: Entity,
-    pub target: Option<rltk::Point>,
+    pub target: Option<bracket_lib::prelude::Point>,
 }
 
 #[derive(Component, Debug, ConvertSaveload, Clone)]
@@ -355,7 +355,7 @@ pub struct UseOnPickUp {
 #[derive(Component, Debug, ConvertSaveload, Clone)]
 pub struct WantsToCastSpell {
     pub spell: Entity,
-    pub target: Option<rltk::Point>,
+    pub target: Option<bracket_lib::prelude::Point>,
 }
 
 #[derive(Component, Debug, ConvertSaveload, Clone)]
@@ -445,14 +445,14 @@ pub struct ParticleLifetime {
 
 #[derive(Component, Serialize, Deserialize, Clone)]
 pub struct SpawnParticleLine {
-    pub glyph: rltk::FontCharType,
+    pub glyph: bracket_lib::prelude::FontCharType,
     pub color: RGB,
     pub lifetime_ms: f32,
 }
 
 #[derive(Component, Serialize, Deserialize, Clone)]
 pub struct SpawnParticleBurst {
-    pub glyph: rltk::FontCharType,
+    pub glyph: bracket_lib::prelude::FontCharType,
     pub color: RGB,
     pub lifetime_ms: f32,
 }

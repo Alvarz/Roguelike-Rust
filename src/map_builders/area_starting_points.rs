@@ -48,9 +48,9 @@ impl AreaStartingPosition {
                 available_floors.push(
                     (
                         idx,
-                        rltk::DistanceAlg::PythagorasSquared.distance2d(
-                            rltk::Point::new(idx as i32 % build_data.map.width, idx as i32 / build_data.map.width),
-                            rltk::Point::new(seed_x, seed_y)
+                        bracket_lib::prelude::DistanceAlg::PythagorasSquared.distance2d(
+                            bracket_lib::prelude::Point::new(idx as i32 % build_data.map.width, idx as i32 / build_data.map.width),
+                            bracket_lib::prelude::Point::new(seed_x, seed_y)
                         )
                     )
                 );

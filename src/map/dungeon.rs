@@ -1,7 +1,7 @@
 use super::{Map, TileType};
 use crate::components::{OtherLevelPosition, Position, Viewshed};
 use crate::map_builders::level_builder;
-use rltk::Point;
+use bracket_lib::prelude::Point;
 use serde::{Deserialize, Serialize};
 use specs::prelude::*;
 use std::collections::{HashMap, HashSet};

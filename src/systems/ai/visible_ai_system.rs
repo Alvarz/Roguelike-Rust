@@ -67,9 +67,9 @@ impl<'a> System<'a> for VisibleAI {
                 for reaction in reactions.iter() {
                     match reaction.1 {
                         Reaction::Attack => {
-                            let range = rltk::DistanceAlg::Chebyshev.distance2d(
-                                rltk::Point::new(pos.x, pos.y),
-                                rltk::Point::new(
+                            let range = bracket_lib::prelude::DistanceAlg::Chebyshev.distance2d(
+                                bracket_lib::prelude::Point::new(pos.x, pos.y),
+                                bracket_lib::prelude::Point::new(
                                     reaction.0 as i32 % map.width,
                                     reaction.0 as i32 / map.width,
                                 ),
@@ -93,7 +93,7 @@ impl<'a> System<'a> for VisibleAI {
                                                         &entities,
                                                     )
                                                     .unwrap(),
-                                                    target: Some(rltk::Point::new(
+                                                    target: Some(bracket_lib::prelude::Point::new(
                                                         reaction.0 as i32 % map.width,
                                                         reaction.0 as i32 / map.width,
                                                     )),
@@ -109,9 +109,9 @@ impl<'a> System<'a> for VisibleAI {
                                 for (weapon, equip) in (&weapons, &equipped).join() {
                                     if let Some(wrange) = weapon.range {
                                         if equip.owner == entity {
-                                            //rltk::console::log(format!("Owner found. Ranges: {}/{}", wrange, range));
+                                            //bracket_lib::prelude::console::log(format!("Owner found. Ranges: {}/{}", wrange, range));
                                             if wrange >= range as i32 {
-                                                //rltk::console::log("Inserting shoot");
+                                                //bracket_lib::prelude::console::log("Inserting shoot");
                                                 wants_shoot
                                                     .insert(
                                                         entity,
