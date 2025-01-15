@@ -244,25 +244,24 @@ impl GameState for State {
                         let entities = self.ecs.entities();
                         let positions = self.ecs.read_storage::<Position>();
 
-                        let mut filtered_mobs: Vec<String> = Vec::new();
-
                         for (entity, _initiative, _pos) in
                             (&entities, &initiatives, &positions).join()
                         {
-                            filtered_mobs.push(gui::get_item_display_name(&self.ecs, entity))
+                            let entity_name = gui::get_item_display_name(&self.ecs, entity);
+
+                            bracket_lib::prelude::console::log(format!(
+                                "entity name: {:?} entity id: {:?}.",
+                                entity_name, entity
+                            ));
+                            crate::gamelog::Logger::new()
+                                .color(bracket_lib::terminal::GRAY)
+                                .append(format!(
+                                    "[DEBUG] entity name: {:?} entity id: {:?}.",
+                                    entity_name, entity
+                                ))
+                                .log();
                         }
 
-                        bracket_lib::prelude::console::log(format!(
-                            "{}.",
-                            filtered_mobs.join(", ")
-                        ));
-                        crate::gamelog::Logger::new()
-                            .color(bracket_lib::terminal::GRAY)
-                            .append(format!(
-                                "[DEBUG] Enemies in current map: {:?}",
-                                filtered_mobs.join(", ")
-                            ))
-                            .log();
                         newrunstate = RunState::AwaitingInput;
                     }
 
@@ -271,23 +270,21 @@ impl GameState for State {
                         let entities = self.ecs.entities();
                         let positions = self.ecs.read_storage::<Position>();
 
-                        let mut filtered_items: Vec<String> = Vec::new();
-
                         for (entity, _item, _pos) in (&entities, &items, &positions).join() {
-                            filtered_items.push(gui::get_item_display_name(&self.ecs, entity));
-                        }
+                            let entity_name = gui::get_item_display_name(&self.ecs, entity);
 
-                        bracket_lib::prelude::console::log(format!(
-                            "{}.",
-                            filtered_items.join(", ")
-                        ));
-                        crate::gamelog::Logger::new()
-                            .color(bracket_lib::terminal::GRAY)
-                            .append(format!(
-                                "[DEBUG] Items in current map: {:?}",
-                                filtered_items.join(", ")
-                            ))
-                            .log();
+                            bracket_lib::prelude::console::log(format!(
+                                "entity name: {:?} entity id: {:?}.",
+                                entity_name, entity
+                            ));
+                            crate::gamelog::Logger::new()
+                                .color(bracket_lib::terminal::GRAY)
+                                .append(format!(
+                                    "[DEBUG] entity name: {:?} entity id: {:?}.",
+                                    entity_name, entity
+                                ))
+                                .log();
+                        }
 
                         newrunstate = RunState::AwaitingInput;
                     }
