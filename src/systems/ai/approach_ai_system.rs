@@ -24,7 +24,9 @@ impl<'a> System<'a> for ApproachAI {
             turn_done.push(entity);
 
             let (target_x, target_y) = map.idx_xy(approach.idx as usize);
-            let path = get_path(pos.x, pos.y, target_x, target_y, &mut *map);
+
+            let path = get_path(pos.x, pos.y, target_x, target_y, &mut *map, &entity);
+
             if path.success && path.steps.len() > 1 {
                 apply_move
                     .insert(

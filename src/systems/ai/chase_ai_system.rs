@@ -1,4 +1,4 @@
-use crate::{path::get_path, ApplyMove, Chasing, HordeMember, Map, MyTurn, Position, TileSize};
+use crate::{path::get_path, ApplyMove, Chasing, HordeMember, Map, MyTurn, Position};
 use specs::prelude::*;
 use std::collections::HashMap;
 
@@ -13,21 +13,12 @@ impl<'a> System<'a> for ChaseAI {
         WriteExpect<'a, Map>,
         Entities<'a>,
         WriteStorage<'a, ApplyMove>,
-        ReadStorage<'a, TileSize>,
         ReadStorage<'a, HordeMember>,
     );
 
     fn run(&mut self, data: Self::SystemData) {
-        let (
-            mut turns,
-            mut chasing,
-            positions,
-            mut map,
-            entities,
-            mut apply_move,
-            sizes,
-            horde_members,
-        ) = data;
+        let (mut turns, mut chasing, positions, mut map, entities, mut apply_move, horde_members) =
+            data;
 
         let mut targets: HashMap<Entity, (i32, i32)> = HashMap::new();
         let mut end_chase: Vec<Entity> = Vec::new();
@@ -51,14 +42,7 @@ impl<'a> System<'a> for ChaseAI {
             let target_pos = targets[&entity];
             let path;
 
-            if let Some(size) = sizes.get(entity) {
-                let mut map_copy = map.clone();
-                map_copy.populate_blocked_multi(size.x, size.y);
-
-                path = get_path(pos.x, pos.y, target_pos.0, target_pos.1, &mut map_copy);
-            } else {
-                path = get_path(pos.x, pos.y, target_pos.0, target_pos.1, &mut *map);
-            }
+            path = get_path(pos.x, pos.y, target_pos.0, target_pos.1, &mut *map, &entity);
             if path.success && path.steps.len() > 1 && path.steps.len() < 15 {
                 apply_move
                     .insert(

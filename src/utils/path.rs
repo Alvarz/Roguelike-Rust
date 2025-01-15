@@ -1,4 +1,5 @@
 use bracket_lib::prelude::NavigationPath;
+use specs::Entity;
 
 use crate::Map;
 
@@ -8,6 +9,7 @@ fn bresenham_search(
     end_x: i32,
     end_y: i32,
     map: &Map,
+    entity: &Entity,
 ) -> NavigationPath {
     let mut line = bracket_lib::prelude::line2d(
         bracket_lib::prelude::LineAlg::Bresenham,
@@ -24,11 +26,28 @@ fn bresenham_search(
     let _ = line.remove(0);
 
     for point in line.iter() {
-        if crate::spatial::is_blocked(map.xy_idx(point.x, point.y)) {
-            result.success = false;
-            return result;
+        let point = map.xy_idx(point.x, point.y);
+        if !crate::spatial::is_blocked(point) {
+            result.steps.push(point);
+            continue;
         }
-        result.steps.push(map.xy_idx(point.x, point.y));
+
+        let blocking_entities = crate::spatial::get_tile_content_clone(point);
+        // bracket_lib::prelude::console::log(format!(
+        //     "entities that are blocking {:?}",
+        //     blocking_entities
+        // ));
+
+        if blocking_entities.len() == 1 {
+            let blocking_entity = blocking_entities.first().unwrap();
+            if blocking_entity == entity {
+                result.steps.push(point);
+                continue;
+            }
+        }
+
+        result.success = false;
+        return result;
     }
 
     result
@@ -40,8 +59,9 @@ pub fn get_path(
     target_x: i32,
     target_y: i32,
     map: &mut Map,
+    entity: &Entity,
 ) -> NavigationPath {
-    let path = bresenham_search(start_x, start_y, target_x, target_y, map);
+    let path = bresenham_search(start_x, start_y, target_x, target_y, map, entity);
 
     if path.success && path.steps.len() > 1 {
         // bracket_lib::prelude::console::log(format!(

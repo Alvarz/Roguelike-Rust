@@ -69,7 +69,8 @@ impl<'a> System<'a> for DefaultMoveAI {
                         let target_y = crate::rng::roll_dice(1, map.height - 2);
                         let idx = map.xy_idx(target_x, target_y);
                         if tile_walkable(map.tiles[idx]) {
-                            let path = get_path(pos.x, pos.y, target_x, target_y, &mut *map);
+                            let path =
+                                get_path(pos.x, pos.y, target_x, target_y, &mut *map, &entity);
                             if path.success && path.steps.len() > 1 {
                                 mode.mode = Movement::RandomWaypoint {
                                     path: Some(path.steps),
