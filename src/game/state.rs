@@ -4,7 +4,7 @@ use specs::prelude::*;
 
 use crate::{
     camera, freeze_level_entities, gamelog, gui, map, saveload, systems, Map, MasterDungeonMap,
-    PROJECT_NAME, SHOW_DEPTH, SHOW_FPS, SHOW_MAPGEN_VISUALIZER, SHOW_SEED,
+    PROJECT_NAME, SHOW_DEPTH, SHOW_FPS, SHOW_MAPGEN_VISUALIZER,
 };
 
 use super::{components::*, spawner};
@@ -580,7 +580,7 @@ impl GameState for State {
             ctx.print(1, 59, &format!("FPS: {}", ctx.fps));
         }
 
-        ctx.print(1, 59, &format!("press <Space>: for help "));
+        ctx.print(1, 59, &format!("press <Tab>: for help "));
 
         if SHOW_SEED {
             ctx.print(

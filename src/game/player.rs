@@ -556,10 +556,10 @@ pub fn player_input(gs: &mut State, ctx: &mut BTerm) -> RunState {
             // Save and Quit
             VirtualKeyCode::Escape => return RunState::ShowOptionMenu,
 
-            // Cheating!
-            VirtualKeyCode::Backslash => return RunState::ShowCheatMenu,
             VirtualKeyCode::Tab => return RunState::ShowHelpMenu,
 
+            // // Cheating!
+            // VirtualKeyCode::Backslash => return RunState::ShowCheatMenu,
             _ => return RunState::AwaitingInput,
         },
     }
