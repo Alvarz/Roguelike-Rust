@@ -23,7 +23,6 @@ pub fn item_trigger(creator: Option<Entity>, item: Entity, targets: &Targets, ec
     // If it was a consumable, then it gets deleted
     if did_something {
         if let Some(c) = ecs.read_storage::<Consumable>().get(item) {
-            bracket_lib::prelude::console::log(format!("{}", c.max_charges));
             if c.max_charges < 2 {
                 ecs.entities().delete(item).expect("Delete Failed");
             }

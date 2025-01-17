@@ -44,10 +44,6 @@ pub fn get_path(
     let path = bresenham_search(start_x, start_y, target_x, target_y, map);
 
     if path.success && path.steps.len() > 1 {
-        // bracket_lib::prelude::console::log(format!(
-        //     "Using bresenham for path - it succeeded? {:?}",
-        //     path.success
-        // ));
         return path;
     }
 
@@ -56,10 +52,5 @@ pub fn get_path(
         map.xy_idx(target_x, target_y),
         &mut *map,
     );
-
-    // bracket_lib::prelude::console::log(format!(
-    //     "Using A* for path - it succeeded? {:?}",
-    //     path.success
-    // ));
     path
 }
