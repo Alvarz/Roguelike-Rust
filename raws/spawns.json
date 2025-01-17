@@ -210,7 +210,7 @@
       ]
     },
     {
-      "name": "Black Dragon",
+      "name": "Vokoth",
       "drops": [{ "name": "Amulet of Yendor", "weight": 10 }]
     }
   ],
@@ -2532,7 +2532,7 @@
           { "name": "right_claw", "hit_bonus": 2, "damage": "1d10" }
         ]
       },
-      "loot_table": "Black Dragon",
+      "loot_table": "Wyrms",
       "faction": "Wyrm",
       "level": 6,
       "gold": "20d10",
@@ -2761,7 +2761,7 @@
         "armor_class": 17,
         "attacks": [{ "name": "whip", "hit_bonus": 4, "damage": "1d10+2" }]
       },
-      "loot_table": "Wyrms",
+      "loot_table": "Vokoth",
       "faction": "Wyrm",
       "level": 8,
       "gold": "20d10",
