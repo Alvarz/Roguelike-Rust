@@ -27,7 +27,7 @@ fn main() -> BError {
         .unwrap()
         .with_title(PROJECT_NAME)
         .with_font("vga8x16.png", 8, 16)
-        /*         .with_fullscreen(true) */
+        .with_fullscreen(true)
         .with_fps_cap(30.0)
         .with_sparse_console(80, 30, "vga8x16.png")
         .with_vsync(false)

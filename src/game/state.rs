@@ -556,7 +556,6 @@ impl GameState for State {
                 newrunstate = RunState::Ticking;
             }
             RunState::SpawnHordeMode => {
-                bracket_lib::prelude::console::log("state to spawn horde mode");
                 spawner::spawn_horde_mode(&mut self.ecs);
                 newrunstate = RunState::Ticking;
             }

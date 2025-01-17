@@ -54,11 +54,6 @@ impl<'a> System<'a> for HordeModeSystem {
                     if active_horde_members_count < 1 {
                         horde_mode.state = WaveState::WaveCompleted;
                     }
-
-                    bracket_lib::prelude::console::log(format!(
-                        "amount of horde members. {}",
-                        active_horde_members_count
-                    ));
                 }
                 WaveState::WaveCompleted => {
                     horde_mode.state = WaveState::WaitingToStart {

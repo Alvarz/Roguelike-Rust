@@ -109,9 +109,7 @@ impl<'a> System<'a> for VisibleAI {
                                 for (weapon, equip) in (&weapons, &equipped).join() {
                                     if let Some(wrange) = weapon.range {
                                         if equip.owner == entity {
-                                            //bracket_lib::prelude::console::log(format!("Owner found. Ranges: {}/{}", wrange, range));
                                             if wrange >= range as i32 {
-                                                //bracket_lib::prelude::console::log("Inserting shoot");
                                                 wants_shoot
                                                     .insert(
                                                         entity,
