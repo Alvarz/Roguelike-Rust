@@ -1,4 +1,5 @@
 <html>
+<<<<<<< Updated upstream
   <head>
     <meta content="text/html;charset=utf-8" http-equiv="Content-Type" />
   </head>
@@ -12,3 +13,41 @@
     </script>
   </body>
 </html>
+=======
+
+<head>
+  <meta content="text/html;charset=utf-8" http-equiv="Content-Type" />
+
+  <style>
+    body {
+      margin: 0;
+      padding: none;
+      display: contents;
+    }
+
+    #main {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    canvas {
+      width: calc(min(100vw, 640 / 480 * 100vh));
+    }
+  </style>
+</head>
+
+<body onload=window.focus()>
+  <div id="main">
+    <canvas id="canvas"></canvas>
+  </div>
+  <script src="./blob.js"></script>
+  <script>
+    window.addEventListener("load", async () => {
+      await wasm_bindgen("./blob.wasm");
+    });
+  </script>
+</body>
+
+</html>
+>>>>>>> Stashed changes

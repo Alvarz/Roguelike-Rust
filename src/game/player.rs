@@ -558,6 +558,7 @@ pub fn player_input(gs: &mut State, ctx: &mut BTerm) -> RunState {
 
             // Cheating!
             VirtualKeyCode::Backslash => return RunState::ShowCheatMenu,
+            VirtualKeyCode::Tab => return RunState::ShowHelpMenu,
 
             _ => return RunState::AwaitingInput,
         },
