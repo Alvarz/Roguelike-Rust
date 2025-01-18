@@ -580,15 +580,7 @@ impl GameState for State {
             ctx.print(1, 59, &format!("FPS: {}", ctx.fps));
         }
 
-        ctx.print(1, 59, &format!("press <Tab>: for help "));
-
-        if SHOW_SEED {
-            ctx.print(
-                10,
-                59,
-                &format!("Seed: {}", crate::rng::get_current_seed().to_string()),
-            );
-        }
+        ctx.print(1, 59, &format!("press <Comma>: for help "));
 
         if SHOW_DEPTH {
             let current_depth = self.ecs.fetch::<Map>().depth;

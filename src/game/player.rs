@@ -529,16 +529,16 @@ pub fn player_input(gs: &mut State, ctx: &mut BTerm) -> RunState {
             VirtualKeyCode::Numpad5 | VirtualKeyCode::Space => return skip_turn(&mut gs.ecs),
 
             // Level changes
-            VirtualKeyCode::Period => {
-                if try_next_level(&mut gs.ecs) {
-                    return RunState::NextLevel;
-                }
-            }
-            VirtualKeyCode::Comma => {
-                if try_previous_level(&mut gs.ecs) {
-                    return RunState::PreviousLevel;
-                }
-            }
+            // VirtualKeyCode::Period => {
+            //     if try_next_level(&mut gs.ecs) {
+            //         return RunState::NextLevel;
+            //     }
+            // }
+            // VirtualKeyCode::Comma => {
+            //     if try_previous_level(&mut gs.ecs) {
+            //         return RunState::PreviousLevel;
+            //     }
+            // }
 
             // Picking up items
             VirtualKeyCode::G => get_item(&mut gs.ecs),
@@ -556,7 +556,7 @@ pub fn player_input(gs: &mut State, ctx: &mut BTerm) -> RunState {
             // Save and Quit
             VirtualKeyCode::Escape => return RunState::ShowOptionMenu,
 
-            VirtualKeyCode::Tab => return RunState::ShowHelpMenu,
+            VirtualKeyCode::Comma => return RunState::ShowHelpMenu,
 
             // // Cheating!
             // VirtualKeyCode::Backslash => return RunState::ShowCheatMenu,
