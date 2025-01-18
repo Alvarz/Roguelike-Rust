@@ -41,6 +41,7 @@ pub enum RunState {
     },
     MapGeneration,
     ShowCheatMenu,
+    ShowHelpMenu,
     ShowVendor {
         vendor: Entity,
         mode: VendorMode,
@@ -205,6 +206,13 @@ impl GameState for State {
                         };
                     }
                     gui::OptionMenuResult::SaveAndExit => newrunstate = RunState::SaveGame,
+                }
+            }
+            RunState::ShowHelpMenu => {
+                let result = gui::show_help_menu(self, ctx);
+                match result {
+                    gui::HelpMenuResult::Cancel => newrunstate = RunState::AwaitingInput,
+                    _ => {}
                 }
             }
             RunState::ShowCheatMenu => {
@@ -571,6 +579,8 @@ impl GameState for State {
         if SHOW_FPS {
             ctx.print(1, 59, &format!("FPS: {}", ctx.fps));
         }
+
+        ctx.print(1, 59, &format!("press <Space>: for help "));
 
         if SHOW_SEED {
             ctx.print(

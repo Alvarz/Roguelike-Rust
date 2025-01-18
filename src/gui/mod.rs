@@ -30,3 +30,5 @@ mod option_menu;
 pub use option_menu::*;
 mod finish_game_menu;
 pub use finish_game_menu::*;
+mod help_menu;
+pub use help_menu::*;
